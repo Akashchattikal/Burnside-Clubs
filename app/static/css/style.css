@@ -1,0 +1,139 @@
+
+/****************/
+/*****GLOBAL*****/
+/****************/
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--clr-body-bg);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    
+}
+
+main {
+    padding-left: 10px;
+    color:#E7E7E7;
+    height: 200px;
+}
+
+footer {
+    padding: 20px;
+    margin-top: 42.2%;
+    position: relative;
+    background-color:#E7E7E7;
+}
+
+/* Standard Syntax -  Prevent User Text Select*/
+.prevent-select {
+    user-select: none;
+}
+
+
+:root {
+    --clr-body-bg: hsl(300, 100%, 99%);
+    --clr-nav-link: #0c5f4c;
+}
+
+.shadow {
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/***********/
+/**Nav Bar**/
+/***********/
+.nav_ul {
+    list-style: none;
+}
+
+.nav_list {
+    display: flex;
+    column-gap: 45px;
+}
+
+
+.nav_link {
+    color: rgba(0, 0, 0, 0.60);
+    font-size: 15px;
+    transition: all 0.4s;
+    position: relative;
+}
+
+.nav_link:hover,
+.nav_link:focus {
+    color: rgba(0, 0, 0, 1);
+}
+
+.nav_link:hover::after {
+    opacity: 1;
+}
+
+.nav_link::after {
+    content: '';
+    height: 2px;
+    width: 100%;
+    background-color: var(--clr-nav-link);
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    transition: all 0.2s;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 1000px;
+}
+
+.start {
+    color: black;
+    background-color: var(--clr-nav-link);
+    padding: 10px 21px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: white;
+}
+
+@media (max-width: 796px) {
+    .header_content {
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 0;
+        row-gap: 18px;
+
+    }
+
+    .nav_list {
+        column-gap: 20px;
+    }
+}
+
+.header {
+    background-color: #E7E7E7;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+}
+
+.header_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 60px;
+    max-width: 1400px;
+    padding: 0 30px;
+    margin: 0 auto;
+}

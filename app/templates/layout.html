@@ -2,14 +2,18 @@
 <html>
 
 <head>
-    <title>PIZZARIA</title>
+    <title>Clubs</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
-    <header></header>
-    <nav>{% include "nav.html" %}</nav>
+    <header class="header shadow">
+        <div class="header_content">
+            <nav class="nav">{% include "nav.html" %}</nav>
+        </div>
+    </header>
+
     <main>
         {% block content %}
         {% endblock %}
