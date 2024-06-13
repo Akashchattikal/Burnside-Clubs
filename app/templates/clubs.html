@@ -2,4 +2,15 @@
 {% block content %}
 
 
+<ul class="club_container">
+    <!-- Loops through every club in Clubs -->
+    {% for item in clubs %}
+    <li class="multiple_club rounded-20 shadow">
+        <!-- Displays a Club profile image and name -->
+        <a href = "/club/{{item.id}}"><img class="pfp prevent-select" src="{{item.pro_photo}}"/></a>
+        <h4 class="club_name prevent-select">{{item.name}}</h4>
+    </li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

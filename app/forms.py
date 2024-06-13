@@ -13,9 +13,9 @@ class Add_Club(FlaskForm):
     #     raise ValidationError("You can't enter a date from the future!")
 
     name = StringField('title', validators=[DataRequired()])
-    description = TextAreaField('description')
-    pro_photo = TextAreaField('pro_photo')
-    club_room = TextAreaField('club_room')
-    organiser = TextAreaField('organiser')
+    description = TextAreaField('description', validators=[DataRequired()])
+    pro_photo = StringField('pro_photo', validators=[DataRequired()])
+    club_room = StringField('club_room', validators=[DataRequired()])
+    organiser = StringField('organiser', validators=[DataRequired()])
 
 #   date = IntegerField('date', validators=[Optional(), check_date])

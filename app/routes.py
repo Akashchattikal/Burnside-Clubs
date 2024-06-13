@@ -2,8 +2,6 @@ from app import app
 from flask import render_template, redirect, request, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
-import app.models as models # need 'db' to import models
-from app.forms import Add_Club
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -14,6 +12,9 @@ app.secret_key = 'correcthorsebatterystaple'
 WTF_CSRF_ENABLED = True
 WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
+
+import app.models as models  # need 'db' to import models
+from app.forms import Add_Club
 
 
 @app.route("/")
@@ -27,17 +28,23 @@ def clubs():
     return render_template("clubs.html", title="Clubs Page", clubs=clubs)
 
 
-@app.route("/admin_access")
-def admin():
-    return render_template("admin.html", title="Admin Access Page")
+@app.route("/club/<int:id>")
+def Club(id):
+    club = models.Clubs.query.filter_by(id=id).first()
+    return render_template('club.html', club=club)
 
 
-@app.route('/teach_access', methods=['GET', 'POST'])
+@app.route("/teach_access")
 def teach():
+    return render_template("teach.html", title="Teach Access Page")
+
+
+@app.route('/admin_access', methods=['GET', 'POST'])
+def admin():
     form = Add_Club()
     if request.method == 'GET':
-        return render_template("teach.html",
-                               title="Teacher Access Page", form=form)
+        return render_template("admin.html",
+                               title="Admin Access Page", form=form)
     else:
         if form.validate_on_submit():
             new_club = models.Clubs()
@@ -48,12 +55,12 @@ def teach():
             new_club.organiser = form.organiser.data
             db.session.add(new_club)
             db.session.commit()
-            return redirect('/clubs')
+            return redirect('/admin_access')
         else:
             # note the terrible logic, this has already been called once in
             # this function - could the logic be tidied up?
-            return render_template("teach.html",
-                                   title="Teacher Access Page", form=form)
+            return render_template("admin.html",
+                                   title="Admin Access Page", form=form)
 
 
 if __name__ == "__main__":
