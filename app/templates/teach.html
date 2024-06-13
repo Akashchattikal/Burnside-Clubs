@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="center">Add Club</h2>
+
+<form method="POST" enctype="multipart/form-data" center>
+  {{ form.csrf_token }}
+  <p>Name: {{ form.name }}</p>
+  <p>Description: {{ form.description }}</p>
+  <p>Profile Photo: {{ form.pro_photo }}</p>
+  <p>Club Common Room: {{ form.club_room }}</p>
+  <p>Organiser: {{ form.organiser }}</p>
+  <input type="submit" value="Add this club">
+</form> 
+
+{% endblock %}

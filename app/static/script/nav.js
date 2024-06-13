@@ -6,11 +6,11 @@ let linkID;
 
 if (path == "/") {
     linkID = "home"
-} else if (path == "#") {
+} else if (path == "/clubs") {
     linkID = "clubs"
-} else if (path == "#") {
+} else if (path == "/teach_access") {
     linkID = "teacher"
-} else if (path == "#") {
+} else if (path == "/admin_access") {
     linkID = "admin"
 }
 
