@@ -1,16 +1,34 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h2 style="text-align: center;">Add Club</h2>
+<h2 style="text-align: center;">Add Club To Database</h2>
 
 <form method="POST" enctype="multipart/form-data">
-  {{ form.csrf_token }}
-  <p class="space_form" style="text-align: center;">Name: {{ form.name }}</p>
-  <p class="space_form" style="text-align: center;">Description: {{ form.description }}</p>
-  <p class="space_form" style="text-align: center;">Profile Photo: {{ form.pro_photo }}</p>
-  <p class="space_form" style="text-align: center;">Club Common Room: {{ form.club_room }}</p>
-  <p class="space_form" style="text-align: center;">Organiser: {{ form.organiser }}</p>
+  {{ club_form.csrf_token }}
+  <p class="space_form" style="text-align: center;">Name: {{ club_form.name }}</p>
+  <p class="space_form" style="text-align: center;">Description: {{ club_form.description }}</p>
+  <p class="space_form" style="text-align: center;">Profile Photo: {{ club_form.pro_photo }}</p>
+  <p class="space_form" style="text-align: center;">Club Common Room: {{ club_form.club_room }}</p>
+  <p class="space_form" style="text-align: center;">Organiser: {{ club_form.organiser }}</p>
   <input type="submit" value="Add Club">
+</form> 
+
+<h2 style="text-align: center;">Add Teacher To Database </h2>
+
+<form method="POST" enctype="multipart/form-data">
+  {{ teacher_form.csrf_token }}
+  <p class="space_form" style="text-align: center;">Name: {{ teacher_form.name }}</p>
+  <p class="space_form" style="text-align: center;">Email: {{ teacher_form.email }}</p>
+  <input type="submit" value="Add Teacher">
+</form> 
+
+<h2 style="text-align: center;">Assign A Teacher To A Club</h2>
+
+<form method="POST" enctype="multipart/form-data">
+  {{ teacher_club_form.csrf_token }}
+  <p class="space_form" style="text-align: center;">Club: {{ teacher_club_form.club }}</p>
+  <p class="space_form" style="text-align: center;">Teacher: {{ teacher_club_form.teacher }}</p>
+  <input type="submit" value="Assign">
 </form> 
 
 {% endblock %}

@@ -13,11 +13,12 @@
 }
 
 body {
-    margin-top: 5.5%;
+    margin-top: 6%;
     background: var(--clr-body-bg);
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
+    
     
 }
 
@@ -32,6 +33,17 @@ footer {
     margin-top: 42.2%;
     position: relative;
     background-color:#E7E7E7;
+}
+
+table {
+    font-family: arial, sans-serif;
+    width: 80%;
+  }
+  
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
 }
 
 /* Standard Syntax -  Prevent User Text Select*/
@@ -138,7 +150,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 60px;
+    min-height: 4rem;
     max-width: 1400px;
     padding: 0 30px;
     margin: 0 auto;
@@ -193,4 +205,83 @@ footer {
     z-index: 1;
     text-align: center;
     margin-top: -20%;
+}
+
+/*************/
+/**Club Page**/
+/*************/
+
+.club_titles {
+    text-align: center;
+}
+
+.organiser {
+    font-size: 100%;
+}
+
+.club_about {
+    width: 60%;
+    margin-left: auto;
+    margin-top: 3%;
+}
+
+.club_pro {
+    width: 55%;
+    height: 35%;
+    float: right;
+    margin-right: 2%;
+    margin-top: -20%;
+}
+
+.wrapper {
+    border: 2px solid #f76707;
+    border-radius: 5px;
+    background-color: #fff4e6;
+  }
+  
+  .wrapper > div {
+    border: 2px solid #ffa94d;
+    border-radius: 5px;
+    background-color: #ffd8a8;
+    padding: 1em;
+    color: #d9480f;
+  }
+  
+  .wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+.club_flex_title {
+    display: flex;
+    align-items: flex-start;
+}
+
+.club_flex_title > div {
+    text-align: center;
+    width: 1000%;
+}
+
+.club_flex {
+    display: flex;
+    align-items: flex-start;
+}
+
+.club_flex > div {
+    text-align: center;
+    width: 40%;
+}
+
+.club_title {
+    margin-top: 5%;
+}
+
+.club_text {
+    margin-top: 1%;
+}
+
+.DV7the{
+    color: rgb(138, 180, 248);
+    cursor: pointer;
+    white-space: nowrap;
 }

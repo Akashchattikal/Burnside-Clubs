@@ -1,5 +1,22 @@
 {% extends 'layout.html' %}
 {% block content %}
+<body>
+  <span>
+    <h2 class="organiser">Club Organiser : {{club.organiser}}</h2>
+  </span>
+  
+  <div class="club_flex_title club_title">
+    <div><h2 class="club_titles">Notices</h2></div>
+    <div><h2 class="club_titles">Events</h2></div>
+    <div><img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/></div>
+  </div>
+  <div class="club_flex">
+    <div class="club_text"><p>placeholder</p></div>
+    <div class="club_text"><p>placeholder</p></div>
+    <div><p class="club_about">{{club.description}}</p></div>
+  </div>
+</body>
+
 
 
 {% endblock %}
