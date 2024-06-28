@@ -54,7 +54,7 @@ td, th {
 
 :root {
     --clr-body-bg: hsl(300, 100%, 99%);
-    --clr-nav-link: #0c5f4c;
+    --clr-bhs: #0c5f4c;
 }
 
 .shadow {
@@ -64,10 +64,18 @@ td, th {
 .center {
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
+    margin: auto
 }
 
 .rounded-20 {
     border-radius: 20px;
+}
+
+.inline_div {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
 }
 
 
@@ -104,7 +112,7 @@ td, th {
     content: '';
     height: 2px;
     width: 100%;
-    background-color: var(--clr-nav-link);
+    background-color: var(--clr-bhs);
     position: absolute;
     left: 0;
     bottom: -8px;
@@ -116,7 +124,7 @@ td, th {
 
 .start {
     color: black;
-    background-color: var(--clr-nav-link);
+    background-color: var(--clr-bhs);
     padding: 10px 21px;
     border-radius: 10px;
     font-size: 15px;
@@ -233,25 +241,6 @@ td, th {
     margin-top: -20%;
 }
 
-.wrapper {
-    border: 2px solid #f76707;
-    border-radius: 5px;
-    background-color: #fff4e6;
-  }
-  
-  .wrapper > div {
-    border: 2px solid #ffa94d;
-    border-radius: 5px;
-    background-color: #ffd8a8;
-    padding: 1em;
-    color: #d9480f;
-  }
-  
-  .wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
 .club_flex_title {
     display: flex;
     align-items: flex-start;
@@ -280,8 +269,37 @@ td, th {
     margin-top: 1%;
 }
 
-.DV7the{
-    color: rgb(138, 180, 248);
-    cursor: pointer;
-    white-space: nowrap;
+
+/**************/
+/**Admin Page**/
+/**************/
+
+
+.admin_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+    row-gap: 20px;
+    column-gap: 6%;
+    padding: 6%;
+    color: white;
 }
+
+.multiple_feature {
+    width: 40%;
+    height: 400px;
+    background-color: var(--clr-bhs);
+}
+
+.submission {
+    padding: 1.5%;
+
+}
+
+.sub_date {
+    padding: 1.5%;
+    font-size: 200%;
+}
+

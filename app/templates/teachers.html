@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<body>
+    <ul>
+        <!-- Loops through every club in Clubs -->
+        {% for item in teachers %}
+        <li>
+            <!-- Displays a Club profile image and name -->
+            <a href="/teach/{{item.id}}"><h4 class="prevent-select">{{item.name}}</h4></a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+{% endblock %}

@@ -14,9 +14,9 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher
+from app.forms import Add_Club, Add_Teacher, Club_Teacher,  Add_Notice, Add_Event
 
-    
+
 @app.route("/")
 def home():
     return render_template("home.html", title="Home Page")
@@ -29,14 +29,47 @@ def clubs():
 
 
 @app.route("/club/<int:id>")
-def Club(id):
+def club(id):
     club = models.Clubs.query.filter_by(id=id).first()
     return render_template('club.html', club=club)
 
 
 @app.route("/teach_access")
-def teach():
-    return render_template("teach.html", title="Teach Access Page")
+def teachers():
+    teachers = models.Teachers.query.all()
+    return render_template("teachers.html", title="Teach Access Page", teachers=teachers)
+
+
+@app.route("/teach/<int:id>")
+def teacher(id):
+    teacher = models.Teachers.query.filter_by(id=id).first()
+    return render_template("teacher.html", title="Club Access Page", teacher=teacher)
+
+
+@app.route("/club_admin/<int:id>", methods=['GET', 'POST'])
+def club_admin(id):
+    club_admin = models.Clubs.query.filter_by(id=id).first()
+    notice_form = Add_Notice()
+    event_form = Add_Event()
+    if request.method == 'GET':
+        return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form)
+    else:
+        if notice_form.validate_on_submit():
+            new_notice = models.Notices()
+            new_notice.notice = notice_form.notice.data
+            new_notice.date = notice_form.date.data
+            db.session.add(new_notice)
+            db.session.commit()
+            return redirect("/club_admin/<int:id>")
+        if event_form.validate_on_submit():
+            new_event = models.Events()
+            new_event.name = event_form.name.data
+            new_event.date = event_form.date.data
+            db.session.add(new_event)
+            db.session.commit()
+            return redirect("/club_admin/<int:id>")
+        else:
+            return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form)
 
 
 @app.route('/admin_access', methods=['GET', 'POST'])
@@ -71,10 +104,11 @@ def admin():
             return redirect('/admin_access')
 
         if teacher_club_form.validate_on_submit():
-            club_teacher = models.Club_Teacher()
-            club_teacher.club = teacher_club_form.club.data
-            club_teacher.teacher = teacher_club_form.teacher.data
-            db.session.add(club_teacher)
+            club_id = teacher_club_form.club.data
+            teacher_id = teacher_club_form.teacher.data
+            club = models.Clubs.query.filter_by(id=club_id).first()
+            teacher = models.Teachers.query.filter_by(id=teacher_id).first()
+            club.teachers.append(teacher)
             db.session.commit()
             return redirect('/admin_access')
 

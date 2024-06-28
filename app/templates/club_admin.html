@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block content %}
+<body>
+  <span>
+    <h2 class="organiser">Club Organiser: {{club_admin.organiser}}</h2>
+  </span>
+  
+  <div class="club_flex_title club_title">
+    <div><h2 class="club_titles">Notices</h2></div>
+    <div><h2 class="club_titles">Events</h2></div>
+    <div><img class="club_pro shadow rounded-20" src="/{{club_admin.pro_photo}}"/></div>
+  </div>
+  <div class="club_flex">
+    {{ notice_form.csrf_token }}
+    <div class="club_text">
+        <form method="POST" enctype="multipart/form-data" class="center">
+            {{ notice_form.notice }}
+            <input type="submit" value="+" class="sub_date rounded-20">
+        </form> 
+    </div>
+    {{ event_form.csrf_token }}
+    <div class="club_text">
+        <form method="POST" enctype="multipart/form-data" class="center">
+            <div class="inline_div">
+                <div class="center">
+                    <p>Event</p>
+                    <br>
+                    {{ event_form.name }}
+                </div>
+                <div class="center">
+                    <p>Date</p>
+                    <br>
+                    {{ event_form.date }}
+                </div>
+                <input type="submit" value="+" class="sub_date rounded-20">
+    <!-- illegal -->
+            </div>
+        </form> 
+    </div>
+    <div><p class="club_about">{{club_admin.description}}</p></div>
+  </div>
+</body>
+
+
+
+{% endblock %}

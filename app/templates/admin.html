@@ -1,34 +1,51 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h2 style="text-align: center;">Add Club To Database</h2>
+<h1 class="center" style="margin-top: 3%;">Adding Information</h1>
 
-<form method="POST" enctype="multipart/form-data">
-  {{ club_form.csrf_token }}
-  <p class="space_form" style="text-align: center;">Name: {{ club_form.name }}</p>
-  <p class="space_form" style="text-align: center;">Description: {{ club_form.description }}</p>
-  <p class="space_form" style="text-align: center;">Profile Photo: {{ club_form.pro_photo }}</p>
-  <p class="space_form" style="text-align: center;">Club Common Room: {{ club_form.club_room }}</p>
-  <p class="space_form" style="text-align: center;">Organiser: {{ club_form.organiser }}</p>
-  <input type="submit" value="Add Club">
-</form> 
-
-<h2 style="text-align: center;">Add Teacher To Database </h2>
-
-<form method="POST" enctype="multipart/form-data">
-  {{ teacher_form.csrf_token }}
-  <p class="space_form" style="text-align: center;">Name: {{ teacher_form.name }}</p>
-  <p class="space_form" style="text-align: center;">Email: {{ teacher_form.email }}</p>
-  <input type="submit" value="Add Teacher">
-</form> 
-
-<h2 style="text-align: center;">Assign A Teacher To A Club</h2>
-
-<form method="POST" enctype="multipart/form-data">
-  {{ teacher_club_form.csrf_token }}
-  <p class="space_form" style="text-align: center;">Club: {{ teacher_club_form.club }}</p>
-  <p class="space_form" style="text-align: center;">Teacher: {{ teacher_club_form.teacher }}</p>
-  <input type="submit" value="Assign">
-</form> 
+<ul class="admin_container">
+  <li class="multiple_feature rounded-20 shadow">
+    <div style="margin-top: 15%;">
+      <h2 class="center">Add New Club</h2>
+      &nbsp;
+      <form method="POST" enctype="multipart/form-data" class="center">
+        {{ club_form.csrf_token }}
+        <p class="space_form">Name: {{ club_form.name }}</p>
+        <p class="space_form">Description: {{ club_form.description }}</p>
+        <p class="space_form">Profile Photo: {{ club_form.pro_photo }}</p>
+        <p class="space_form">Club Common Room: {{ club_form.club_room }}</p>
+        <p class="space_form">Organiser: {{ club_form.organiser }}</p>
+        <br>
+        <input type="submit" value="Add Club" class="submission rounded-20">
+      </form> 
+    </div>
+  </li>
+  <li class="multiple_feature rounded-20 shadow">
+    <div style="margin-top: 8%;">
+      <h2 style="text-align: center;">Add Teacher To Database </h2>
+      &nbsp;
+      <form method="POST" enctype="multipart/form-data" class="center">
+        {{ teacher_form.csrf_token }}
+        <p class="space_form">Name: {{ teacher_form.name }}</p>
+        <p class="space_form">Email: {{ teacher_form.email }}</p>
+        <br>
+        <input type="submit" value="Add Teacher" class="submission rounded-20">
+      </form> 
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <h2 style="text-align: center;">Assign A Teacher To A Club</h2>
+      &nbsp;
+      <form method="POST" enctype="multipart/form-data" class="center">
+        {{ teacher_club_form.csrf_token }}
+        <p class="space_form" style="text-align: center;">Club: {{ teacher_club_form.club }}</p>
+        <p class="space_form" style="text-align: center;">Teacher: {{ teacher_club_form.teacher }}</p>
+        <br>
+        <input type="submit" value="Assign" class="submission rounded-20">
+      </form> 
+    </div>
+  </li>
+</ul>
 
 {% endblock %}
