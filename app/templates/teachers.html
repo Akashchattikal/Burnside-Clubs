@@ -3,10 +3,10 @@
 
 <body>
     <ul>
-        <!-- Loops through every club in Clubs -->
+        <!-- Loops through every teacher in Teachers-->
         {% for item in teachers %}
         <li>
-            <!-- Displays a Club profile image and name -->
+            <!-- Displays all teachers -->
             <a href="/teach/{{item.id}}"><h4 class="prevent-select">{{item.name}}</h4></a>
         </li>
         {% endfor %}

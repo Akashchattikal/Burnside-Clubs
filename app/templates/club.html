@@ -15,6 +15,19 @@
     <div class="club_text"><p>placeholder</p></div>
     <div><p class="club_about">{{club.description}}</p></div>
   </div>
+
+  <div class="photos">
+    <p>Photos Placeholder</p>
+    <ul class="photo_container">
+      <!-- Loops through every club in Clubs -->
+
+      {% for item in photos %}
+      <li class="rounded-20 multiple_photo shadow">
+          <img class="prevent-select" src="{{item.photo}}"/>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 </body>
 
 

@@ -10,7 +10,7 @@ class Add_Club(FlaskForm):
 
     name = StringField('title', validators=[DataRequired()])
     description = StringField('description', validators=[DataRequired()])
-    pro_photo = StringField('pro_photo', validators=[DataRequired()])
+    pro_photo = FileField('pro_photo', validators=[DataRequired()])
     club_room = StringField('club_room', validators=[DataRequired()])
     organiser = StringField('organiser', validators=[DataRequired()])
 
@@ -30,7 +30,7 @@ class Add_Notice(FlaskForm):
     #     if field.data < _current_date:
     #         raise ValidationError("You can't enter a date from the past!")
 
-    notice = StringField('name', validators=[DataRequired()])
+    notice = StringField('notice', validators=[DataRequired()])
 
 # IntegerField('date', validators=[Optional(), check_date])
 
@@ -44,3 +44,13 @@ class Add_Event(FlaskForm):
 class Club_Teacher(FlaskForm):
     club = SelectField('club', validators=[DataRequired()])
     teacher = SelectField('teacher', validators=[DataRequired()])
+
+
+class Add_Photo(FlaskForm):
+
+    photo = FileField('photo', validators=[DataRequired()])
+
+
+class Find_Club(FlaskForm):
+
+    club_name = SelectField('club_name', validators=[DataRequired()], coerce=int)

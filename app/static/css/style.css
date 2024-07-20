@@ -18,7 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
-    
+    min-height: 1000px;
     
 }
 
@@ -30,7 +30,7 @@ main {
 
 footer {
     padding: 20px;
-    margin-top: 42.2%;
+    margin-top: auto;
     position: relative;
     background-color:#E7E7E7;
 }
@@ -190,8 +190,8 @@ td, th {
 }
 
 .multiple_club {
-    width: 200px;
-    height: 280px;
+    width: 250px;
+    height: 200px;
 }
 
 .pfp {
@@ -269,6 +269,27 @@ td, th {
     margin-top: 1%;
 }
 
+.photo_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+    row-gap: 20px;
+    column-gap: 20px;
+    padding: 6%;
+}
+
+.multiple_photo {
+    width: 200px;
+    height: 280px;
+}
+
+.photos {
+    position: absolute; 
+    bottom: 0; 
+}
+
 
 /**************/
 /**Admin Page**/
@@ -303,3 +324,16 @@ td, th {
     font-size: 200%;
 }
 
+/******************/
+/**404 Error Page**/
+/******************/
+
+.error {
+    background-color: var(--clr-bhs);
+    color: white;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    margin-top: 10%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
