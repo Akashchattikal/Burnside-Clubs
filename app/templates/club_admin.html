@@ -8,11 +8,6 @@
 
   <div class="grid-container">
     <div class="item1">
-      <img class="club_pro shadow rounded-20" src="/{{club_admin.pro_photo}}"/>
-      &nbsp;
-      <p class="club_about">{{club_admin.description}}</p>
-    </div>
-    <div class="item2">
       <h2 class="club_titles" id="notices_section">Notices</h2>
       {{ notice_form.csrf_token }}
       <form method="POST" enctype="multipart/form-data" class="center">
@@ -59,8 +54,15 @@
           </li>
         {% endfor %}
       </ul>
-    </div>  
+    </div>
+    <div class="item2">
+      <img class="club_pro shadow rounded-20" src="/{{club_admin.pro_photo}}"/>
+      &nbsp;
+      <p class="club_about">{{club_admin.description}}</p>
+    </div>
   </div>
+
+</body>
 
 
 

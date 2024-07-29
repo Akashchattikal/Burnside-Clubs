@@ -30,7 +30,7 @@ class Add_Notice(FlaskForm):
     #     if field.data < _current_date:
     #         raise ValidationError("You can't enter a date from the past!")
 
-    notice = StringField('notice')#, validators=[DataRequired()])
+    notice = StringField('notice')  # , validators=[DataRequired()])
     date = DateField('date', format='%Y-%m-%d')
 
 # IntegerField('date', validators=[Optional(), check_date])
