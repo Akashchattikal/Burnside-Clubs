@@ -212,8 +212,8 @@ td, th {
     flex-wrap: wrap;
     list-style: none;
     justify-content: center;
-    row-gap: 20px;
-    column-gap: 20px;
+    row-gap: 27px;
+    column-gap: 27px;
     padding: 6%;
 }
 
@@ -251,6 +251,55 @@ td, th {
     text-align: center;
 }
 
+.multiple_notices {
+    background-color: rgba(109, 109, 109, 0.632);
+    margin: auto;
+    padding-left: -0.9%;
+    padding-right: -0.9%;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+    border-radius: 10px;
+    color: white;
+}
+
+.multiple_events {
+    background-color: rgba(109, 109, 109, 0.632);
+    margin: auto;
+    padding-left: -0.9%;
+    padding-right: -0.9%;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+    border-radius: 10px;
+    color: white;
+}
+
+.notice_section, .event_section {
+    width: 70%;
+    margin-bottom: 7%;
+}
+
+.date_section_not {
+    width: 20%;
+    font-size: 70%;
+    display: inline;
+}
+
+.date_section_eve {
+    width: 20%;
+    font-size: 85%;
+    display: inline;
+}
+
+.notices_container, .events_container, .photo_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+    row-gap: 20px;
+    column-gap: 20px;
+    padding: 3%;
+}
 .organiser {
     font-size: 100%;
     padding-bottom: 2%;
@@ -258,7 +307,7 @@ td, th {
 
 .club_about {
     font-size: 15px;
-    width: 90%;
+    width: 97%;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
@@ -271,24 +320,12 @@ td, th {
     padding: 0.5%;
     border-radius: 20px;
     font-size: 75%;
-
 }
 
 .club_pro {
-    width: 90%;
-    height: 70%;
+    width: 97%;
+    height: 97%;
     margin-right: -5%;
-}
-
-.photo_container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    list-style: none;
-    justify-content: center;
-    row-gap: 20px;
-    column-gap: 20px;
-    padding: 6%;
 }
 
 .multiple_photo {
@@ -296,26 +333,22 @@ td, th {
     height: 280px;
 }
 
-.photos {
-    position: absolute; 
-    bottom: 0; 
-}
-
-.item1 { 
-    grid-area: club_details; 
-    margin-top: -8%;
-}
-.item2 { grid-area: main; }
-
 .grid-container {
-    display: grid;
-    grid-template-areas: 
-        'main club_details';
-    grid-template-columns: 4fr 1fr;
-    /* gap: 10px;
-    background-color: #2196F3;
-    padding: 10px; */
+    display: flex;
+    height: 100%; /* Full height of the container */
     margin-top: 2%;
+}
+
+.item1 {
+    flex: 1; /* Flexible width, taking up remaining space */
+    padding: 10px;
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+.item2 {
+    flex: 0 0 320px; /* Fixed width of 300px */
+    padding: 10px;
+    box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
 .grid-container > div {

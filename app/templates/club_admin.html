@@ -14,24 +14,51 @@
     </div>
     <div class="item2">
       <h2 class="club_titles" id="notices_section">Notices</h2>
-      {% for notice in club_admin.notices %}
-      <p>{{notice.notice}}</p>
-      {% endfor %}
       {{ notice_form.csrf_token }}
       <form method="POST" enctype="multipart/form-data" class="center">
         {{ notice_form.notice }}
         {{ notice_form.date }}
         <input type="submit" value="+" class="sub_date">
-      </form> 
+      </form>
+      <ul class="notices_container">
+        {% for notice in club_admin.notices %}
+          <li class="multiple_notices">
+            
+            <div class="notice_section center">
+              <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
+              {{notice.notice}}
+            </div>
+            &nbsp;
+            <div class="date_section_not">Uploaded At {{notice.date}}</div>
+
+          </li>
+        {% endfor %}
+      </ul>
       &nbsp;
       &nbsp;
       <h2 class="club_titles" id="events_section">Events</h2>
       {{ event_form.csrf_token }}
       <form method="POST" enctype="multipart/form-data" class="center">
         {{ event_form.name }}
+        {{ event_form.location }}
         {{ event_form.date }}
         <input type="submit" value="+" class="sub_date">
       </form>
+      <ul class="events_container">
+        {% for event in club_admin.events %}
+          <li class="multiple_events">
+            
+            <div class="event_section center">
+              <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
+              {{event.name}}
+              {{event.location}}
+            </div>
+            &nbsp;
+            <div class="date_section_eve">Date: {{event.date}}</div>
+
+          </li>
+        {% endfor %}
+      </ul>
     </div>  
   </div>
 

@@ -9,35 +9,58 @@
 
   <div class="grid-container">
     <div class="item1">
+      <h2 class="club_titles" id="notices_section">Notices</h2>
+      
+      <ul class="notices_container">
+        {% for notice in club.notices %}
+          <li class="multiple_notices">
+            
+            <div class="notice_section center">
+              <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
+              {{notice.notice}}
+            </div>
+            &nbsp;
+            <div class="date_section_not">Uploaded At {{notice.date}}</div>
+
+          </li>
+        {% endfor %}
+      </ul>
+      &nbsp;
+      &nbsp;
+      <h2 class="club_titles" id="events_section">Events</h2>
+      <ul class="events_container">
+        {% for event in club.events %}
+          <li class="multiple_events">
+            
+            <div class="event_section center">
+              <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
+              {{event.name}}
+              {{event.location}}
+            </div>
+            &nbsp;
+            <div class="date_section_eve">Date: {{event.date}}</div>
+
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="item2">
       <img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/>
       &nbsp;
       <p class="club_about">{{club.description}}</p>
     </div>
-    <div class="item2">
-      <h2 class="club_titles" id="notices_section">Notices</h2>
-      {% for notice in club.notices %}
-      <p>{{notice.notice}}</p>
-      {% endfor %}
-      &nbsp;
-      &nbsp;
-      <h2 class="club_titles" id="events_section">Events</h2>
-    </div>  
   </div>
 
+  <p>Photos Placeholder</p>
+  <ul class="photo_container">
+    <!-- Loops through every club in Clubs -->
 
-
-  <div class="photos">
-    <p>Photos Placeholder</p>
-    <ul class="photo_container">
-      <!-- Loops through every club in Clubs -->
-
-      {% for item in photos %}
-      <li class="rounded-20 multiple_photo shadow">
-          <img class="prevent-select" src="{{item.photo}}"/>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
+    {% for item in photos %}
+    <li class="rounded-20 multiple_photo shadow">
+        <img class="prevent-select" src="{{item.photo}}"/>
+    </li>
+    {% endfor %}
+  </ul>
 </body>
 
 

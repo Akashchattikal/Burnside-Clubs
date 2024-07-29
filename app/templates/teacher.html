@@ -9,15 +9,17 @@
   <h1 class="center" style="margin-top: 3%;">Clubs {{teacher.name}} Has Access To:</h1>
 
 
-    {% for club in teacher.clubs %}
+    
         <ul class="club_container">
+            {% for club in teacher.clubs %}
             <li class="multiple_club rounded-20 shadow center">
                 <!-- Displays a Club profile image and name -->
                 <a href = "/club_admin/{{club.id}}"><img class="pfp prevent-select" src="/{{club.pro_photo}}"/></a>
                 <a href="/club_admin/{{club.id}}"><h4 class="club_name prevent-select">{{club.name}}</h4></a>
             </li>
+            {% endfor %}
         </ul>
-    {% endfor %}
+    
 </body>
 
 {% endblock %}

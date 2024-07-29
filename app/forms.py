@@ -39,6 +39,7 @@ class Add_Notice(FlaskForm):
 class Add_Event(FlaskForm):
 
     name = StringField('name', validators=[DataRequired()])
+    location = StringField('location', validators=[DataRequired()])
     date = DateField('date', validators=[DataRequired()], format='%Y-%m-%d')
 
 
