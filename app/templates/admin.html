@@ -9,16 +9,16 @@
       <h2 class="center">Add New Club</h2>
       &nbsp;
       <form method="POST" enctype="multipart/form-data" class="center">
-        {{ club_form.csrf_token }}
-        <p class="space_form">Name: {{ club_form.name }}</p>
-        <p class="space_form">Description: {{ club_form.description }}</p>
-        <p class="space_form">Profile Photo: {{ club_form.pro_photo }}</p>
-        <p class="space_form">Club Common Room: {{ club_form.club_room }}</p>
-        <p class="space_form">Organiser: {{ club_form.organiser }}</p>
-        <br>
-        <input type="submit" value="Add Club" class="submission rounded-20">
-      </form> 
-    </div>
+          {{ club_form.csrf_token }}
+          <p class="space_form">Name: {{ club_form.name }}</p>
+          <p class="space_form">Description: {{ club_form.description }}</p>
+          <p class="space_form">Profile Photo: {{ club_form.pro_photo }}</p>
+          <p class="space_form">Club Common Room: {{ club_form.club_room }}</p>
+          <p class="space_form">Organiser: {{ club_form.organiser }}</p>
+          <br>
+          <input type="submit" value="Add Club" class="submission rounded-20">
+      </form>
+  </div>
   </li>
   <li class="multiple_feature rounded-20 shadow">   
     <div style="margin-top: 8%;">

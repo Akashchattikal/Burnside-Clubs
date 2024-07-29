@@ -19,6 +19,7 @@ body {
     flex-direction: column;
     font-family: 'Inter', sans-serif;
     min-height: 1000px;
+    height: 100%;
     
 }
 
@@ -29,9 +30,24 @@ main {
 }
 
 footer {
+    /* padding: 20px;
+    margin-top: auto;
+    position: absolute;
+    color: white;
+    width:100%;
+    padding:20px;
+    display:block; 
+    clear:both;
+    bottom:0;   
+    background-color:#E7E7E7; */
+    
     padding: 20px;
     margin-top: auto;
     position: relative;
+    width:100%;
+    display:block; 
+    clear:both;
+    bottom:0;   
     background-color:#E7E7E7;
 }
 
@@ -78,17 +94,43 @@ td, th {
     margin: auto;
 }
 
+@media only screen and (max-width: 600px) {
+    .header_content {
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 0;
+        row-gap: 18px;
+
+    }
+
+    .nav_list {
+        margin-top: 6%;
+        column-gap: 20px;
+    }
+    
+    footer {
+        padding: 20px;
+        position: absolute;
+        color: white;
+        width:100%;
+        padding:20px;
+        display:block; 
+        clear:both;
+        bottom:0;   
+        background-color:#E7E7E7; 
+    }
+}
+
 
 /***********/
 /**Nav Bar**/
 /***********/
-.nav_ul {
-    list-style: none;
-}
 
 .nav_list {
     display: flex;
     column-gap: 45px;
+    list-style: none;
+    text-align: center;
 }
 
 
@@ -130,20 +172,6 @@ td, th {
     font-size: 15px;
     font-weight: 500;
     color: white;
-}
-
-@media (max-width: 796px) {
-    .header_content {
-        flex-direction: column;
-        align-items: center;
-        padding: 25px 0;
-        row-gap: 18px;
-
-    }
-
-    .nav_list {
-        column-gap: 20px;
-    }
 }
 
 .header {
@@ -225,48 +253,31 @@ td, th {
 
 .organiser {
     font-size: 100%;
+    padding-bottom: 2%;
 }
 
 .club_about {
-    width: 60%;
+    font-size: 15px;
+    width: 90%;
+    text-align: center;
     margin-left: auto;
-    margin-top: 3%;
-}
-
-.club_pro {
-    width: 55%;
-    height: 35%;
-    float: right;
-    margin-right: 2%;
-    margin-top: -20%;
-}
-
-.club_flex_title {
-    display: flex;
-    align-items: flex-start;
-}
-
-.club_flex_title > div {
-    text-align: center;
-    width: 1000%;
-}
-
-.club_flex {
-    display: flex;
-    align-items: flex-start;
-}
-
-.club_flex > div {
-    text-align: center;
-    width: 40%;
-}
-
-.club_title {
+    margin-right: auto;
     margin-top: 5%;
 }
 
-.club_text {
-    margin-top: 1%;
+.scroll {
+    color: white;
+    background-color: var(--clr-bhs);
+    padding: 0.5%;
+    border-radius: 20px;
+    font-size: 75%;
+
+}
+
+.club_pro {
+    width: 90%;
+    height: 70%;
+    margin-right: -5%;
 }
 
 .photo_container {
@@ -290,6 +301,27 @@ td, th {
     bottom: 0; 
 }
 
+.item1 { 
+    grid-area: club_details; 
+    margin-top: -8%;
+}
+.item2 { grid-area: main; }
+
+.grid-container {
+    display: grid;
+    grid-template-areas: 
+        'main club_details';
+    grid-template-columns: 4fr 1fr;
+    /* gap: 10px;
+    background-color: #2196F3;
+    padding: 10px; */
+    margin-top: 2%;
+}
+
+.grid-container > div {
+  /* background-color: rgba(255, 255, 255, 0.8); */
+  text-align: center;
+}
 
 /**************/
 /**Admin Page**/
@@ -304,7 +336,7 @@ td, th {
     justify-content: center;
     row-gap: 20px;
     column-gap: 6%;
-    padding: 6%;
+    padding: 7%;
     color: white;
 }
 
@@ -320,7 +352,7 @@ td, th {
 }
 
 .sub_date {
-    padding: 1.5%;
+    padding: 0.5%;
     font-size: 200%;
 }
 

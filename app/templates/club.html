@@ -1,20 +1,30 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body>
-  <span>
-    <h2 class="organiser">Club Organiser: {{club.organiser}}</h2>
-  </span>
-  
-  <div class="club_flex_title club_title">
-    <div><h2 class="club_titles">Notices</h2></div>
-    <div><h2 class="club_titles">Events</h2></div>
-    <div><img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/></div>
+
+  <h2 class="organiser">Club Organiser: {{club.organiser}}</h2>
+  <a href="#notices_section" class="scroll">Go To Notices</a>
+  &nbsp; 
+  <a href="#events_section" class="scroll">Go To Events</a>
+
+  <div class="grid-container">
+    <div class="item1">
+      <img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/>
+      &nbsp;
+      <p class="club_about">{{club.description}}</p>
+    </div>
+    <div class="item2">
+      <h2 class="club_titles" id="notices_section">Notices</h2>
+      {% for notice in club.notices %}
+      <p>{{notice.notice}}</p>
+      {% endfor %}
+      &nbsp;
+      &nbsp;
+      <h2 class="club_titles" id="events_section">Events</h2>
+    </div>  
   </div>
-  <div class="club_flex">
-    <div class="club_text"><p>{{club.notice}}</p></div>
-    <div class="club_text"><p>placeholder</p></div>
-    <div><p class="club_about">{{club.description}}</p></div>
-  </div>
+
+
 
   <div class="photos">
     <p>Photos Placeholder</p>

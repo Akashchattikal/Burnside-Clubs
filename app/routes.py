@@ -33,6 +33,7 @@ def clubs():
 @app.route("/club/<int:id>")
 def club(id):
     club = models.Clubs.query.filter_by(id=id).first()
+
     return render_template('club.html', club=club)
 
 
@@ -50,9 +51,11 @@ def teacher(id):
 
 @app.route("/club_admin/<int:id>", methods=['GET', 'POST'])
 def club_admin(id):
+
     club_admin = models.Clubs.query.filter_by(id=id).first()
     notice_form = Add_Notice()
     event_form = Add_Event()
+    print(notice_form.notice.data)
     if request.method == 'GET':
         return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form)
     else:
@@ -60,16 +63,19 @@ def club_admin(id):
             new_notice = models.Notices()
             new_notice.notice = notice_form.notice.data
             new_notice.date = notice_form.date.data
-            db.session.add(new_notice)
+            print('blah')
+            club_admin.notices.append(new_notice)
             db.session.commit()
             flash('Notice Added!')
             time.sleep(2.5)
             return redirect("/club_admin/<int:id>")
+        else:
+            print("Failed Validation")
         if event_form.validate_on_submit():
             new_event = models.Events()
             new_event.name = event_form.name.data
             new_event.date = event_form.date.data
-            db.session.add(new_event)
+            club_admin.events.append(new_event)
             db.session.commit()
             flash('Event Added!')
             time.sleep(2.5)
