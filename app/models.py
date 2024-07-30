@@ -4,7 +4,7 @@ Club_Events = db.Table('Club_Events', db.Column('cid', db.Integer, db.ForeignKey
 
 Club_Notices = db.Table('Club_Notices', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('nid', db.Integer, db.ForeignKey('Notices.id')))
 
-Clubs_Photos = db.Table('Clubs_Photos', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('pid', db.Integer, db.ForeignKey('Photos.id')))
+Club_Photos = db.Table('Club_Photos', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('pid', db.Integer, db.ForeignKey('Photos.id')))
 
 Club_Teacher = db.Table('Club_Teacher', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('tid', db.Integer, db.ForeignKey('Teachers.id')))
 
@@ -19,7 +19,7 @@ class Clubs(db.Model):
     organiser = db.Column(db.Text())
     events = db.relationship('Events', secondary='Club_Events', back_populates='clubs')
     notices = db.relationship('Notices', secondary='Club_Notices', back_populates='clubs')
-    photos = db.relationship('Photos', secondary='Clubs_Photos', back_populates='clubs')
+    photos = db.relationship('Photos', secondary='Club_Photos', back_populates='clubs')
     teachers = db.relationship('Teachers', secondary='Club_Teacher', back_populates='clubs')
 
     def __repr__(self):
@@ -53,7 +53,7 @@ class Photos(db.Model):
     __tablename__ = "Photos"
     id = db.Column(db.Integer, primary_key=True)
     photo = db.Column(db.Text())
-    clubs = db.relationship('Clubs', secondary='Clubs_Photos', back_populates='photos')
+    clubs = db.relationship('Clubs', secondary='Club_Photos', back_populates='photos')
 
     def __repr__(self):
         return self.name

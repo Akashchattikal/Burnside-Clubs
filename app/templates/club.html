@@ -20,7 +20,7 @@
               {{notice.notice}}
             </div>
             &nbsp;
-            <div class="date_section_not">Uploaded At {{notice.date}}</div>
+            <div class="date_section_not">Uploaded On {{notice.date}}</div>
 
           </li>
         {% endfor %}
@@ -35,7 +35,12 @@
             <div class="event_section center">
               <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
               {{event.name}}
-              {{event.location}}
+              <div class="event_location">
+                <hr style="margin-bottom: 20%;">
+                <i class='fas fa-map-marker-alt'></i>
+                <a href="https://www.google.com/maps?q={{ event.location | urlencode }}" target="_blank" class="location">{{event.location}}</a>
+              </div>
+             
             </div>
             &nbsp;
             <div class="date_section_eve">Date: {{event.date}}</div>
@@ -48,20 +53,55 @@
       <img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/>
       &nbsp;
       <p class="club_about">{{club.description}}</p>
+
+      <button id="myButton" class="photo_pop">See Photos</button>
+      
     </div>
   </div>
+  <div id="myPopup" class="popup">
+    <div class="popup-content">
+      <ul class="photo_container">
+        <!-- Loops through every club in Clubs -->
 
-  <p>Photos Placeholder</p>
-  <ul class="photo_container">
-    <!-- Loops through every club in Clubs -->
-
-    {% for item in photos %}
-    <li class="rounded-20 multiple_photo shadow">
-        <img class="prevent-select" src="{{item.photo}}"/>
-    </li>
-    {% endfor %}
-  </ul>
+        {% for photo in club.photos %}
+          <li class="center">
+              <img class="rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
+          </li>
+        {% endfor %}
+      </ul>
+      <button id="closePopup" class="pop_close prevent-select">X</button>
+    </div>
+  </div>
 </body>
+
+<script>
+  myButton.addEventListener(
+      "click",
+      function () {
+          myPopup.classList.add("show");
+      }
+  );
+  closePopup.addEventListener(
+      "click",
+      function () {
+          myPopup.classList.remove(
+              "show"
+          );
+      }
+  );
+  window.addEventListener(
+      "click",
+      function (event) {
+          if (event.target == myPopup) {
+              myPopup.classList.remove(
+                  "show"
+              );
+          }
+      }
+  );
+</script>
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 
 
