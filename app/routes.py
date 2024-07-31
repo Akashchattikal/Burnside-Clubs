@@ -16,7 +16,7 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher,  Add_Notice, Add_Event
+from app.forms import Add_Club, Add_Teacher, Club_Teacher,  Add_Notice, Add_Event, Add_Photo
 
 
 @app.route("/")
@@ -55,8 +55,9 @@ def club_admin(id):
     club_admin = models.Clubs.query.filter_by(id=id).first()
     notice_form = Add_Notice()
     event_form = Add_Event()
+    photo_form = Add_Photo()
     if request.method == 'GET':
-        return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form)
+        return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form, photo_form=photo_form)
     else:
         if notice_form.validate_on_submit():
             new_notice = models.Notices()
@@ -67,8 +68,7 @@ def club_admin(id):
             flash('Notice Added!')
             time.sleep(2.5)
             return redirect(f"/club_admin/{id}")
-        else:
-            print("Failed Validation")
+
         if event_form.validate_on_submit():
             new_event = models.Events()
             new_event.name = event_form.name.data
@@ -77,9 +77,22 @@ def club_admin(id):
             db.session.commit()
             flash('Event Added!')
             time.sleep(2.5)
-            return redirect("/club_admin/<int:id>")
+            return redirect(f"/club_admin/{id}")
+
+        if photo_form.validate_on_submit():
+            new_photo = models.Photos()
+            photo = photo_form.photo.data
+            filename = secure_filename(photo.filename)
+            new_photo.photo = ('static/images/' + filename)
+            photo.save(os.path.join(basedir, 'static/images/' + filename))
+            new_photo.description = photo_form.description.data
+            club_admin.photos.append(new_photo)
+            db.session.commit()
+            flash('Photo Added!')
+            time.sleep(2.5)
+            return redirect(f"/club_admin/{id}")
         else:
-            return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form)
+            return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form, photo_form=photo_form)
 
 
 @app.route('/admin_access', methods=['GET', 'POST'])

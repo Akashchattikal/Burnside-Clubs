@@ -32,6 +32,7 @@ class Events(db.Model):
     name = db.Column(db.Text())
     location = db.Column(db.Text())
     date = db.Column(db.Text())
+    photo = db.Column(db.Text())
     clubs = db.relationship('Clubs', secondary='Club_Events', back_populates='events')
 
     def __repr__(self):
@@ -43,6 +44,7 @@ class Notices(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notice = db.Column(db.Text())
     date = db.Column(db.Text())
+    photo = db.Column(db.Text())
     clubs = db.relationship('Clubs', secondary='Club_Notices', back_populates='notices')
 
     def __repr__(self):
@@ -53,6 +55,7 @@ class Photos(db.Model):
     __tablename__ = "Photos"
     id = db.Column(db.Integer, primary_key=True)
     photo = db.Column(db.Text())
+    description = db.Column(db.Text())
     clubs = db.relationship('Clubs', secondary='Club_Photos', back_populates='photos')
 
     def __repr__(self):

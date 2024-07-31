@@ -1,77 +1,72 @@
 {% extends 'layout.html' %}
 {% block content %}
-<body>
-
+<body class="prevent-select">
   <h2 class="organiser">Club Organiser: {{club.organiser}}</h2>
-  <a href="#notices_section" class="scroll">Go To Notices</a>
+  <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
   &nbsp; 
-  <a href="#events_section" class="scroll">Go To Events</a>
+  <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
 
   <div class="grid-container">
     <div class="item1">
-      <h2 class="club_titles" id="notices_section">Notices</h2>
-      
-      <ul class="notices_container">
-        {% for notice in club.notices %}
-          <li class="multiple_notices">
-            
-            <div class="notice_section center">
-              <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
-              {{notice.notice}}
-            </div>
-            &nbsp;
-            <div class="date_section_not">Uploaded On {{notice.date}}</div>
-
-          </li>
-        {% endfor %}
-      </ul>
-      &nbsp;
-      &nbsp;
-      <h2 class="club_titles" id="events_section">Events</h2>
-      <ul class="events_container">
-        {% for event in club.events %}
-          <li class="multiple_events">
-            
-            <div class="event_section center">
-              <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
-              {{event.name}}
-              <div class="event_location">
-                <hr style="margin-bottom: 20%;">
-                <i class='fas fa-map-marker-alt'></i>
-                <a href="https://www.google.com/maps?q={{ event.location | urlencode }}" target="_blank" class="location">{{event.location}}</a>
+      <div id="section1" class="section scroll-target">
+        <h2 class="club_titles" id="notices_section">Notices</h2>
+        <ul class="notices_container">
+          {% for notice in club.notices %}
+            <li class="multiple_notices">
+              
+              <div class="notice_section center">
+                <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
+                {{notice.notice}}
               </div>
-             
-            </div>
-            &nbsp;
-            <div class="date_section_eve">Date: {{event.date}}</div>
+              &nbsp;
+              <div class="date_section_not">Uploaded At {{notice.date}}</div>
 
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-    <div class="item2">
-      <img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
       &nbsp;
-      <p class="club_about">{{club.description}}</p>
+      &nbsp;
+      <div id="section2" class="section scroll-target">
+        <h2 class="club_titles" id="events_section">Events</h2>
+        <ul class="events_container">
+          {% for event in club.events %}
+            <li class="multiple_events">
+              
+              <div class="event_section center">
+                <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
+                {{event.name}}
+                {{event.location}}
+              </div>
+              &nbsp;
+              <div class="date_section_eve">Date: {{event.date}}</div>
 
-      <button id="myButton" class="photo_pop">See Photos</button>
-      
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-  </div>
-  <div id="myPopup" class="popup">
-    <div class="popup-content">
-      <ul class="photo_container">
-        <!-- Loops through every club in Clubs -->
+  <div class="item2">
+    <img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/>
+    &nbsp;
+    <p class="club_about">{{club.description}}</p>
 
-        {% for photo in club.photos %}
-          <li class="center">
-              <img class="rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
-          </li>
-        {% endfor %}
-      </ul>
-      <button id="closePopup" class="pop_close prevent-select">X</button>
-    </div>
+    <button id="myButton" class="photo_pop">Click Me To See Photos</button>
   </div>
+</div>
+<div id="myPopup" class="popup">
+  <div class="popup-content">
+
+    <ul class="photo_container">
+      {% for photo in club.photos %}
+      <li class="multi_photo shadow">
+          <img class="photo_pic rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
+      </li>
+      {% endfor %}
+    </ul>
+    <button id="closePopup" class="pop_close prevent-select">X</button>
+  </div>
+</div>
 </body>
 
 <script>
@@ -99,9 +94,22 @@
           }
       }
   );
+
+function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      const yOffset = -60; // Adjust based on your needs
+      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+      });
+  }
 </script>
 
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
+</body>
 
 
 

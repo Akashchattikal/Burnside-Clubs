@@ -18,7 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
-    min-height: 1000px;
+    min-height: 100000px;
     height: 100%;
     
 }
@@ -63,9 +63,7 @@ td, th {
 }
 
 /* Standard Syntax -  Prevent User Text Select*/
-.prevent-select {
-    user-select: none;
-}
+.prevent-select {user-select: none;}
 
 
 :root {
@@ -73,9 +71,7 @@ td, th {
     --clr-bhs: #0c5f4c;
 }
 
-.shadow {
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
-}
+.shadow {box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);}
 
 .center {
     margin-left: auto;
@@ -84,9 +80,7 @@ td, th {
     margin: auto
 }
 
-.rounded-20 {
-    border-radius: 20px;
-}
+.rounded-20 {border-radius: 20px;}
 
 .inline_div {
     display: flex;
@@ -146,9 +140,7 @@ td, th {
     color: rgba(0, 0, 0, 1);
 }
 
-.nav_link:hover::after {
-    opacity: 1;
-}
+.nav_link:hover::after {opacity: 1;}
 
 .nav_link::after {
     content: '';
@@ -222,6 +214,12 @@ td, th {
     height: 200px;
 }
 
+.multi_photo {
+    width: 250px;
+    height: 140.5px;
+    border-radius: 20px ;
+}
+
 .pfp {
     display: block;
     margin-left: auto;
@@ -231,6 +229,8 @@ td, th {
     border-radius: 20px;
     z-index: -1;
 }
+
+.multiple_club:hover {opacity: 0.9;}
 
 .club_name {
     margin-left: auto;
@@ -247,8 +247,12 @@ td, th {
 /**Club Page**/
 /*************/
 
-.club_titles {
-    text-align: center;
+.club_titles {text-align: center;}
+
+.photo_pic:active {
+    width: 200%;
+    z-index: 2;
+    
 }
 
 .multiple_notices {
@@ -273,14 +277,16 @@ td, th {
     color: white;
 }
 
+.multiple_events:hover {box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4); }
+
+.multiple_notices:hover {box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4); }
+
 .notice_section, .event_section {
     width: 70%;
     margin-bottom: 7%;
 }
 
-.location {
-    color: white;
-}
+.location {color: white;}
 
 .event_location {
     margin-top: 10%;
@@ -299,7 +305,7 @@ td, th {
     display: inline;
 }
 
-.notices_container, .events_container, .photo_container {
+.notices_container, .events_container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -308,6 +314,17 @@ td, th {
     row-gap: 20px;
     column-gap: 20px;
     padding: 3%;
+}
+
+.photo_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    justify-content: center;
+    row-gap: 27px;
+    column-gap: 27px;
+    padding: 6%;
 }
 
 .organiser {
@@ -330,7 +347,10 @@ td, th {
     padding: 0.5%;
     border-radius: 20px;
     font-size: 75%;
+    border: 0;
 }
+
+.scroll:hover {opacity: 0.9;}
 
 .club_pro {
     width: 97%;
@@ -344,7 +364,7 @@ td, th {
 }
 
 .club_photos {
-    width: 40%;
+    width: 100%;
     border-radius: 5px;
     position: relative;
 }
@@ -367,10 +387,8 @@ td, th {
     box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
-.grid-container > div {
-  /* background-color: rgba(255, 255, 255, 0.8); */
-  text-align: center;
-}
+.grid-container > div {text-align: center;}
+  /* background-color: rgba(255, 255, 255, 0.8);  Used for testing grid container*/
 
 .popup {
     position: fixed;
@@ -380,13 +398,9 @@ td, th {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(
-        0,
-        0,
-        0,
-        0.4
-    );
+    background-color: rgba(0, 0, 0, 0.4);
     display: none;
+
 }
 .popup-content {
     background-color: white;
@@ -395,14 +409,14 @@ td, th {
     width: 60%;
     border-radius: 10px;
     font-weight: bolder;
+    margin-top: 9%;
 }
 .popup-content button {
     display: block;
     margin: 0 auto;
 }
-.show {
-    display: block;
-}
+
+.show {display: block;}
 
 .photo_pop {
     margin-top: 10%;
@@ -413,6 +427,8 @@ td, th {
     border: 0px;
 }
 
+.photo_pop:hover {opacity: 0.9;}
+
 .pop_close {
     background-color: white;
     font-size: 20px;
@@ -420,6 +436,10 @@ td, th {
     border: 0px;
     float: top;
 }
+
+.section {padding-top: 2%;} /* Adjust this value based on your needs */
+.scroll-target {scroll-margin-top: 2%;} /* Adjust based on your header height */
+
 
 /**************/
 /**Admin Page**/
@@ -454,6 +474,16 @@ td, th {
     padding: 0.5%;
     font-size: 200%;
 }
+
+.sub_photo {
+    padding: 2%;
+    font-size: 300%;
+    border-radius: 20px;
+    border: 0;
+    margin-left: 3%;
+}
+
+.sub_photo:hover {box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.1);}
 
 /******************/
 /**404 Error Page**/

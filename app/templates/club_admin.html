@@ -1,67 +1,133 @@
 {% extends 'layout.html' %}
 {% block content %}
-<body>
+<body class="prevent-select">
   <h2 class="organiser">Club Organiser: {{club_admin.organiser}}</h2>
-  <a href="#notices_section" class="scroll">Go To Notices</a>
+  <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
   &nbsp; 
-  <a href="#events_section" class="scroll">Go To Events</a>
+  <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
 
   <div class="grid-container">
     <div class="item1">
-      <h2 class="club_titles" id="notices_section">Notices</h2>
-      
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ notice_form.csrf_token }}
-        {{ notice_form.notice }}
-        {{ notice_form.date }}
-        <input type="submit" value="+" class="sub_date">
-      </form>
-      <ul class="notices_container">
-        {% for notice in club_admin.notices %}
-          <li class="multiple_notices">
-            
-            <div class="notice_section center">
-              <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
-              {{notice.notice}}
-            </div>
-            &nbsp;
-            <div class="date_section_not">Uploaded At {{notice.date}}</div>
+      <div id="section1" class="section scroll-target">
+        <h2 class="club_titles" id="notices_section">Notices</h2>
+        
+        <form method="POST" enctype="multipart/form-data" class="center">
+          {{ notice_form.csrf_token }}
+          {{ notice_form.notice }}
+          {{ notice_form.date }}
+          <input type="submit" value="+" class="sub_date">
+        </form>
+        <ul class="notices_container">
+          {% for notice in club_admin.notices %}
+            <li class="multiple_notices">
+              
+              <div class="notice_section center">
+                <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
+                {{notice.notice}}
+              </div>
+              &nbsp;
+              <div class="date_section_not">Uploaded At {{notice.date}}</div>
 
-          </li>
-        {% endfor %}
-      </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
       &nbsp;
       &nbsp;
-      <h2 class="club_titles" id="events_section">Events</h2>
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ event_form.csrf_token }}
-        {{ event_form.name }}
-        {{ event_form.location }}
-        {{ event_form.date }}
-        <input type="submit" value="+" class="sub_date">
-      </form>
-      <ul class="events_container">
-        {% for event in club_admin.events %}
-          <li class="multiple_events">
-            
-            <div class="event_section center">
-              <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
-              {{event.name}}
-              {{event.location}}
-            </div>
-            &nbsp;
-            <div class="date_section_eve">Date: {{event.date}}</div>
+      <div id="section2" class="section scroll-target">
+        <h2 class="club_titles" id="events_section">Events</h2>
+        <form method="POST" enctype="multipart/form-data" class="center">
+          {{ event_form.csrf_token }}
+          {{ event_form.name }}
+          {{ event_form.location }}
+          {{ event_form.date }}
+          <input type="submit" value="+" class="sub_date">
+        </form>
+        <ul class="events_container">
+          {% for event in club_admin.events %}
+            <li class="multiple_events">
+              
+              <div class="event_section center">
+                <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
+                {{event.name}}
+                {{event.location}}
+              </div>
+              &nbsp;
+              <div class="date_section_eve">Date: {{event.date}}</div>
 
-          </li>
-        {% endfor %}
-      </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-    <div class="item2">
-      <img class="club_pro shadow rounded-20" src="/{{club_admin.pro_photo}}"/>
-      &nbsp;
-      <p class="club_about">{{club_admin.description}}</p>
-    </div>
+  <div class="item2">
+    <img class="club_pro shadow rounded-20" src="/{{club_admin.pro_photo}}"/>
+    &nbsp;
+    <p class="club_about">{{club_admin.description}}</p>
+
+    <button id="myButton" class="photo_pop">Click Me To See Photos</button>
   </div>
+</div>
+<div id="myPopup" class="popup">
+  <div class="popup-content">
+    <form method="POST" enctype="multipart/form-data" class="center">
+      {{ photo_form.csrf_token }}
+      {{ photo_form.photo}}
+      {{ photo_form.description }}
+      <input type="submit" value="+" class="sub_photo">
+    </form>
+
+    <ul class="photo_container">
+      {% for photo in club_admin.photos %}
+      <li class="multi_photo shadow">
+          <img class="photo_pic rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
+      </li>
+      {% endfor %}
+    </ul>
+    <button id="closePopup" class="pop_close prevent-select">X</button>
+  </div>
+</div>
+</body>
+
+<script>
+  myButton.addEventListener(
+      "click",
+      function () {
+          myPopup.classList.add("show");
+      }
+  );
+  closePopup.addEventListener(
+      "click",
+      function () {
+          myPopup.classList.remove(
+              "show"
+          );
+      }
+  );
+  window.addEventListener(
+      "click",
+      function (event) {
+          if (event.target == myPopup) {
+              myPopup.classList.remove(
+                  "show"
+              );
+          }
+      }
+  );
+
+function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      const yOffset = -60; // Adjust based on your needs
+      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+      });
+  }
+</script>
+
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 </body>
 

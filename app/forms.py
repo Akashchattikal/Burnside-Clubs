@@ -31,6 +31,7 @@ class Add_Notice(FlaskForm):
     #         raise ValidationError("You can't enter a date from the past!")
 
     notice = StringField('notice')  # , validators=[DataRequired()])
+    photo = FileField('photo', validators=[DataRequired()])
     date = DateField('date', format='%Y-%m-%d')
 
 # IntegerField('date', validators=[Optional(), check_date])
@@ -40,6 +41,7 @@ class Add_Event(FlaskForm):
 
     name = StringField('name', validators=[DataRequired()])
     location = StringField('location', validators=[DataRequired()])
+    photo = FileField('photo', validators=[DataRequired()])
     date = DateField('date', validators=[DataRequired()], format='%Y-%m-%d')
 
 
@@ -51,6 +53,7 @@ class Club_Teacher(FlaskForm):
 class Add_Photo(FlaskForm):
 
     photo = FileField('photo', validators=[DataRequired()])
+    description = StringField('name', validators=[DataRequired()])
 
 
 class Find_Club(FlaskForm):
