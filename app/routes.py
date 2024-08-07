@@ -16,7 +16,7 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher
+from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club
 
 
 @app.route("/")
@@ -58,11 +58,13 @@ def club_admin(id):
     notice_form = Add_Notice()
     event_form = Add_Event()
     photo_form = Add_Photo()
+    update_form = Update_Club()
     if request.method == 'GET':
         return render_template('club_admin.html',
                                title="Club Admin Access Page",
                                notice_form=notice_form, club_admin=club_admin,
-                               event_form=event_form, photo_form=photo_form)
+                               event_form=event_form, photo_form=photo_form,
+                               update_form=update_form)
     else:
         if notice_form.validate_on_submit():
             new_notice = models.Notices()
@@ -103,13 +105,35 @@ def club_admin(id):
             flash('Photo Added!')
             time.sleep(2.5)
             return redirect(f"/club_admin/{id}")
-        else:
-            return render_template('club_admin.html',
-                                   title="Club Admin Access Page",
-                                   notice_form=notice_form,
-                                   club_admin=club_admin,
-                                   event_form=event_form,
-                                   photo_form=photo_form)
+
+        if 'update_club' in request.form:
+            if update_form.validate_on_submit():
+                if update_form.name.data:
+                    club_admin.name = update_form.name.data
+                if update_form.description.data:
+                    club_admin.description = update_form.description.data
+                if update_form.pro_photo.data:
+                    photo = update_form.pro_photo.data
+                    filename = secure_filename(photo.filename)
+                    club_admin.pro_photo = 'static/images/' + filename
+                    photo.save(os.path.join(basedir, 'static/images/' + filename))
+                if update_form.club_room.data:
+                    club_admin.club_room = update_form.club_room.data
+                if update_form.organiser.data:
+                    club_admin.organiser = update_form.organiser.data
+                db.session.commit()
+                flash('Club Updated!')
+                time.sleep(2.5)
+                return redirect(f"/club_admin/{id}")
+
+    # Set forms with exsisting values
+    update_form.name.data = club_admin.name
+    update_form.description.data = club_admin.description
+    update_form.pro_photo.data = club_admin.pro_photo
+    update_form.club_room.data = club_admin.club_room
+    update_form.organiser.data = club_admin.organiser
+
+    return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form, photo_form=photo_form, update_form=update_form)
 
 
 @app.route('/admin_access', methods=['GET', 'POST'])
@@ -132,7 +156,7 @@ def admin():
                                club_form=club_form, teacher_form=teacher_form,
                                teacher_club_form=teacher_club_form,
                                remove_club_form=remove_club_form,
-                               remove_teacher_form=remove_teacher_form)
+                               remove_teacher_form=remove_teacher_form,)
     else:
         if club_form.validate_on_submit():
             new_club = models.Clubs()

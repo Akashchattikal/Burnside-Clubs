@@ -12,20 +12,21 @@
 
   <div class="grid-container">
     <div class="item1">
+      <h1 class="club_title">{{club.name}} Club</h1>
+      <p class="club_room">Club Common Room: {{ club.club_room }}</p>
       <div id="section1" class="section scroll-target">
         <h2 class="club_titles" id="notices_section">Notices</h2>
         <ul class="notices_container">
           {% for notice in club.notices %}
-            <li class="multiple_notices">
-              
-              <div class="notice_section center">
-                <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
-                {{notice.notice}}
-              </div>
-              &nbsp;
-              <div class="date_section_not">Uploaded At {{notice.date}}</div>
-
-            </li>
+            {% if notice.notice and notice.date %}
+              <li class="multiple_notices">
+                <div class="notice_section center">
+                  {{ notice.notice }}
+                </div>
+                &nbsp;
+                <div class="date_section_not">Uploaded At {{ notice.date }}</div>
+              </li>
+            {% endif %}
           {% endfor %}
         </ul>
       </div>

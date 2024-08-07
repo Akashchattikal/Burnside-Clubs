@@ -2,7 +2,13 @@
 {% block content %}
 <body class="prevent-select">
   <div class="fix_menu">
-    <h2 class="organiser">Club Organiser: {{club_admin.organiser}}</h2>
+    <h2 class="organiser">Club Organiser: {{ club_admin.organiser }} <button onclick="toggleEdit('organiserEditForm')" class="form_edit">✎</button></h2>
+    
+    <form id="organiserEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
+        {{ update_form.csrf_token }}
+        {{ update_form.organiser() }}
+        <input type="submit" name="update_club" value="Apply" class="change_sub_small">
+    </form>
     <div class="scroll_container">
       <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
       <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
@@ -11,6 +17,18 @@
 
   <div class="grid-container">
     <div class="item1">
+      <h1 class="club_title">{{ club_admin.name }} Club<button onclick="toggleEdit('nameEditForm')" class="form_edit">✎</button></h1>
+      <form id="nameEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
+          {{ update_form.csrf_token }}
+          {{ update_form.name() }}
+          <input type="submit" name="update_club" value="Apply" class="change_sub">
+      </form>
+      <p class="club_room">Club Common Room: {{ club_admin.club_room }} <button onclick="toggleEdit('roomEditForm')" class="form_edit">✎</button></p>
+      <form id="roomEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
+          {{ update_form.csrf_token }}
+          {{ update_form.club_room() }}
+          <input type="submit" name="update_club" value="Apply" class="change_sub">
+      </form>
       <div id="section1" class="section scroll-target">
         <h2 class="club_titles" id="notices_section">Notices</h2>
         
@@ -23,16 +41,15 @@
         </form>
         <ul class="notices_container">
           {% for notice in club_admin.notices %}
-            <li class="multiple_notices">
-              
-              <div class="notice_section center">
-                <!-- <h3 style="margin-bottom: 3%;">Notice</h3> -->
-                {{notice.notice}}
-              </div>
-              &nbsp;
-              <div class="date_section_not">Uploaded At {{notice.date}}</div>
-
-            </li>
+            {% if notice.notice and notice.date %}
+              <li class="multiple_notices">
+                <div class="notice_section center">
+                  {{ notice.notice }}
+                </div>
+                &nbsp;
+                <div class="date_section_not">Uploaded At {{ notice.date }}</div>
+              </li>
+            {% endif %}
           {% endfor %}
         </ul>
       </div>
@@ -68,7 +85,7 @@
         {{ photo_form.csrf_token }}
         {{ photo_form.photo}}
         {{ photo_form.description }}
-        <input type="submit" value="+" class="sub_photo">
+        <input type="submit" value="+" class="sub_date">
       </form>
   
       <ul class="photo_container">
@@ -80,10 +97,23 @@
       </ul>
     </div>
   <div class="item2">
-    <img class="club_pro shadow rounded-20" src="/{{club_admin.pro_photo}}"/>
+    <img class="club_pro shadow rounded-20" src="/{{ club_admin.pro_photo }}" />
     &nbsp;
-    <p class="club_about">{{club_admin.description}}</p>
-
+    <button onclick="toggleEdit('photoEditForm')" class="form_edit">✎ Change Profile Photo</button>
+    <form id="photoEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
+        {{ update_form.csrf_token }}
+        {{ update_form.pro_photo() }}
+        <input type="submit" name="update_club" value="Apply" class="change_sub_small">
+    </form>
+    &nbsp;
+    <p class="club_about">{{ club_admin.description }} <button onclick="toggleEdit('descriptionEditForm')" class="form_edit">✎</button></p>
+    
+    
+    <form id="descriptionEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
+        {{ update_form.csrf_token }}
+        {{ update_form.description() }}
+        <input type="submit" name="update_club" value="Apply" class="change_sub_small">
+    </form>
     <button id="myButton" class="photo_pop">Click Me To See Photos</button>
   </div>
 </div>
@@ -93,7 +123,7 @@
       {{ photo_form.csrf_token }}
       {{ photo_form.photo}}
       {{ photo_form.description }}
-      <input type="submit" value="+" class="sub_photo">
+      <input type="submit" value="+" class="sub_date">
     </form>
 
     <ul class="photo_container">
@@ -143,6 +173,15 @@ function scrollToSection(sectionId) {
           top: y,
           behavior: 'smooth'
       });
+  }
+
+  function toggleEdit(formId) {
+      var form = document.getElementById(formId);
+      if (form.style.display === "none") {
+          form.style.display = "block";
+      } else {
+          form.style.display = "none";
+      }
   }
 </script>
 

@@ -69,6 +69,16 @@ td, th {
 :root {
     --clr-body-bg: hsl(300, 100%, 99%);
     --clr-bhs: #0c5f4c;
+
+    --primary-light: #8abdff;
+    --primary: #6d5dfc;
+    --primary-dark: #5b0eeb;
+  
+    --white: #FFFFFF;
+    --greyLight-1: #F5F5F5; /* Lighter grey for background */
+    --greyLight-2: #E0E0E0; /* Light grey for shadows */
+    --greyLight-3: #C0C0C0; /* Medium grey for highlights */
+    --greyDark: #B0B0B0; /* Darker grey for active states */
 }
 
 .shadow {box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);}
@@ -247,7 +257,17 @@ td, th {
 /**Club Page**/
 /*************/
 
-.club_titles {text-align: center;}
+.club_titles {
+    text-align: center;
+    margin-bottom: 2%;
+
+}
+
+.club_title {
+    font-size: 280%;
+    text-transform: uppercase;
+    margin-bottom: 1%;
+}
 
 .photo_pic:active {
     width: 200%;
@@ -329,7 +349,7 @@ td, th {
 
 .organiser {
     font-size: 100%;
-    padding-bottom: 2%;
+    padding-bottom: 10%;
 }
 
 .club_about {
@@ -443,9 +463,10 @@ td, th {
 .scroll-target {scroll-margin-top: 2%;} /* Adjust based on your header height */
 
 .scroll_container {
-    margin-top: -0.0.01%;
     display: flex;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .fix_menu {
@@ -453,6 +474,10 @@ td, th {
     background-color: #d2d2d2;
     border-radius: 20px;
     padding: 1%;
+}
+
+.club_room {
+    margin-bottom: 3%;
 }
 
 /**************/
@@ -474,30 +499,302 @@ td, th {
 
 .multiple_feature {
     width: 40%;
-    height: 400px;
+    height: 600px;
     background-color: var(--clr-bhs);
 }
 
 .submission {
     padding: 1.5%;
     border: 0px;
+}
 
+.submission :hover {
+    background-color: rgb(228, 228, 228);
 }
 
 .sub_date {
-    padding: 0.5%;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    
     font-size: 200%;
+    border: none;
+    border-radius: 10px; /* Rounded corners for a softer look */
+    background-color: var(--white);
+    box-shadow: 
+        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
+        -0.2rem -0.2rem 0.4rem var(--white);
+    color: black;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    outline: none;
 }
 
-.sub_photo {
-    padding: 2%;
-    font-size: 300%;
-    border-radius: 20px;
+/* Style for hover and focus states */
+.sub_date:hover, .sub_date:focus {
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+
+}
+
+.custom-select {
+    width: 30%;
+    padding: 1%;
     border: 0;
-    margin-left: 3%;
+    border-radius: 5px;
+    background-color: #e4e2e2;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    box-sizing: border-box; /* Ensure padding does not affect width */
+    margin-bottom: 3%;
+    outline: none;
 }
 
-.sub_photo:hover {box-shadow: 10px 10px 10px 0px rgba(0,0,0,0.1);}
+/* Custom styles for option elements inside select */
+.custom-select option {
+    background-color: #e4e2e2;
+}
+
+
+/* Global styles for form inputs */
+.form_name {
+    width: 40%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.form_pic {
+    width: 40%;
+    height: 90%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.form_desc {
+    width: 60%;
+    height: 90%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.form_email {
+    width: 40%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.form_room {
+    width: 10%;
+    padding: 5px;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.form_organiser {
+    width: 40%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.file-input {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 2%;
+    cursor: pointer;
+    background-color: #e4e2e2;
+    color: #000000; /* Text color */
+    outline: none;
+}
+
+
+
+
+
+
+/**************/
+/**Club Admin**/
+/**************/
+
+
+.form_add {
+    width: 19%;
+    padding: 1%;
+    border: none;
+    border-radius: 10px; /* Rounded corners for a softer look */
+    box-sizing: border-box;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
+    outline: none;
+}
+
+.form_add:focus, .form_add:hover {
+    box-shadow: 
+        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
+        -0.2rem -0.2rem 0.4rem var(--white);
+    outline: none;
+}
+
+.form_add_photo {
+    width: 25%;
+    padding: 1%;
+    border: none;
+    border-radius: 10px; /* Rounded corners for a softer look */
+    box-sizing: border-box;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
+    outline: none;
+}
+
+.form_add_photo:focus, .form_add_photo:hover {
+    box-shadow: 
+        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
+        -0.2rem -0.2rem 0.4rem var(--white);
+    outline: none;
+}
+
+.form_add_pic {
+    width: 19%;
+    padding: 1%;
+    border: none;
+    border-radius: 10px; /* Rounded corners for a softer look */
+    box-sizing: border-box;
+    background-color: var(--white);
+    box-shadow: 
+        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
+        -0.2rem -0.2rem 0.4rem var(--white);
+    margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
+    outline: none;
+}
+
+.form_add_pic:focus, .form_add_pic:hover {
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    outline: none;
+}
+
+.form_edit {
+    border: 0;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.form_change_center {
+    width: 16%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    margin-bottom: 3%;
+    outline: none;
+}
+
+.form_change_organiser {
+    display: block;
+    width: 70%;
+    padding: 3%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    outline: none;
+    margin: auto;
+    margin-bottom: 5%;
+}
+
+.form_change_desc {
+    width: 100%;
+    padding: 2%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #e4e2e2;
+    margin-bottom: 8%;
+    outline: none;
+    margin-top: 7%;
+}
+
+.form_change_file {
+    width: 64%;
+    height: 90%;
+    padding: 2%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 5%;
+    outline: none;
+    margin-top: 5%;
+}
+
+.change_sub {
+    display: block;
+    border: 0;
+    outline: none;
+    background-color: #e4e2e2;
+    padding: 0.5%;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 5%;
+}
+
+.change_sub_small {
+    display: block;
+    border: 0;
+    outline: none;
+    background-color: #e4e2e2;
+    padding: 2%;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 10%;
+}
+
 
 /******************/
 /**404 Error Page**/

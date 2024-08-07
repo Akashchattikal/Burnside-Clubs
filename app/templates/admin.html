@@ -10,11 +10,16 @@
       &nbsp;
       <form method="POST" enctype="multipart/form-data" class="center">
           {{ club_form.csrf_token }}
-          <p class="space_form">Name: {{ club_form.name }}</p>
-          <p class="space_form">Description: {{ club_form.description }}</p>
-          <p class="space_form">Profile Photo: {{ club_form.pro_photo }}</p>
-          <p class="space_form">Club Common Room: {{ club_form.club_room }}</p>
-          <p class="space_form">Organiser: {{ club_form.organiser }}</p>
+          Name: 
+          <p class="space_form">{{ club_form.name }}</p>
+          Description: 
+          <p class="space_form">{{ club_form.description }}</p>
+          Profile Photo: 
+          <p class="space_form">{{ club_form.pro_photo }}</p>
+          Club Common Room: 
+          <p class="space_form">{{ club_form.club_room }}</p>
+          Organiser: 
+          <p class="space_form">{{ club_form.organiser }}</p>
           <br>
           <input type="submit" value="Add Club" class="submission rounded-20">
       </form>
@@ -26,8 +31,10 @@
       &nbsp;
       <form method="POST" enctype="multipart/form-data" class="center">
         {{ teacher_form.csrf_token }}
-        <p class="space_form">Name: {{ teacher_form.name }}</p>
-        <p class="space_form">Email: {{ teacher_form.email }}</p>
+        Name: 
+        <p class="space_form">{{ teacher_form.name }}</p>
+        Email: 
+        <p class="space_form">{{ teacher_form.email }}</p>
         <br>
         <input type="submit" value="Add Teacher" class="submission rounded-20">
       </form> 
@@ -39,8 +46,10 @@
       &nbsp;
       <form method="POST" enctype="multipart/form-data" class="center">
         {{ teacher_club_form.csrf_token }}
-        <p class="space_form" style="text-align: center;">Club: {{ teacher_club_form.club }}</p>
-        <p class="space_form" style="text-align: center;">Teacher: {{ teacher_club_form.teacher }}</p>
+        Club: 
+        <p class="space_form" style="text-align: center;">{{ teacher_club_form.club }}</p>
+        Teacher: 
+        <p class="space_form" style="text-align: center;">{{ teacher_club_form.teacher }}</p>
         <br>
         <input type="submit" value="Assign" class="submission rounded-20">
       </form>
@@ -56,7 +65,8 @@
       &nbsp;
       <form method="POST" enctype="multipart/form-data" class="center">
         {{ remove_club_form.csrf_token }}
-        <p class="space_form" style="text-align: center;">Club: {{ remove_club_form.club }}</p>
+        Club: 
+        <p class="space_form" style="text-align: center;">{{ remove_club_form.club }}</p>
         <br>
         <input type="submit" value="Remove Club" class="submission rounded-20">
       </form>
@@ -66,7 +76,8 @@
       &nbsp;
       <form method="POST" enctype="multipart/form-data" class="center">
         {{ remove_teacher_form.csrf_token }}
-        <p class="space_form">Teacher: {{ remove_teacher_form.teacher }}</p>
+        Teacher: 
+        <p class="space_form">{{ remove_teacher_form.teacher }}</p>
         <br>
         <input type="submit" value="Remove Teacher" class="submission rounded-20">
       </form>
