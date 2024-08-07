@@ -16,7 +16,7 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher,  Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher
+from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher
 
 
 @app.route("/")
@@ -40,13 +40,15 @@ def club(id):
 @app.route("/teach_access")
 def teachers():
     teachers = models.Teachers.query.all()
-    return render_template("teachers.html", title="Teach Access Page", teachers=teachers)
+    return render_template("teachers.html", title="Teach Access Page",
+                           teachers=teachers)
 
 
 @app.route("/teach/<int:id>")
 def teacher(id):
     teacher = models.Teachers.query.filter_by(id=id).first()
-    return render_template("teacher.html", title="Club Access Page", teacher=teacher)
+    return render_template("teacher.html", title="Club Access Page",
+                           teacher=teacher)
 
 
 @app.route("/club_admin/<int:id>", methods=['GET', 'POST'])
@@ -57,7 +59,10 @@ def club_admin(id):
     event_form = Add_Event()
     photo_form = Add_Photo()
     if request.method == 'GET':
-        return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form, photo_form=photo_form)
+        return render_template('club_admin.html',
+                               title="Club Admin Access Page",
+                               notice_form=notice_form, club_admin=club_admin,
+                               event_form=event_form, photo_form=photo_form)
     else:
         if notice_form.validate_on_submit():
             new_notice = models.Notices()
@@ -99,7 +104,12 @@ def club_admin(id):
             time.sleep(2.5)
             return redirect(f"/club_admin/{id}")
         else:
-            return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form, photo_form=photo_form)
+            return render_template('club_admin.html',
+                                   title="Club Admin Access Page",
+                                   notice_form=notice_form,
+                                   club_admin=club_admin,
+                                   event_form=event_form,
+                                   photo_form=photo_form)
 
 
 @app.route('/admin_access', methods=['GET', 'POST'])
@@ -118,7 +128,11 @@ def admin():
     remove_teacher_form.teacher.choices = [(teacher.id, teacher.name) for teacher in teachers]
 
     if request.method == 'GET':
-        return render_template("admin.html", title="Admin Access Page", club_form=club_form, teacher_form=teacher_form, teacher_club_form=teacher_club_form, remove_club_form=remove_club_form, remove_teacher_form=remove_teacher_form)
+        return render_template("admin.html", title="Admin Access Page",
+                               club_form=club_form, teacher_form=teacher_form,
+                               teacher_club_form=teacher_club_form,
+                               remove_club_form=remove_club_form,
+                               remove_teacher_form=remove_teacher_form)
     else:
         if club_form.validate_on_submit():
             new_club = models.Clubs()
@@ -190,7 +204,12 @@ def admin():
                 return redirect('/admin_access')
 
         else:
-            return render_template("admin.html", title="Admin Access Page", club_form=club_form, teacher_form=teacher_form, teacher_club_form=teacher_club_form, remove_club_form=remove_club_form, remove_teacher_form=remove_teacher_form)
+            return render_template("admin.html", title="Admin Access Page",
+                                   club_form=club_form,
+                                   teacher_form=teacher_form,
+                                   teacher_club_form=teacher_club_form,
+                                   remove_club_form=remove_club_form,
+                                   remove_teacher_form=remove_teacher_form)
 
 
 @app.errorhandler(404)
