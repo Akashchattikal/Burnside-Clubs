@@ -18,7 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
-    min-height: 100000px;
+    min-height: 10000px;
     height: 100%;
     
 }
@@ -344,11 +344,12 @@ td, th {
 .scroll {
     color: white;
     background-color: var(--clr-bhs);
-    padding: 0.5%;
+    padding: 4%;
     border-radius: 20px;
     font-size: 75%;
     border: 0;
 }
+
 
 .scroll:hover {opacity: 0.9;}
 
@@ -438,8 +439,21 @@ td, th {
 }
 
 .section {padding-top: 2%;} /* Adjust this value based on your needs */
+
 .scroll-target {scroll-margin-top: 2%;} /* Adjust based on your header height */
 
+.scroll_container {
+    margin-top: -0.0.01%;
+    display: flex;
+    gap: 10px;
+}
+
+.fix_menu {
+    position: fixed;
+    background-color: #d2d2d2;
+    border-radius: 20px;
+    padding: 1%;
+}
 
 /**************/
 /**Admin Page**/

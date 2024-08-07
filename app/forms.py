@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, TextAreaField, SelectField, EmailField, FileField, DateField
+from wtforms import IntegerField, StringField, TextAreaField, SelectField, EmailField, FileField, DateField, SubmitField
 from wtforms.validators import DataRequired, Optional, ValidationError
 from wtforms import validators
 import app.models
@@ -53,9 +53,19 @@ class Club_Teacher(FlaskForm):
 class Add_Photo(FlaskForm):
 
     photo = FileField('photo', validators=[DataRequired()])
-    description = StringField('name', validators=[DataRequired()])
+    description = StringField('description', validators=[DataRequired()])
 
 
 class Find_Club(FlaskForm):
 
     club_name = SelectField('club_name', validators=[DataRequired()], coerce=int)
+
+
+class Remove_Club(FlaskForm):
+    club = SelectField('Club', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Remove Club')
+
+
+class Remove_Teacher(FlaskForm):
+    teacher = SelectField('Select Teacher', coerce=int)
+    submit = SubmitField('Remove Teacher')

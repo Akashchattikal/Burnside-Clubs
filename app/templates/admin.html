@@ -43,7 +43,33 @@
         <p class="space_form" style="text-align: center;">Teacher: {{ teacher_club_form.teacher }}</p>
         <br>
         <input type="submit" value="Assign" class="submission rounded-20">
-      </form> 
+      </form>
+    </div>
+  </li>
+</ul>
+
+<h1 class="center" style="margin-top: 3%;">Deleting Information</h1>
+<ul class="admin_container">
+  <li class="multiple_feature rounded-20 shadow">
+    <div style="margin-top: 8%;">
+      <h2 style="text-align: center;">Remove Club</h2>
+      &nbsp;
+      <form method="POST" enctype="multipart/form-data" class="center">
+        {{ remove_club_form.csrf_token }}
+        <p class="space_form" style="text-align: center;">Club: {{ remove_club_form.club }}</p>
+        <br>
+        <input type="submit" value="Remove Club" class="submission rounded-20">
+      </form>
+    </div>
+    <div style="margin-top: 8%;">
+      <h2 style="text-align: center;">Remove Teacher</h2>
+      &nbsp;
+      <form method="POST" enctype="multipart/form-data" class="center">
+        {{ remove_teacher_form.csrf_token }}
+        <p class="space_form">Teacher: {{ remove_teacher_form.teacher }}</p>
+        <br>
+        <input type="submit" value="Remove Teacher" class="submission rounded-20">
+      </form>
     </div>
   </li>
 </ul>

@@ -1,10 +1,14 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class="prevent-select">
-  <h2 class="organiser">Club Organiser: {{club.organiser}}</h2>
-  <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
-  &nbsp; 
-  <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
+  <div class="fix_menu">
+    <h2 class="organiser">Club Organiser: {{club.organiser}}</h2>
+    <div class="scroll_container">
+      <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
+      <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
+    </div>
+  </div>
+
 
   <div class="grid-container">
     <div class="item1">

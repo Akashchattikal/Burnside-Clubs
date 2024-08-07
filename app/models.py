@@ -1,12 +1,12 @@
 from app.routes import db
 
-Club_Events = db.Table('Club_Events', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('eid', db.Integer, db.ForeignKey('Events.id')))
+Club_Events = db.Table('Club_Events', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('eid', db.Integer, db.ForeignKey('Events.id', ondelete='CASCADE')))
 
-Club_Notices = db.Table('Club_Notices', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('nid', db.Integer, db.ForeignKey('Notices.id')))
+Club_Notices = db.Table('Club_Notices', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('nid', db.Integer, db.ForeignKey('Notices.id', ondelete='CASCADE')))
 
-Club_Photos = db.Table('Club_Photos', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('pid', db.Integer, db.ForeignKey('Photos.id')))
+Club_Photos = db.Table('Club_Photos', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('pid', db.Integer, db.ForeignKey('Photos.id', ondelete='CASCADE')))
 
-Club_Teacher = db.Table('Club_Teacher', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('tid', db.Integer, db.ForeignKey('Teachers.id')))
+Club_Teacher = db.Table('Club_Teacher', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('tid', db.Integer, db.ForeignKey('Teachers.id', ondelete='CASCADE')))
 
 
 class Clubs(db.Model):
@@ -17,10 +17,10 @@ class Clubs(db.Model):
     pro_photo = db.Column(db.Text())
     club_room = db.Column(db.Text())
     organiser = db.Column(db.Text())
-    events = db.relationship('Events', secondary='Club_Events', back_populates='clubs')
-    notices = db.relationship('Notices', secondary='Club_Notices', back_populates='clubs')
-    photos = db.relationship('Photos', secondary='Club_Photos', back_populates='clubs')
-    teachers = db.relationship('Teachers', secondary='Club_Teacher', back_populates='clubs')
+    events = db.relationship('Events', secondary='Club_Events', back_populates='clubs', cascade='all, delete')
+    notices = db.relationship('Notices', secondary='Club_Notices', back_populates='clubs', cascade='all, delete')
+    photos = db.relationship('Photos', secondary='Club_Photos', back_populates='clubs', cascade='all, delete')
+    teachers = db.relationship('Teachers', secondary='Club_Teacher', back_populates='clubs', cascade='all, delete')
 
     def __repr__(self):
         return self.name
