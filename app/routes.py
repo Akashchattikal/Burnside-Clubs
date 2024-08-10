@@ -5,7 +5,6 @@ import os
 import time
 from werkzeug.utils import secure_filename
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "info.db")
@@ -133,7 +132,10 @@ def club_admin(id):
     update_form.club_room.data = club_admin.club_room
     update_form.organiser.data = club_admin.organiser
 
-    return render_template('club_admin.html', title="Club Admin Access Page", notice_form=notice_form, club_admin=club_admin, event_form=event_form, photo_form=photo_form, update_form=update_form)
+    return render_template('club_admin.html', title="Club Admin Access Page",
+                           notice_form=notice_form, club_admin=club_admin,
+                           event_form=event_form, photo_form=photo_form,
+                           update_form=update_form)
 
 
 @app.route('/admin_access', methods=['GET', 'POST'])
