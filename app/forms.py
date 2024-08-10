@@ -30,19 +30,19 @@ class Add_Notice(FlaskForm):
     #     if field.data < _current_date:
     #         raise ValidationError("You can't enter a date from the past!")
 
-    notice = StringField('notice', validators=[DataRequired()], render_kw={"class": "form_add"})
-    photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add"})
-    date = DateField('date', format='%Y-%m-%d', render_kw={"class": "form_add"})
+    notice = StringField('notice', validators=[DataRequired()], render_kw={"class": "form_add add_in_order", "placeholder": "Enter Notice Details"})
+    photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add add_in_order add_notice_prop"})
+    date = DateField('date', format='%Y-%m-%d', render_kw={"class": "form_add add_in_order"})
 
 # IntegerField('date', validators=[Optional(), check_date])
 
 
 class Add_Event(FlaskForm):
 
-    name = StringField('name', validators=[DataRequired()], render_kw={"class": "form_add"})
-    location = StringField('location', validators=[DataRequired()], render_kw={"class": "form_add"})
-    photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add"})
-    date = DateField('date', validators=[DataRequired()], format='%Y-%m-%d', render_kw={"class": "form_add"})
+    name = StringField('name', validators=[DataRequired()], render_kw={"class": "form_add add_in_order", "placeholder": "Enter Event Details"})
+    location = StringField('location', validators=[DataRequired()], render_kw={"class": "form_add add_in_order", "placeholder": "Enter Event Location"})
+    photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add add_in_order add_event_prop"})
+    date = DateField('date', validators=[DataRequired()], format='%Y-%m-%d', render_kw={"class": "form_add add_in_order"})
 
 
 class Club_Teacher(FlaskForm):
@@ -52,8 +52,8 @@ class Club_Teacher(FlaskForm):
 
 class Add_Photo(FlaskForm):
 
-    photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add_photo"})
-    description = StringField('description', validators=[DataRequired()], render_kw={"class": "form_add_photo"})
+    photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add_photo add_in_order"})
+    description = StringField('description', validators=[DataRequired()], render_kw={"class": "form_add_photo add_in_order"})
 
 
 class Find_Club(FlaskForm):

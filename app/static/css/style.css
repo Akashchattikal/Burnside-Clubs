@@ -73,7 +73,6 @@ td, th {
     --primary-light: #8abdff;
     --primary: #6d5dfc;
     --primary-dark: #5b0eeb;
-  
     --white: #FFFFFF;
     --greyLight-1: #F5F5F5; /* Lighter grey for background */
     --greyLight-2: #E0E0E0; /* Light grey for shadows */
@@ -263,47 +262,53 @@ td, th {
 
 }
 
+.info_release {
+    background-color: rgb(242, 242, 242);
+    border-radius: 15px;
+    padding-bottom: 3%;
+    width: 22%;
+    text-align: center;
+    border: 2px solid rgb(217, 217, 217);
+  }
+  
+.info_text {
+    margin-top: 100%;
+    border-top: 3px solid rgb(219, 219, 219);
+    min-height: 10rem;
+    width: 90%;
+    margin: auto;
+    padding-top: 10%;
+}
+
+.info_pic {
+    min-height: 7rem;
+    width: 100%;
+    overflow: hidden; /* Hide overflow to fit image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info_upload {
+    border-top: 3px solid rgb(219, 219, 219);
+    min-height: 1rem;
+    font-size: 70%;
+    padding-top: 10%;
+    width: 90%;
+    margin: auto;
+}
+
 .club_title {
     font-size: 280%;
     text-transform: uppercase;
     margin-bottom: 1%;
 }
 
-.photo_pic:active {
-    width: 200%;
-    z-index: 2;
-    
-}
+.club_items_hover:hover {box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4); }
 
-.multiple_notices {
-    background-color: rgba(109, 109, 109, 0.632);
+.add_in_order {
+    display: block;
     margin: auto;
-    padding-left: -0.9%;
-    padding-right: -0.9%;
-    padding-top: 1.5%;
-    padding-bottom: 1.5%;
-    border-radius: 10px;
-    color: white;
-}
-
-.multiple_events {
-    background-color: rgba(109, 109, 109, 0.632);
-    margin: auto;
-    padding-left: -0.9%;
-    padding-right: -0.9%;
-    padding-top: 1.5%;
-    padding-bottom: 1.5%;
-    border-radius: 10px;
-    color: white;
-}
-
-.multiple_events:hover {box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4); }
-
-.multiple_notices:hover {box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4); }
-
-.notice_section, .event_section {
-    width: 70%;
-    margin-bottom: 7%;
 }
 
 .location {color: white;}
@@ -311,12 +316,6 @@ td, th {
 .event_location {
     margin-top: 10%;
     display: inline-block;
-}
-
-.date_section_not {
-    width: 20%;
-    font-size: 70%;
-    display: inline;
 }
 
 .date_section_eve {
@@ -386,8 +385,7 @@ td, th {
 
 .club_photos {
     width: 100%;
-    border-radius: 5px;
-    position: relative;
+    border-radius: 8px 8px 0px 0px;
 }
 
 .grid-container {
@@ -427,10 +425,10 @@ td, th {
     background-color: white;
     margin:auto;
     padding: 20px;
-    width: 60%;
+    width: 70%;
     border-radius: 10px;
-    font-weight: bolder;
     margin-top: 9%;
+    min-height: 150%;
 }
 .popup-content button {
     display: block;
@@ -455,7 +453,7 @@ td, th {
     font-size: 20px;
     border-radius: 20px;
     border: 0px;
-    float: top;
+    float: right;
 }
 
 .section {padding-top: 2%;} /* Adjust this value based on your needs */
@@ -479,6 +477,26 @@ td, th {
 .club_room {
     margin-bottom: 3%;
 }
+
+.multi_pic {
+    background-color: rgb(242, 242, 242);
+    border-radius: 10px;
+    border: 2px solid rgb(217, 217, 217);
+}
+
+.multi_pic_1 {
+    min-height: 9rem
+}
+
+.multi_pic_2 {
+    margin-top: -1.8%;
+    padding-top: 6%;
+    border-top: 3px solid rgb(219, 219, 219);
+    min-height: 6rem;
+    font-size: 80%;
+    text-align: center;
+}
+
 
 /**************/
 /**Admin Page**/
@@ -645,18 +663,14 @@ td, th {
 }
 
 
-
-
-
-
 /**************/
 /**Club Admin**/
 /**************/
 
 
 .form_add {
-    width: 19%;
-    padding: 1%;
+    width: 90%;
+    padding: 3%;
     border: none;
     border-radius: 10px; /* Rounded corners for a softer look */
     box-sizing: border-box;
@@ -677,7 +691,7 @@ td, th {
 }
 
 .form_add_photo {
-    width: 25%;
+    width: 80%;
     padding: 1%;
     border: none;
     border-radius: 10px; /* Rounded corners for a softer look */
@@ -794,6 +808,31 @@ td, th {
     margin: auto;
     margin-bottom: 10%;
 }
+
+.add_notice_prop {
+    margin-top: 6%;
+}
+
+.add_event_prop {
+    margin-top: 3%;
+}
+
+.notice_photo, .event_photo {
+    width: 100%; /* Set width to 100% to fill the parent */
+    height: 100%; /* Set height to 100% to fill the parent */
+    object-fit: cover; /* Ensure the image covers the area */
+    border-radius: 15px 15px 0px 0px;
+}
+
+.add_photo_title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 8%;
+}
+
+
 
 
 /******************/

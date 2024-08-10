@@ -19,13 +19,18 @@
         <ul class="notices_container">
           {% for notice in club.notices %}
             {% if notice.notice and notice.date %}
-              <li class="multiple_notices">
-                <div class="notice_section center">
-                  {{ notice.notice }}
+
+              <div class="info_release multiple_notices">
+                <div class="info_pic">
+                  {% if notice.photo %}
+                    <img class="notice_photo" style="opacity: 1;" src="/{{notice.photo}}"/>
+                  {% else %}
+                    <img class="notice_photo" src="/static/images/placeholder.png"/>
+                  {% endif %}
                 </div>
-                &nbsp;
-                <div class="date_section_not">Uploaded At {{ notice.date }}</div>
-              </li>
+                <div class="info_text">{{ notice.notice }}</div>
+                <div class="info_upload">Uploaded At {{ notice.date }}</div>
+              </div>
             {% endif %}
           {% endfor %}
         </ul>
@@ -36,17 +41,20 @@
         <h2 class="club_titles" id="events_section">Events</h2>
         <ul class="events_container">
           {% for event in club.events %}
-            <li class="multiple_events">
-              
-              <div class="event_section center">
-                <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
-                {{event.name}}
-                {{event.location}}
+              <div class="info_release multiple_events">
+                <div class="info_pic">
+                  {% if event.photo %}
+                    <img class="event_photo" src="{{event.photo}}"/>
+                  {% else %}
+                    <img class="notice_photo" src="/static/images/placeholder.png"/>
+                  {% endif %}
+                </div>
+                <div class="info_text">
+                  {{event.name}}
+                  {{event.location}}
+                </div>
+                <div class="info_upload">Event At {{ event.date }}</div>
               </div>
-              &nbsp;
-              <div class="date_section_eve">Date: {{event.date}}</div>
-
-            </li>
           {% endfor %}
         </ul>
       </div>

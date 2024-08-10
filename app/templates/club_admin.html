@@ -32,23 +32,33 @@
       <div id="section1" class="section scroll-target">
         <h2 class="club_titles" id="notices_section">Notices</h2>
         
-        <form method="POST" enctype="multipart/form-data" class="center">
-          {{ notice_form.csrf_token }}
-          {{ notice_form.photo }}
-          {{ notice_form.notice }}
-          {{ notice_form.date }}
-          <input type="submit" value="+" class="sub_date">
-        </form>
         <ul class="notices_container">
+          <div class="info_release club_items_hover">
+            <form method="POST" enctype="multipart/form-data" class="center">
+              {{ notice_form.csrf_token }}
+              <div class="info_pic"><h3>ADD NOTICE</h3></div>
+              <div class="info_text">
+                {{ notice_form.photo }}
+                {{ notice_form.notice }}
+                {{ notice_form.date }}
+              </div>
+              <div class="info_upload"><input type="submit" value="+" class="sub_date"></div>
+            </form>
+          </div>
           {% for notice in club_admin.notices %}
             {% if notice.notice and notice.date %}
-              <li class="multiple_notices">
-                <div class="notice_section center">
-                  {{ notice.notice }}
+
+              <div class="info_release club_items_hover">
+                <div class="info_pic">
+                  {% if notice.photo %}
+                    <img class="notice_photo" style="opacity: 0.7;" src="/{{notice.photo}}"/>
+                  {% else %}
+                    <img class="notice_photo" src="/static/images/placeholder.png"/>
+                  {% endif %}
                 </div>
-                &nbsp;
-                <div class="date_section_not">Uploaded At {{ notice.date }}</div>
-              </li>
+                <div class="info_text">{{ notice.notice }}</div>
+                <div class="info_upload">Uploaded At {{ notice.date }}</div>
+              </div>
             {% endif %}
           {% endfor %}
         </ul>
@@ -57,44 +67,40 @@
       &nbsp;
       <div id="section2" class="section scroll-target">
         <h2 class="club_titles" id="events_section">Events</h2>
-        <form method="POST" enctype="multipart/form-data" class="center">
-          {{ event_form.csrf_token }}
-          {{ event_form.photo }}
-          {{ event_form.name }}
-          {{ event_form.location }}
-          {{ event_form.date }}
-          <input type="submit" value="+" class="sub_date">
-        </form>
         <ul class="events_container">
-          {% for event in club_admin.events %}
-            <li class="multiple_events">
-              
-              <div class="event_section center">
-                <!-- <h3 style="margin-bottom: 3%;">Event</h3> -->
-                {{event.name}}
-                {{event.location}}
+          <div class="info_release club_items_hover">
+            <form method="POST" enctype="multipart/form-data" class="center">
+              {{ event_form.csrf_token }}
+              <div class="info_pic"><h3>ADD EVENT</h3></div>
+              <div class="info_text">
+                <div class="add_event_or">
+                  {{ event_form.photo }}
+                  {{ event_form.name }}
+                  {{ event_form.location }}
+                  {{ event_form.date }}
+                </div>
               </div>
-              &nbsp;
-              <div class="date_section_eve">Date: {{event.date}}</div>
-
-            </li>
+              <div class="info_upload"><input type="submit" value="+" class="sub_date"></div>
+            </form>
+          </div>
+          {% for event in club_admin.events %}
+              <div class="info_release club_items_hover">
+                <div class="info_pic">
+                  {% if event.photo %}
+                    <img class="event_photo" src="{{event.photo}}"/>
+                  {% else %}
+                    <img class="notice_photo" src="/static/images/placeholder.png"/>
+                  {% endif %}
+                </div>
+                <div class="info_text">
+                  {{event.name}}
+                  {{event.location}}
+                </div>
+                <div class="info_upload">Uploaded At {{ event.date }}</div>
+              </div>
           {% endfor %}
         </ul>
       </div>
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ photo_form.csrf_token }}
-        {{ photo_form.photo}}
-        {{ photo_form.description }}
-        <input type="submit" value="+" class="sub_date">
-      </form>
-  
-      <ul class="photo_container">
-        {% for photo in club_admin.photos %}
-        <li class="multi_photo shadow">
-            <img class="photo_pic rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
-        </li>
-        {% endfor %}
-      </ul>
     </div>
   <div class="item2">
     <img class="club_pro shadow rounded-20" src="/{{ club_admin.pro_photo }}" />
@@ -119,21 +125,39 @@
 </div>
 <div id="myPopup" class="popup">
   <div class="popup-content">
-    <form method="POST" enctype="multipart/form-data" class="center">
-      {{ photo_form.csrf_token }}
-      {{ photo_form.photo}}
-      {{ photo_form.description }}
-      <input type="submit" value="+" class="sub_date">
-    </form>
-
+    <button id="closePopup" class="pop_close prevent-select">X</button>
     <ul class="photo_container">
+      <li class="multi_photo shadow">
+        <div class="multi_pic club_items_hover">
+          <form method="POST" enctype="multipart/form-data" class="center">
+            <div class="multi_pic_1"><h3 class="add_photo_title">
+              <h3 class="add_photo_title">ADD PHOTO</h3>
+              {{ photo_form.csrf_token }}
+              {{ photo_form.photo}}
+              {{ photo_form.description }}
+            </div>
+            <div class="multi_pic_2">
+
+
+                <input type="submit" value="+" class="sub_date">
+              
+            </div>
+        </form>
+        </div>
+      </li>
       {% for photo in club_admin.photos %}
       <li class="multi_photo shadow">
-          <img class="photo_pic rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
+        <div class="multi_pic club_items_hover">
+          <div class="multi_pic_1"><img class="prevent-select photo_pic club_photos" src="/{{photo.photo}}"/></div>
+          {% if photo.description %}
+            <div class="multi_pic_2">{{photo.description}}</div>
+          {% else %}
+            <div class="multi_pic_2">No Details Provided</div>
+          {% endif %}
+        </div>
       </li>
       {% endfor %}
     </ul>
-    <button id="closePopup" class="pop_close prevent-select">X</button>
   </div>
 </div>
 </body>
