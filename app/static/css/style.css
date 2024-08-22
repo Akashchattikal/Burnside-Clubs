@@ -62,13 +62,22 @@ td, th {
     padding: 8px;
 }
 
+button {
+    outline: none;
+}
+
+.dark_title {
+    color: var(--clr-bhs-dark);
+}
+
+
 /* Standard Syntax -  Prevent User Text Select*/
 .prevent-select {user-select: none;}
 
 
 :root {
-    --clr-body-bg: hsl(300, 100%, 99%);
-    --clr-bhs: #0c5f4c;
+    --clr-body-bg: #EFE9E7;
+    --clr-bhs-dark: #173248;
 
     --primary-light: #8abdff;
     --primary: #6d5dfc;
@@ -124,18 +133,43 @@ td, th {
     }
 }
 
+/*************/
+/**Home Page**/
+/*************/
+
+
 
 /***********/
 /**Nav Bar**/
 /***********/
+.header {
+    background-color: #E7E7E7;
+    position: fixed;
+    width: 100%; /* Ensure the nav bar covers the entire width */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    box-sizing: border-box; /* Ensure padding doesn't affect the width */
+    min-height: 4.4rem;
+}
+
+.header_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Ensure content spans the full width of the header */
+    padding: 0 30px; /* Adjust padding as needed */
+}
 
 .nav_list {
     display: flex;
     column-gap: 45px;
     list-style: none;
-    text-align: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
-
 
 .nav_link {
     color: rgba(0, 0, 0, 0.60);
@@ -149,13 +183,15 @@ td, th {
     color: rgba(0, 0, 0, 1);
 }
 
-.nav_link:hover::after {opacity: 1;}
+.nav_link:hover::after {
+    opacity: 1;
+}
 
 .nav_link::after {
     content: '';
     height: 2px;
     width: 100%;
-    background-color: var(--clr-bhs);
+    background-color: var(--clr-bhs-dark);
     position: absolute;
     left: 0;
     bottom: -8px;
@@ -166,8 +202,8 @@ td, th {
 }
 
 .start {
-    color: black;
-    background-color: var(--clr-bhs);
+    color: var(--clr-bhs-dark);
+    background-color: var(--clr-bhs-dark);
     padding: 10px 21px;
     border-radius: 10px;
     font-size: 15px;
@@ -175,23 +211,49 @@ td, th {
     color: white;
 }
 
-.header {
-    background-color: #E7E7E7;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1;
+.default_si {
+    border-radius: 50%;
+    width: 50px;
+    cursor: pointer;
 }
 
-.header_content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 4rem;
-    max-width: 1400px;
-    padding: 0 30px;
-    margin: 0 auto;
+.default_si:active { 
+    border: 3px solid var(--clr-bhs-dark);
 }
+
+
+.default_user {
+    position: fixed;
+    top: 11%;
+    right: 1.8%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: auto;
+    justify-content: flex-start;
+}
+
+.defualt_use {
+    display: none; /* Initially hide the buttons */
+    text-align: center;
+    outline: none;
+    border: 5px solid #ffffff;
+    background-color: var(--clr-bhs-dark);
+    color: white;
+    width: 55px; /* Same width as the image */
+    height: 55px; /* Same height as the image */
+    border-radius: 50%;
+    margin-top: 5px; /* Space between the buttons */
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem; /* Adjust text size for readability */
+}
+
+.defualt_use.show {
+    display: block; /* Show buttons when .show class is added */
+}
+
 
 /************/
 /**Add Club**/
@@ -216,6 +278,7 @@ td, th {
     row-gap: 27px;
     column-gap: 27px;
     padding: 6%;
+    margin-top: -1%;
 }
 
 .multiple_club {
@@ -225,9 +288,19 @@ td, th {
 
 .multi_photo {
     width: 250px;
-    height: 140.5px;
-    border-radius: 20px ;
+    height: auto; /* Adjust height based on content */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    transition: all 0.5s ease-out;
 }
+
+.multi_photo:hover {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
+
 
 .pfp {
     display: block;
@@ -250,10 +323,67 @@ td, th {
     z-index: 1;
     text-align: center;
     margin-top: -20%;
+    padding: 3%;
+}
+
+.title {
+    text-align: center;
+    font-size: 280%;
+    text-transform: uppercase;  
+    margin-top: 2%;
+    color: var(--clr-bhs-dark);
+}
+
+
+.club_search {
+    width: 20rem;
+    padding: 5%;
+    border: none;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    margin-right: 0.9%;
+    outline: none;
+}
+
+.search_button {
+    padding: 5%;
+    border: none;
+    margin-left: 5%;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
+        -0.2rem -0.2rem 0.4rem var(--white);
+    color: var(--clr-bhs-dark);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+.search_button:hover, .search_button:focus {
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+
+}
+
+.search_section {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin-top: 4%;
+}
+
+.search_section form {
+    display: flex;
+    align-items: center;
 }
 
 /*************/
-/**Club Page**/
+/**Club Page**/ 
 /*************/
 
 .club_titles {
@@ -263,13 +393,21 @@ td, th {
 }
 
 .info_release {
-    background-color: rgb(242, 242, 242);
+    background-color: white;
     border-radius: 15px;
     padding-bottom: 3%;
     width: 22%;
+    min-width: 250px; /* Set a minimum width to prevent shrinking */
     text-align: center;
-    border: 2px solid rgb(217, 217, 217);
-  }
+    transition: all 0.5s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.info_release:hover {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
   
 .info_text {
     margin-top: 100%;
@@ -281,12 +419,14 @@ td, th {
 }
 
 .info_pic {
-    min-height: 7rem;
+    height: auto; /* Adjust height based on content */
     width: 100%;
-    overflow: hidden; /* Hide overflow to fit image */
+    flex: 1; /* Allow this section to grow if needed */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    min-height: 6rem;
 }
 
 .info_upload {
@@ -303,8 +443,6 @@ td, th {
     text-transform: uppercase;
     margin-bottom: 1%;
 }
-
-.club_items_hover:hover {box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.4); }
 
 .add_in_order {
     display: block;
@@ -362,8 +500,18 @@ td, th {
 
 .scroll {
     color: white;
-    background-color: var(--clr-bhs);
+    background-color: var(--clr-bhs-dark);
     padding: 4%;
+    border-radius: 20px;
+    font-size: 75%;
+    border: 0;
+}
+
+.scroll_admin {
+    margin-top: -1%;
+    color: white;
+    background-color: var(--clr-bhs-dark);
+    padding: 6%;
     border-radius: 20px;
     font-size: 75%;
     border: 0;
@@ -385,7 +533,7 @@ td, th {
 
 .club_photos {
     width: 100%;
-    border-radius: 8px 8px 0px 0px;
+    border-radius: 20px 20px 0px 0px;
 }
 
 .grid-container {
@@ -422,13 +570,14 @@ td, th {
 
 }
 .popup-content {
-    background-color: white;
+    background-color: var(--clr-body-bg);
     margin:auto;
     padding: 20px;
     width: 70%;
     border-radius: 10px;
-    margin-top: 9%;
-    min-height: 150%;
+    margin-top: 5%;
+    min-height: 80%;
+    flex: 1;
 }
 .popup-content button {
     display: block;
@@ -439,7 +588,7 @@ td, th {
 
 .photo_pop {
     margin-top: 10%;
-    background-color: var(--clr-bhs);
+    background-color: var(--clr-bhs-dark);
     color: white;
     border-radius: 20px;
     padding: 5%;
@@ -449,16 +598,16 @@ td, th {
 .photo_pop:hover {opacity: 0.9;}
 
 .pop_close {
-    background-color: white;
+    background-color: var(--clr-body-bg);
     font-size: 20px;
     border-radius: 20px;
     border: 0px;
     float: right;
 }
 
-.section {padding-top: 2%;} /* Adjust this value based on your needs */
+.section {padding-top: 2%;} 
 
-.scroll-target {scroll-margin-top: 2%;} /* Adjust based on your header height */
+.scroll-target {scroll-margin-top: 2%;} 
 
 .scroll_container {
     display: flex;
@@ -468,33 +617,85 @@ td, th {
 }
 
 .fix_menu {
+    margin-top: 2%;
     position: fixed;
-    background-color: #d2d2d2;
+    background-color: rgb(210, 210, 210);
     border-radius: 20px;
-    padding: 1%;
+    padding: 1.2%;
+    transition: transform 0.3s ease-in-out; 
+    left: 0;
+    padding-right: 2%;
 }
+  
+.fix_menu.hidden {
+    transform: translateX(-93%); 
+}
+
+.toggle_button {
+    position: absolute;
+    top: 50%;
+    right: -1px; 
+    transform: translateY(-50%);
+    background-color: rgb(150, 150, 150, 0);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--clr-bhs-dark);
+    padding: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.toggle_button:hover {
+    color: white;
+}
+
+
+.fix_menu.hidden .toggle_button {
+    transform: translateY(-50%) rotate(180deg);
+}
+
 
 .club_room {
     margin-bottom: 3%;
 }
 
 .multi_pic {
-    background-color: rgb(242, 242, 242);
     border-radius: 10px;
-    border: 2px solid rgb(217, 217, 217);
+    display: flex;
+    flex-direction: column; /* Ensure items are stacked vertically */
+    justify-content: space-between; /* Ensure items don’t overlap */
 }
 
 .multi_pic_1 {
-    min-height: 9rem
+    min-height: 9.2rem;
+    flex: 1; /* Allow this section to grow if needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
 }
 
 .multi_pic_2 {
-    margin-top: -1.8%;
+    margin-top: -1.8%; /* Reset any negative margins */
     padding-top: 6%;
     border-top: 3px solid rgb(219, 219, 219);
     min-height: 6rem;
     font-size: 80%;
     text-align: center;
+}
+
+.event_location {
+    display: inline-block;
+    margin-top: 2rem;
+    width: 100%;
+    padding-top: 7%;
+}
+
+.location {
+    margin-bottom: 3%;
+    font-size: 0.7rem;
+    color: black;
+    font-weight: 5rem;
 }
 
 
@@ -518,12 +719,15 @@ td, th {
 .multiple_feature {
     width: 40%;
     height: 600px;
-    background-color: var(--clr-bhs);
+    background-color: var(--clr-bhs-dark);
 }
 
 .submission {
     padding: 1.5%;
     border: 0px;
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
 }
 
 .submission :hover {
@@ -535,7 +739,7 @@ td, th {
     padding-bottom: 0.1rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    
+    margin: auto;
     font-size: 200%;
     border: none;
     border-radius: 10px; /* Rounded corners for a softer look */
@@ -543,7 +747,7 @@ td, th {
     box-shadow: 
         0.4rem 0.4rem 0.8rem var(--greyLight-2), 
         -0.2rem -0.2rem 0.4rem var(--white);
-    color: black;
+    color: var(--clr-bhs-dark);
     cursor: pointer;
     transition: box-shadow 0.3s ease, color 0.3s ease;
     outline: none;
@@ -562,10 +766,13 @@ td, th {
     padding: 1%;
     border: 0;
     border-radius: 5px;
-    background-color: #e4e2e2;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
-    box-sizing: border-box; /* Ensure padding does not affect width */
+    box-sizing: border-box;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
 }
 
@@ -582,11 +789,15 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
 }
+
 
 .form_pic {
     width: 40%;
@@ -595,8 +806,12 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
 }
 
@@ -607,10 +822,16 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
+    max-width: 90%;
+    max-height: 5rem;
+
 }
 
 .form_email {
@@ -619,9 +840,12 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
 }
 
@@ -631,9 +855,12 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
 }
 
@@ -643,21 +870,19 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
-    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.6);
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
     margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
     outline: none;
-}
-
-.file-input {
-    display: none;
 }
 
 .custom-file-upload {
     display: inline-block;
     padding: 2%;
     cursor: pointer;
-    background-color: #e4e2e2;
     color: #000000; /* Text color */
     outline: none;
 }
@@ -682,17 +907,9 @@ td, th {
     transition: box-shadow 0.3s ease;
     outline: none;
 }
-
-.form_add:focus, .form_add:hover {
-    box-shadow: 
-        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
-        -0.2rem -0.2rem 0.4rem var(--white);
-    outline: none;
-}
-
 .form_add_photo {
     width: 80%;
-    padding: 1%;
+    padding: 2%;
     border: none;
     border-radius: 10px; /* Rounded corners for a softer look */
     box-sizing: border-box;
@@ -700,15 +917,7 @@ td, th {
     box-shadow: 
         inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
         inset -0.2rem -0.2rem 0.4rem var(--white);
-    margin-bottom: 3%;
     transition: box-shadow 0.3s ease;
-    outline: none;
-}
-
-.form_add_photo:focus, .form_add_photo:hover {
-    box-shadow: 
-        0.4rem 0.4rem 0.8rem var(--greyLight-2), 
-        -0.2rem -0.2rem 0.4rem var(--white);
     outline: none;
 }
 
@@ -727,12 +936,6 @@ td, th {
     outline: none;
 }
 
-.form_add_pic:focus, .form_add_pic:hover {
-    box-shadow: 
-        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
-        inset -0.2rem -0.2rem 0.4rem var(--white);
-    outline: none;
-}
 
 .form_edit {
     border: 0;
@@ -745,9 +948,14 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
+    background-color: #ffffff;
     margin-bottom: 3%;
     outline: none;
+    transition: all 0.5s ease-out;
+}
+
+.form_change_center:hover, .form_change_center:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .form_change_organiser {
@@ -757,10 +965,15 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
+    background-color: #ffffff;
     outline: none;
     margin: auto;
     margin-bottom: 5%;
+    transition: all 0.5s ease-out;
+}
+
+.form_change_organiser:hover, .form_change_organiser:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .form_change_desc {
@@ -769,10 +982,16 @@ td, th {
     border: 0;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #e4e2e2;
+    background-color: #ffffff;
     margin-bottom: 8%;
     outline: none;
     margin-top: 7%;
+    transition: all 0.5s ease-out;
+
+}
+
+.form_change_desc:hover, .form_change_desc:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .form_change_file {
@@ -785,28 +1004,44 @@ td, th {
     margin-bottom: 5%;
     outline: none;
     margin-top: 5%;
+    background-color: #ffffff;
+    transition: all 0.5s ease-out;
+}
+
+.form_change_file:hover, .form_change_file:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .change_sub {
     display: block;
     border: 0;
     outline: none;
-    background-color: #e4e2e2;
+    background-color: #ffffff;
     padding: 0.5%;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 5%;
+    transition: all 0.5s ease-out;
+}
+
+.change_sub:hover, .change_sub:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .change_sub_small {
     display: block;
     border: 0;
     outline: none;
-    background-color: #e4e2e2;
+    background-color: #ffffff;
     padding: 2%;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 10%;
+    transition: all 0.5s ease-out;
+}
+
+.change_sub_small:hover, .change_sub_small:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .add_notice_prop {
@@ -829,7 +1064,7 @@ td, th {
     align-items: center;
     justify-content: center;
     margin: auto;
-    margin-bottom: 8%;
+    margin-bottom: 1%;
 }
 
 
@@ -840,7 +1075,7 @@ td, th {
 /******************/
 
 .error {
-    background-color: var(--clr-bhs);
+    background-color: var(--clr-bhs-dark);
     color: white;
     padding-top: 5%;
     padding-bottom: 5%;

@@ -15,7 +15,7 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club
+from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm
 
 
 @app.route("/")
@@ -23,10 +23,18 @@ def home():
     return render_template("home.html", title="Home Page")
 
 
-@app.route("/clubs")
+@app.route("/clubs", methods=["GET", "POST"])
 def clubs():
-    clubs = models.Clubs.query.all()
-    return render_template("clubs.html", title="Clubs Page", clubs=clubs)
+    form = SearchClubForm()
+    clubs = []
+    if form.validate_on_submit():
+        search_query = form.search_query.data
+        clubs = models.Clubs.query.filter(models.Clubs.name.like(f"%{search_query}%")).all()
+        if not clubs:
+            flash("No Results", "info")  # Flash message if no clubs are found
+    else:
+        clubs = models.Clubs.query.all()
+    return render_template("clubs.html", title="Clubs Page", clubs=clubs, form=form)
 
 
 @app.route("/club/<int:id>")
@@ -207,6 +215,7 @@ def admin():
                 db.session.execute(models.Club_Notices.delete().where(models.Club_Notices.c.cid == club.id))
                 db.session.execute(models.Club_Photos.delete().where(models.Club_Photos.c.cid == club.id))
                 db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.cid == club.id))
+                db.session.execute(models.Club_Users.delete().where(models.Club_Users.c.cid == club.id))
                 db.session.commit()
 
                 db.session.delete(club)
@@ -221,6 +230,7 @@ def admin():
 
             if teacher:
                 db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.tid == teacher.id))
+                db.session.execute(models.Teacher_Admin.delete().where(models.Teacher_Admin.c.tid == teacher.id))
                 db.session.commit()
 
                 db.session.delete(teacher)

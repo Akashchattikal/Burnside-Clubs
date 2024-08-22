@@ -8,12 +8,24 @@
     </head>
 
     <body>
-        <header class="header shadow">
-            <div class="header_content">
-                <nav class="nav">{% include "nav.html" %}</nav>
-            </div>
-        </header>
+        <header>
+            <nav class="header header_content nav shadow">
+                <ul class="nav_list prevent-select">
+                    <li><a href="/" class="nav_link" id="home">Home</a></li>
+                    <li><a href="/clubs" class="nav_link" id="clubs">Clubs</a></li>
+                    <li><a href="/teach_access" class="nav_link" id="teacher">Teacher Access</a></li>
+                    <li><a href="/admin_access" class="nav_link" id="admin">Admin Access</a></li>
+                </ul>
 
+
+                <img class="default_si" src="/static/images/default_si.png" onclick="toggleButtons()" />
+            </nav>
+        </header>
+        <div class="default_user">
+            <!-- Buttons appear outside the nav bar -->
+            <button class="defualt_use shadow">Login</button>
+            <button class="defualt_use shadow">Register</button>
+        </div>
         <main>
             {% block content %}
             {% endblock %}
@@ -22,4 +34,9 @@
         <footer>Nobody Reads It</footer>
     </body>
 
+    <script>
+
+
+    </script>
+    <script src="{{url_for('static',  filename='/script/nav.js')}}"></script>
 </html>

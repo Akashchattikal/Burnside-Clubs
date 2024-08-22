@@ -1,88 +1,119 @@
 {% extends "layout.html" %}
 {% block content %}
-
-<h1 class="center" style="margin-top: 3%;">Adding Information</h1>
-
-<ul class="admin_container">
-  <li class="multiple_feature rounded-20 shadow">
-    <div style="margin-top: 15%;">
-      <h2 class="center">Add New Club</h2>
-      &nbsp;
-      <form method="POST" enctype="multipart/form-data" class="center">
-          {{ club_form.csrf_token }}
-          Name: 
-          <p class="space_form">{{ club_form.name }}</p>
-          Description: 
-          <p class="space_form">{{ club_form.description }}</p>
-          Profile Photo: 
-          <p class="space_form">{{ club_form.pro_photo }}</p>
-          Club Common Room: 
-          <p class="space_form">{{ club_form.club_room }}</p>
-          Organiser: 
-          <p class="space_form">{{ club_form.organiser }}</p>
-          <br>
-          <input type="submit" value="Add Club" class="submission rounded-20">
-      </form>
+<body>
+  <div class="fix_menu">
+    <button class="toggle_button" onclick="toggleMenu()">&#9664;</button>
+    <h2 class="organiser dark_title">Tools Quick Access Menu</h2>
+    <div class="scroll_container">
+      <button onclick="scrollToSection('section1')" class="scroll_admin">Add</button>
+      <button onclick="scrollToSection('section2')" class="scroll_admin">Delete</button>
+    </div>
   </div>
-  </li>
-  <li class="multiple_feature rounded-20 shadow">   
-    <div style="margin-top: 8%;">
-      <h2 style="text-align: center;">Add Teacher To Database </h2>
-      &nbsp;
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ teacher_form.csrf_token }}
-        Name: 
-        <p class="space_form">{{ teacher_form.name }}</p>
-        Email: 
-        <p class="space_form">{{ teacher_form.email }}</p>
-        <br>
-        <input type="submit" value="Add Teacher" class="submission rounded-20">
-      </form> 
-      &nbsp;
-      &nbsp;
-      &nbsp;
-      &nbsp;
-      <h2 style="text-align: center;">Assign A Teacher To A Club</h2>
-      &nbsp;
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ teacher_club_form.csrf_token }}
-        Club: 
-        <p class="space_form" style="text-align: center;">{{ teacher_club_form.club }}</p>
-        Teacher: 
-        <p class="space_form" style="text-align: center;">{{ teacher_club_form.teacher }}</p>
-        <br>
-        <input type="submit" value="Assign" class="submission rounded-20">
-      </form>
-    </div>
-  </li>
-</ul>
+  <div id="section1" class="section scroll-target">
+    <h1 class="center dark_title" style="margin-top: 3%;" id="adding_section">Adding Information</h1>
 
-<h1 class="center" style="margin-top: 3%;">Deleting Information</h1>
-<ul class="admin_container">
-  <li class="multiple_feature rounded-20 shadow">
-    <div style="margin-top: 8%;">
-      <h2 style="text-align: center;">Remove Club</h2>
-      &nbsp;
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ remove_club_form.csrf_token }}
-        Club: 
-        <p class="space_form" style="text-align: center;">{{ remove_club_form.club }}</p>
-        <br>
-        <input type="submit" value="Remove Club" class="submission rounded-20">
-      </form>
-    </div>
-    <div style="margin-top: 8%;">
-      <h2 style="text-align: center;">Remove Teacher</h2>
-      &nbsp;
-      <form method="POST" enctype="multipart/form-data" class="center">
-        {{ remove_teacher_form.csrf_token }}
-        Teacher: 
-        <p class="space_form">{{ remove_teacher_form.teacher }}</p>
-        <br>
-        <input type="submit" value="Remove Teacher" class="submission rounded-20">
-      </form>
-    </div>
-  </li>
-</ul>
+    <ul class="admin_container">
+      <li class="multiple_feature rounded-20 shadow">
+        <div style="margin-top: 15%;">
+          <h2 class="center">Add New Club</h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+              {{ club_form.csrf_token }}
+              Name: 
+              <p class="space_form">{{ club_form.name }}</p>
+              Description: 
+              <p class="space_form">{{ club_form.description }}</p>
+              Profile Photo: 
+              <p class="space_form">{{ club_form.pro_photo }}</p>
+              Club Common Room: 
+              <p class="space_form">{{ club_form.club_room }}</p>
+              Organiser: 
+              <p class="space_form">{{ club_form.organiser }}</p>
+              <br>
+              <input type="submit" value="Add Club" class="submission rounded-20">
+          </form>
+      </div>
+      </li>
+      <li class="multiple_feature rounded-20 shadow">   
+        <div style="margin-top: 8%;">
+          <h2 style="text-align: center;">Add Teacher To Database </h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+            {{ teacher_form.csrf_token }}
+            Name: 
+            <p class="space_form">{{ teacher_form.name }}</p>
+            Email: 
+            <p class="space_form">{{ teacher_form.email }}</p>
+            <br>
+            <input type="submit" value="Add Teacher" class="submission rounded-20">
+          </form> 
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          &nbsp;
+          <h2 style="text-align: center;">Assign A Teacher To A Club</h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+            {{ teacher_club_form.csrf_token }}
+            Club: 
+            <p class="space_form" style="text-align: center;">{{ teacher_club_form.club }}</p>
+            Teacher: 
+            <p class="space_form" style="text-align: center;">{{ teacher_club_form.teacher }}</p>
+            <br>
+            <input type="submit" value="Assign" class="submission rounded-20">
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="section2" class="section scroll-target">
+    <h1 class="center dark_title" style="margin-top: 3%;">Deleting Information</h1>
+    <ul class="admin_container">
+      <li class="multiple_feature rounded-20 shadow">
+        <div style="margin-top: 8%;">
+          <h2 style="text-align: center;">Remove Club</h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+            {{ remove_club_form.csrf_token }}
+            Club: 
+            <p class="space_form" style="text-align: center;">{{ remove_club_form.club }}</p>
+            <br>
+            <input type="submit" value="Remove Club" class="submission rounded-20">
+          </form>
+        </div>
+        <div style="margin-top: 8%;">
+          <h2 style="text-align: center;">Remove Teacher</h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+            {{ remove_teacher_form.csrf_token }}
+            Teacher: 
+            <p class="space_form">{{ remove_teacher_form.teacher }}</p>
+            <br>
+            <input type="submit" value="Remove Teacher" class="submission rounded-20">
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+</body>
+
+<script>
+  function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      const yOffset = -60; // Adjust based on your needs
+      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+      });
+  }
+  function toggleMenu() {
+  const menu = document.querySelector('.fix_menu');
+  menu.classList.toggle('hidden');
+  }
+
+</script>
+
 
 {% endblock %}

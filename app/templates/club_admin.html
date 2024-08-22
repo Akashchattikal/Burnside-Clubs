@@ -2,7 +2,8 @@
 {% block content %}
 <body class="prevent-select">
   <div class="fix_menu">
-    <h2 class="organiser">Club Organiser: {{ club_admin.organiser }} <button onclick="toggleEdit('organiserEditForm')" class="form_edit">✎</button></h2>
+    <button class="toggle_button" onclick="toggleMenu()">&#9664;</button>
+    <h2 class="organiser dark_title">Club Organiser: {{ club_admin.organiser }} <button onclick="toggleEdit('organiserEditForm')" class="form_edit dark_title">✎</button></h2>
     
     <form id="organiserEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
         {{ update_form.csrf_token }}
@@ -17,27 +18,27 @@
 
   <div class="grid-container">
     <div class="item1">
-      <h1 class="club_title">{{ club_admin.name }} Club<button onclick="toggleEdit('nameEditForm')" class="form_edit">✎</button></h1>
+      <h1 class="club_title dark_title">{{ club_admin.name }} Club<button onclick="toggleEdit('nameEditForm')" class="form_edit dark_title">✎</button></h1>
       <form id="nameEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
           {{ update_form.csrf_token }}
           {{ update_form.name() }}
           <input type="submit" name="update_club" value="Apply" class="change_sub">
       </form>
-      <p class="club_room">Club Common Room: {{ club_admin.club_room }} <button onclick="toggleEdit('roomEditForm')" class="form_edit">✎</button></p>
+      <p class="club_room dark_title">Club Common Room: {{ club_admin.club_room }} <button onclick="toggleEdit('roomEditForm')" class="form_edit dark_title">✎</button></p>
       <form id="roomEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
           {{ update_form.csrf_token }}
           {{ update_form.club_room() }}
           <input type="submit" name="update_club" value="Apply" class="change_sub">
       </form>
       <div id="section1" class="section scroll-target">
-        <h2 class="club_titles" id="notices_section">Notices</h2>
+        <h2 class="club_titles dark_title">Notices</h2>
         
         <ul class="notices_container">
           <div class="info_release club_items_hover">
             <form method="POST" enctype="multipart/form-data" class="center">
               {{ notice_form.csrf_token }}
-              <div class="info_pic"><h3>ADD NOTICE</h3></div>
-              <div class="info_text">
+              <div class="info_pic dark_title"><h3>ADD NOTICE</h3></div>
+              <div class="info_text dark_title">
                 {{ notice_form.photo }}
                 {{ notice_form.notice }}
                 {{ notice_form.date }}
@@ -48,7 +49,7 @@
           {% for notice in club_admin.notices %}
             {% if notice.notice and notice.date %}
 
-              <div class="info_release club_items_hover">
+              <div class="info_release club_items_hover dark_title">
                 <div class="info_pic">
                   {% if notice.photo %}
                     <img class="notice_photo" style="opacity: 0.7;" src="/{{notice.photo}}"/>
@@ -71,8 +72,8 @@
           <div class="info_release club_items_hover">
             <form method="POST" enctype="multipart/form-data" class="center">
               {{ event_form.csrf_token }}
-              <div class="info_pic"><h3>ADD EVENT</h3></div>
-              <div class="info_text">
+              <div class="info_pic dark_title"><h3>ADD EVENT</h3></div>
+              <div class="info_text dark_title">
                 <div class="add_event_or">
                   {{ event_form.photo }}
                   {{ event_form.name }}
@@ -92,11 +93,15 @@
                     <img class="notice_photo" src="/static/images/placeholder.png"/>
                   {% endif %}
                 </div>
-                <div class="info_text">
+                <div class="info_text dark_title">
                   {{event.name}}
-                  {{event.location}}
+                  <div class="event_location">
+                    <p class="location">Event Location:</p>
+                    <a href="https://www.google.com/maps/search/{{ event.location | urlencode }}" target="_blank">{{ event.location }}</a>
+                  </div>
+                  
                 </div>
-                <div class="info_upload">Uploaded At {{ event.date }}</div>
+                <div class="info_upload dark_title">Uploaded At {{ event.date }}</div>
               </div>
           {% endfor %}
         </ul>
@@ -105,14 +110,14 @@
   <div class="item2">
     <img class="club_pro shadow rounded-20" src="/{{ club_admin.pro_photo }}" />
     &nbsp;
-    <button onclick="toggleEdit('photoEditForm')" class="form_edit">✎ Change Profile Photo</button>
+    <button onclick="toggleEdit('photoEditForm')" class="form_edit dark_title">✎ Change Profile Photo</button>
     <form id="photoEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
         {{ update_form.csrf_token }}
         {{ update_form.pro_photo() }}
         <input type="submit" name="update_club" value="Apply" class="change_sub_small">
     </form>
     &nbsp;
-    <p class="club_about">{{ club_admin.description }} <button onclick="toggleEdit('descriptionEditForm')" class="form_edit">✎</button></p>
+    <p class="club_about dark_title">{{ club_admin.description }} <button onclick="toggleEdit('descriptionEditForm')" class="form_edit dark_title">✎</button></p>
     
     
     <form id="descriptionEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
@@ -127,32 +132,32 @@
   <div class="popup-content">
     <button id="closePopup" class="pop_close prevent-select">X</button>
     <ul class="photo_container">
-      <li class="multi_photo shadow">
+      <li class="multi_photo">
         <div class="multi_pic club_items_hover">
           <form method="POST" enctype="multipart/form-data" class="center">
-            <div class="multi_pic_1"><h3 class="add_photo_title">
-              <h3 class="add_photo_title">ADD PHOTO</h3>
+            <div class="multi_pic_1 dark_title">
+              <h3 class="add_photo_title dark_title">ADD PHOTO</h3>
               {{ photo_form.csrf_token }}
-              {{ photo_form.photo}}
+              {{ photo_form.photo }}
               {{ photo_form.description }}
             </div>
             <div class="multi_pic_2">
 
 
-                <input type="submit" value="+" class="sub_date">
+                <input type="submit" value="+" class="sub_date dark_title">
               
             </div>
         </form>
         </div>
       </li>
       {% for photo in club_admin.photos %}
-      <li class="multi_photo shadow">
-        <div class="multi_pic club_items_hover">
-          <div class="multi_pic_1"><img class="prevent-select photo_pic club_photos" src="/{{photo.photo}}"/></div>
+      <li class="multi_photo">
+        <div class="multi_pic">
+          <div class="multi_pic_1"><img class="prevent-select club_photos" src="/{{photo.photo}}"/></div>
           {% if photo.description %}
-            <div class="multi_pic_2">{{photo.description}}</div>
+            <div class="multi_pic_2 dark_title">{{photo.description}}</div>
           {% else %}
-            <div class="multi_pic_2">No Details Provided</div>
+            <div class="multi_pic_2 dark_title">No Details Provided</div>
           {% endif %}
         </div>
       </li>
@@ -206,6 +211,10 @@ function scrollToSection(sectionId) {
       } else {
           form.style.display = "none";
       }
+  }
+  function toggleMenu() {
+  const menu = document.querySelector('.fix_menu');
+  menu.classList.toggle('hidden');
   }
 </script>
 

@@ -2,7 +2,8 @@
 {% block content %}
 <body class="prevent-select">
   <div class="fix_menu">
-    <h2 class="organiser">Club Organiser: {{club.organiser}}</h2>
+    <button class="toggle_button" onclick="toggleMenu()">&#9664;</button>
+    <h2 class="organiser dark_title">Club Organiser: {{club.organiser}}</h2>
     <div class="scroll_container">
       <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
       <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
@@ -12,15 +13,15 @@
 
   <div class="grid-container">
     <div class="item1">
-      <h1 class="club_title">{{club.name}} Club</h1>
-      <p class="club_room">Club Common Room: {{ club.club_room }}</p>
+      <h1 class="club_title dark_title">{{club.name}} Club</h1>
+      <p class="club_room dark_title">Club Common Room: {{ club.club_room }}</p>
       <div id="section1" class="section scroll-target">
-        <h2 class="club_titles" id="notices_section">Notices</h2>
+        <h2 class="club_titles dark_title" id="notices_section">Notices</h2>
         <ul class="notices_container">
           {% for notice in club.notices %}
             {% if notice.notice and notice.date %}
 
-              <div class="info_release multiple_notices">
+              <div class="info_release">
                 <div class="info_pic">
                   {% if notice.photo %}
                     <img class="notice_photo" style="opacity: 1;" src="/{{notice.photo}}"/>
@@ -28,8 +29,8 @@
                     <img class="notice_photo" src="/static/images/placeholder.png"/>
                   {% endif %}
                 </div>
-                <div class="info_text">{{ notice.notice }}</div>
-                <div class="info_upload">Uploaded At {{ notice.date }}</div>
+                <div class="info_text dark_title">{{ notice.notice }}</div>
+                <div class="info_upload dark_title">Uploaded At {{ notice.date }}</div>
               </div>
             {% endif %}
           {% endfor %}
@@ -38,7 +39,7 @@
       &nbsp;
       &nbsp;
       <div id="section2" class="section scroll-target">
-        <h2 class="club_titles" id="events_section">Events</h2>
+        <h2 class="club_titles dark_title" id="events_section">Events</h2>
         <ul class="events_container">
           {% for event in club.events %}
               <div class="info_release multiple_events">
@@ -49,11 +50,15 @@
                     <img class="notice_photo" src="/static/images/placeholder.png"/>
                   {% endif %}
                 </div>
-                <div class="info_text">
+                <div class="info_text dark_title">
                   {{event.name}}
-                  {{event.location}}
+                  <div class="event_location">
+                    <p class="location">Event Location:</p>
+                    <a href="https://www.google.com/maps/search/{{ event.location | urlencode }}" target="_blank">{{ event.location }}</a>
+                  </div>
+                  
                 </div>
-                <div class="info_upload">Event At {{ event.date }}</div>
+                <div class="info_upload dark_title">Event At {{ event.date }}</div>
               </div>
           {% endfor %}
         </ul>
@@ -62,22 +67,29 @@
   <div class="item2">
     <img class="club_pro shadow rounded-20" src="/{{club.pro_photo}}"/>
     &nbsp;
-    <p class="club_about">{{club.description}}</p>
+    <p class="club_about dark_title">{{club.description}}</p>
 
     <button id="myButton" class="photo_pop">Click Me To See Photos</button>
   </div>
 </div>
 <div id="myPopup" class="popup">
   <div class="popup-content">
-
+    <button id="closePopup" class="pop_close prevent-select">X</button>
     <ul class="photo_container">
       {% for photo in club.photos %}
-      <li class="multi_photo shadow">
-          <img class="photo_pic rounded-20 prevent-select club_photos shadow" src="/{{photo.photo}}"/>
+      <li class="multi_photo">
+        <div class="multi_pic">
+          <div class="multi_pic_1"><img class="prevent-select club_photos" src="/{{photo.photo}}"/></div>
+          {% if photo.description %}
+            <div class="multi_pic_2 dark_title">{{photo.description}}</div>
+          {% else %}
+            <div class="multi_pic_2 dark_title">No Details Provided</div>
+          {% endif %}
+        </div>
       </li>
       {% endfor %}
     </ul>
-    <button id="closePopup" class="pop_close prevent-select">X</button>
+
   </div>
 </div>
 </body>
@@ -117,6 +129,10 @@ function scrollToSection(sectionId) {
           top: y,
           behavior: 'smooth'
       });
+  }
+  function toggleMenu() {
+  const menu = document.querySelector('.fix_menu');
+  menu.classList.toggle('hidden');
   }
 </script>
 
