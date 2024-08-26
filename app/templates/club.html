@@ -94,49 +94,7 @@
 </div>
 </body>
 
-<script>
-  myButton.addEventListener(
-      "click",
-      function () {
-          myPopup.classList.add("show");
-      }
-  );
-  closePopup.addEventListener(
-      "click",
-      function () {
-          myPopup.classList.remove(
-              "show"
-          );
-      }
-  );
-  window.addEventListener(
-      "click",
-      function (event) {
-          if (event.target == myPopup) {
-              myPopup.classList.remove(
-                  "show"
-              );
-          }
-      }
-  );
-
-function scrollToSection(sectionId) {
-      const section = document.getElementById(sectionId);
-      const yOffset = -60; // Adjust based on your needs
-      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-      window.scrollTo({
-          top: y,
-          behavior: 'smooth'
-      });
-  }
-  function toggleMenu() {
-  const menu = document.querySelector('.fix_menu');
-  menu.classList.toggle('hidden');
-  }
-</script>
-
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script src="{{url_for('static',  filename='/script/club.js')}}"></script>
 
 </body>
 

@@ -20,7 +20,8 @@ from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event
 
 @app.route("/")
 def home():
-    return render_template("home.html", title="Home Page")
+    club_photos = [club.pro_photo for club in models.Clubs.query.all()]
+    return render_template("home.html", title="Home Page", club_photos=club_photos)
 
 
 @app.route("/clubs", methods=["GET", "POST"])
@@ -215,7 +216,7 @@ def admin():
                 db.session.execute(models.Club_Notices.delete().where(models.Club_Notices.c.cid == club.id))
                 db.session.execute(models.Club_Photos.delete().where(models.Club_Photos.c.cid == club.id))
                 db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.cid == club.id))
-                db.session.execute(models.Club_Users.delete().where(models.Club_Users.c.cid == club.id))
+                db.session.execute(models.Club_User.delete().where(models.Club_Users.c.cid == club.id))
                 db.session.commit()
 
                 db.session.delete(club)
@@ -230,7 +231,6 @@ def admin():
 
             if teacher:
                 db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.tid == teacher.id))
-                db.session.execute(models.Teacher_Admin.delete().where(models.Teacher_Admin.c.tid == teacher.id))
                 db.session.commit()
 
                 db.session.delete(teacher)

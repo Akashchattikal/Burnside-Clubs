@@ -63,7 +63,7 @@ class Add_Event(FlaskForm):
 class Add_Photo(FlaskForm):
 
     photo = FileField('photo', validators=[DataRequired()], render_kw={"class": "form_add_photo add_in_order"})
-    description = StringField('description', validators=[DataRequired()], render_kw={"class": "form_add_photo add_in_order"})
+    description = StringField('description', validators=[DataRequired()], render_kw={"class": "form_add_photo add_in_order", "placeholder": "Enter Photo Details"})
 
 
 class Update_Club(FlaskForm):

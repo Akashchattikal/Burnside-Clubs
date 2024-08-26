@@ -18,8 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
-    min-height: 10000px;
-    height: 100%;
+    min-height: 180rem;
     
 }
 
@@ -136,6 +135,35 @@ button {
 /*************/
 /**Home Page**/
 /*************/
+
+.svg_container {
+    display: grid;
+    place-items: center;
+    margin-top: -37%;
+}
+
+.club_symbol {
+    width: 30%;
+}
+
+.home_image {
+    margin-top: 5%;
+    border: 2px solid black;
+    width: 100%;
+    min-height: 40rem;
+
+}
+
+.home_indi_image {
+    width: 20%;
+    border: 2px solid black;
+    min-height: 10rem;
+}
+
+.home_test {
+    display: flex;
+    align-items: center;
+}
 
 
 
@@ -720,6 +748,12 @@ button {
     width: 40%;
     height: 600px;
     background-color: var(--clr-bhs-dark);
+    border-radius: 20px;
+    transition: all 0.5s ease-out;
+}
+
+.multiple_feature:hover {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
 .submission {
@@ -1083,3 +1117,8 @@ button {
     margin-left: 15%;
     margin-right: 15%;
 }
+
+
+
+/***Test***/
+
