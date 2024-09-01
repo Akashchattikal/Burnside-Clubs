@@ -73,7 +73,28 @@ def club_admin(id):
                                notice_form=notice_form, club_admin=club_admin,
                                event_form=event_form, photo_form=photo_form,
                                update_form=update_form)
+    
     else:
+        # Handle deleting a notice
+        if 'delete_notice' in request.form:
+            notice_id = request.form.get('delete_notice')
+            notice_to_delete = models.Notices.query.filter_by(id=notice_id).first()
+            if notice_to_delete:
+                club_admin.notices.remove(notice_to_delete)
+                db.session.commit()
+                flash('Notice Deleted!')
+            return redirect(f"/club_admin/{id}")
+
+        # Handle deleting an event
+        if 'delete_event' in request.form:
+            event_id = request.form.get('delete_event')
+            event_to_delete = models.Events.query.filter_by(id=event_id).first()
+            if event_to_delete:
+                club_admin.events.remove(event_to_delete)
+                db.session.commit()
+                flash('Event Deleted!')
+            return redirect(f"/club_admin/{id}")
+
         if notice_form.validate_on_submit():
             new_notice = models.Notices()
             new_notice.notice = notice_form.notice.data
@@ -216,7 +237,7 @@ def admin():
                 db.session.execute(models.Club_Notices.delete().where(models.Club_Notices.c.cid == club.id))
                 db.session.execute(models.Club_Photos.delete().where(models.Club_Photos.c.cid == club.id))
                 db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.cid == club.id))
-                db.session.execute(models.Club_User.delete().where(models.Club_Users.c.cid == club.id))
+                db.session.execute(models.Club_User.delete().where(models.Club_User.c.cid == club.id))
                 db.session.commit()
 
                 db.session.delete(club)
