@@ -868,6 +868,18 @@ button {
     box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
 }
 
+.multiple_feature_ad {
+    width: 40%;
+    height: 300px;
+    background-color: var(--clr-bhs-dark);
+    border-radius: 20px;
+    transition: all 0.5s ease-out;
+}
+
+.multiple_feature_ad:hover {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
 .submission {
     padding: 1.5%;
     border: 0px;
@@ -1366,6 +1378,7 @@ button {
     font-size: 120%; /* Adjust the size as needed */
     padding-bottom: 10%;
     margin-left: 2%;
+    margin-top: 3%;
 }
 
 .delete_club_item {

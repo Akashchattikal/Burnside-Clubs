@@ -14,8 +14,11 @@
                 <li><a href="/" class="nav_link" id="home">Home</a></li>
                 <li><a href="/clubs" class="nav_link" id="clubs">Clubs</a></li>
                 {% if current_user.is_authenticated %}
-                    <li><a href="/admin_access" class="nav_link" id="admin">Admin Access</a></li>
-                    <li>Hello, {{ current_user.name }}</li>
+                    {% if is_admin %}
+                        <li>Welcome Admin</li>
+                    {% else %}
+                        <li>Hello, {{ current_user.name }}</li>
+                    {% endif %}
                 {% endif %}
             </ul>
 
@@ -32,6 +35,9 @@
             {% if current_user.get_teacher_id() %}
                 <button class="defualt_use shadow"><a href="/teach/{{ current_user.get_teacher_id() }}" class="in_log">Teach Access</a></button>
             {% endif %}
+            {% if is_admin %}
+                <button class="defualt_use shadow"><a href="/admin_access" class="in_log">Admin Access</a></button>
+            {% endif%}
             <button class="defualt_use shadow"><a href="/logout" class="in_log">Logout</a></button>
         {% else %}
             <button class="defualt_use shadow"><a href="/login" class="in_log">Login</a></button>

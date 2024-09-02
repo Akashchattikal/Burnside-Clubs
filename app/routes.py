@@ -23,7 +23,7 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm, LoginForm, SignupForm
+from app.forms import Add_Club, Add_Teacher, Club_Teacher, Remove_Admin, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm, LoginForm, SignupForm, Add_Admin
 
 
 @login_manager.user_loader
@@ -271,105 +271,150 @@ def club_admin(id):
                            update_form=update_form)
 
 
+@app.context_processor
+def inject_is_admin():
+    if current_user.is_authenticated:
+        admin_emails = [admin.email for admin in models.Admins.query.all()]
+        is_admin = current_user.email in admin_emails
+    else:
+        is_admin = False
+    return dict(is_admin=is_admin)
+
+
 @app.route('/admin_access', methods=['GET', 'POST'])
+@login_required
 def admin():
     club_form = Add_Club()
     teacher_form = Add_Teacher()
+    admin_form = Add_Admin()
     teacher_club_form = Club_Teacher()
     remove_club_form = Remove_Club()
     remove_teacher_form = Remove_Teacher()
-
+    remove_admin_form = Remove_Admin()
+    admin_emails = [admin.email for admin in models.Admins.query.all()]
+    admins = models.Admins.query.all()
     teachers = models.Teachers.query.all()
     clubs = models.Clubs.query.all()
     teacher_club_form.teacher.choices = [(teacher.id, teacher.name) for teacher in teachers]
     teacher_club_form.club.choices = [(club.id, club.name) for club in clubs]
     remove_club_form.club.choices = [(club.id, club.name) for club in clubs]
     remove_teacher_form.teacher.choices = [(teacher.id, teacher.name) for teacher in teachers]
+    remove_admin_form.admin.choices = [(admin.id, admin.name) for admin in admins]
 
-    if request.method == 'GET':
-        return render_template("admin.html", title="Admin Access Page",
-                               club_form=club_form, teacher_form=teacher_form,
-                               teacher_club_form=teacher_club_form,
-                               remove_club_form=remove_club_form,
-                               remove_teacher_form=remove_teacher_form,)
+    if current_user.email not in admin_emails:
+        abort(404)
     else:
-        if club_form.validate_on_submit():
-            new_club = models.Clubs()
-            new_club.name = club_form.name.data
-            new_club.description = club_form.description.data
-            photo = club_form.pro_photo.data
-            filename = secure_filename(photo.filename)
-            new_club.pro_photo = ('static/images/' + filename)
-            photo.save(os.path.join(basedir, 'static/images/' + filename))
-            new_club.club_room = club_form.club_room.data
-            new_club.organiser = club_form.organiser.data
-            db.session.add(new_club)
-            db.session.commit()
-            flash('New Club Added!')
-            time.sleep(2.5)
-            return redirect('/admin_access')
-
-        if teacher_form.validate_on_submit():
-            new_teacher = models.Teachers()
-            new_teacher.name = teacher_form.name.data
-            new_teacher.email = teacher_form.email.data
-            db.session.add(new_teacher)
-            db.session.commit()
-            flash('New Teacher Added!')
-            time.sleep(2.5)
-            return redirect('/admin_access')
-
-        if teacher_club_form.validate_on_submit():
-            club_id = teacher_club_form.club.data
-            teacher_id = teacher_club_form.teacher.data
-            club = models.Clubs.query.filter_by(id=club_id).first()
-            teacher = models.Teachers.query.filter_by(id=teacher_id).first()
-            club.teachers.append(teacher)
-            db.session.commit()
-            flash('Teacher Gained Access to Club!')
-            time.sleep(2.5)
-            return redirect('/admin_access')
-
-        if remove_club_form.validate_on_submit():
-            club_id = remove_club_form.club.data
-            club = models.Clubs.query.filter_by(id=club_id).first()
-
-            if club:
-                # Delete All Relationships With Club
-                db.session.execute(models.Club_Events.delete().where(models.Club_Events.c.cid == club.id))
-                db.session.execute(models.Club_Notices.delete().where(models.Club_Notices.c.cid == club.id))
-                db.session.execute(models.Club_Photos.delete().where(models.Club_Photos.c.cid == club.id))
-                db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.cid == club.id))
-                db.session.execute(models.Club_User.delete().where(models.Club_User.c.cid == club.id))
-                db.session.commit()
-
-                db.session.delete(club)
-                db.session.commit()
-                flash('Club and all associated relationships removed!')
-                time.sleep(2.5)
-                return redirect('/admin_access')
-
-        if remove_teacher_form.validate_on_submit():
-            teacher_id = remove_teacher_form.teacher.data
-            teacher = models.Teachers.query.filter_by(id=teacher_id).first()
-
-            if teacher:
-                db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.tid == teacher.id))
-                db.session.commit()
-
-                db.session.delete(teacher)
-                db.session.commit()
-                flash('Teacher and all associated relationships removed!')
-                time.sleep(2.5)
-                return redirect('/admin_access')
-
-        else:
-            return render_template("admin.html", title="Admin Access Page",
+        if request.method == 'GET':
+            return render_template("admin.html",
+                                   title="Admin Access Page",
                                    club_form=club_form,
                                    teacher_form=teacher_form,
                                    teacher_club_form=teacher_club_form,
                                    remove_club_form=remove_club_form,
-                                   remove_teacher_form=remove_teacher_form)
+                                   remove_teacher_form=remove_teacher_form,
+                                   remove_admin_form=remove_admin_form,
+                                   admin_form=admin_form, admins=admins)
+        else:
+            if club_form.validate_on_submit():
+                new_club = models.Clubs()
+                new_club.name = club_form.name.data
+                new_club.description = club_form.description.data
+                photo = club_form.pro_photo.data
+                filename = secure_filename(photo.filename)
+                new_club.pro_photo = ('static/images/' + filename)
+                photo.save(os.path.join(basedir, 'static/images/' + filename))
+                new_club.club_room = club_form.club_room.data
+                new_club.organiser = club_form.organiser.data
+                db.session.add(new_club)
+                db.session.commit()
+                flash('New Club Added!')
+                time.sleep(2.5)
+                return redirect('/admin_access')
+
+            if teacher_form.validate_on_submit():
+                new_teacher = models.Teachers()
+                new_teacher.name = teacher_form.name.data
+                new_teacher.email = teacher_form.email.data
+                db.session.add(new_teacher)
+                db.session.commit()
+                flash('New Teacher Added!')
+                time.sleep(2.5)
+                return redirect('/admin_access')
+
+            if admin_form.validate_on_submit():
+                new_admin = models.Admins()
+                new_admin.name = admin_form.name.data
+                new_admin.email = admin_form.email.data
+                db.session.add(new_admin)
+                db.session.commit()
+                flash('New Admin Added!')
+                time.sleep(2.5)
+                return redirect('/admin_access')
+
+            if teacher_club_form.validate_on_submit():
+                club_id = teacher_club_form.club.data
+                teacher_id = teacher_club_form.teacher.data
+                club = models.Clubs.query.filter_by(id=club_id).first()
+                teacher = models.Teachers.query.filter_by(id=teacher_id).first()
+                club.teachers.append(teacher)
+                db.session.commit()
+                flash('Teacher Gained Access to Club!')
+                time.sleep(2.5)
+                return redirect('/admin_access')
+
+            if remove_club_form.validate_on_submit():
+                club_id = remove_club_form.club.data
+                club = models.Clubs.query.filter_by(id=club_id).first()
+
+                if club:
+                    # Delete All Relationships With Club
+                    db.session.execute(models.Club_Events.delete().where(models.Club_Events.c.cid == club.id))
+                    db.session.execute(models.Club_Notices.delete().where(models.Club_Notices.c.cid == club.id))
+                    db.session.execute(models.Club_Photos.delete().where(models.Club_Photos.c.cid == club.id))
+                    db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.cid == club.id))
+                    db.session.execute(models.Club_User.delete().where(models.Club_User.c.cid == club.id))
+                    db.session.commit()
+
+                    db.session.delete(club)
+                    db.session.commit()
+                    flash('Club and all associated relationships removed!')
+                    time.sleep(2.5)
+                    return redirect('/admin_access')
+
+            if remove_teacher_form.validate_on_submit():
+                teacher_id = remove_teacher_form.teacher.data
+                teacher = models.Teachers.query.filter_by(id=teacher_id).first()
+
+                if teacher:
+                    db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.tid == teacher.id))
+                    db.session.commit()
+
+                    db.session.delete(teacher)
+                    db.session.commit()
+                    flash('Teacher and all associated relationships removed!')
+                    time.sleep(2.5)
+                    return redirect('/admin_access')
+
+            if remove_admin_form.validate_on_submit():
+                admin_id = remove_admin_form.admin.data
+                admin_to_remove = models.Admins.query.get(admin_id)
+                if admin_to_remove:
+                    db.session.delete(admin_to_remove)
+                    db.session.commit()
+                    flash('Admin removed successfully!')
+                    return redirect('/admin_access')
+
+            else:
+                return render_template("admin.html",
+                                       title="Admin Access Page",
+                                       club_form=club_form,
+                                       teacher_form=teacher_form,
+                                       teacher_club_form=teacher_club_form,
+                                       remove_club_form=remove_club_form,
+                                       remove_teacher_form=remove_teacher_form,
+                                       remove_admin_form=remove_admin_form,
+                                       admin_form=admin_form, admins=admins)
+
 
 
 @app.errorhandler(404)

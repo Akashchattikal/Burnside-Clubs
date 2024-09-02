@@ -72,8 +72,6 @@ class Teachers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text())
     email = db.Column(db.Text())
-    password = db.Column(db.Text())
-    picture = db.Column(db.Text())
     clubs = db.relationship('Clubs', secondary='Club_Teacher', back_populates='teachers')
 
 
@@ -95,3 +93,10 @@ class User(db.Model, UserMixin):
 
     def get_teacher(self):
         return db.session.query(Teachers).filter_by(email=self.email).first()
+
+
+class Admins(db.Model):
+    __tablename__ = "Admins"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text())
+    email = db.Column(db.Text())

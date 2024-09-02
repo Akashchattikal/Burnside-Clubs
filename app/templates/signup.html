@@ -4,13 +4,6 @@
 
     <div class="signup_div">
         <h2 class="signup_title">Sign Up</h2>
-        {% with error_message = get_flashed_messages() %}
-        {% if error_message %}
-        <div>
-          <h4><b>{{ error_message[0] }}</b></h4>
-        </div>
-        {% endif %}
-        {% endwith %}
         <form method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">

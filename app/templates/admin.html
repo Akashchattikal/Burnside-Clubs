@@ -7,6 +7,7 @@
     <div class="scroll_container">
       <button onclick="scrollToSection('section1')" class="scroll_admin">Add</button>
       <button onclick="scrollToSection('section2')" class="scroll_admin">Delete</button>
+      <button onclick="scrollToSection('section3')" class="scroll_admin">Admin</button>
     </div>
   </div>
   <div id="section1" class="section scroll-target">
@@ -30,7 +31,7 @@
               Organiser: 
               <p class="space_form">{{ club_form.organiser }}</p>
               <br>
-              <input type="submit" value="Add Club" class="submission rounded-20">
+              <input type="submit" value="Add" class="submission rounded-20">
           </form>
       </div>
       </li>
@@ -45,7 +46,7 @@
             Email: 
             <p class="space_form">{{ teacher_form.email }}</p>
             <br>
-            <input type="submit" value="Add Teacher" class="submission rounded-20">
+            <input type="submit" value="Add" class="submission rounded-20">
           </form> 
           &nbsp;
           &nbsp;
@@ -71,25 +72,56 @@
     <ul class="admin_container">
       <li class="multiple_feature">
         <div style="margin-top: 8%;">
-          <h2 style="text-align: center;">Remove Club</h2>
+          <h2 style="text-align: center;">Delete Club</h2>
           &nbsp;
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ remove_club_form.csrf_token }}
-            Club: 
+            Clubs: 
             <p class="space_form" style="text-align: center;">{{ remove_club_form.club }}</p>
             <br>
-            <input type="submit" value="Remove Club" class="submission rounded-20">
+            <input type="submit" value="Delete" class="submission rounded-20">
           </form>
         </div>
         <div style="margin-top: 8%;">
-          <h2 style="text-align: center;">Remove Teacher</h2>
+          <h2 style="text-align: center;">Delete Teacher</h2>
           &nbsp;
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ remove_teacher_form.csrf_token }}
-            Teacher: 
+            Teachers: 
             <p class="space_form">{{ remove_teacher_form.teacher }}</p>
             <br>
-            <input type="submit" value="Remove Teacher" class="submission rounded-20">
+            <input type="submit" value="Delete" class="submission rounded-20">
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="section3" class="section scroll-target">
+    <h1 class="center dark_title" style="margin-top: 3%;">Add Admin</h1>
+    <ul class="admin_container">
+      <li class="multiple_feature">
+        <div style="margin-top: 8%;">
+          <h2 style="text-align: center;">Give Admin Access To</h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+            {{ admin_form.csrf_token }}
+            Name: 
+            <p class="space_form">{{ admin_form.name }}</p>
+            Email: 
+            <p class="space_form">{{ admin_form.email }}</p>
+            <br>
+            {{ admin_form.submit }}
+          </form>
+        </div>
+        <div style="margin-top: 8%;">
+          <h2 style="text-align: center;">Delete Admin</h2>
+          &nbsp;
+          <form method="POST" enctype="multipart/form-data" class="center">
+            {{ remove_admin_form.csrf_token }}
+            Admins: 
+            <p class="space_form">{{ remove_admin_form.admin }}</p>
+            <br>
+            <input type="submit" value="Delete" class="submission rounded-20">
           </form>
         </div>
       </li>

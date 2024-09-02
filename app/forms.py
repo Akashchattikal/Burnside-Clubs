@@ -33,13 +33,26 @@ class Club_Teacher(FlaskForm):
 class Remove_Club(FlaskForm):
 
     club = SelectField('Club', coerce=int, validators=[DataRequired()], render_kw={"class": "custom-select"})
-    submit = SubmitField('Remove Club')
+    submit = SubmitField('Delete')
 
 
 class Remove_Teacher(FlaskForm):
 
     teacher = SelectField('Select Teacher', coerce=int, render_kw={"class": "custom-select"})
-    submit = SubmitField('Remove Teacher')
+    submit = SubmitField('Delete')
+
+
+class Add_Admin(FlaskForm):
+
+    name = StringField('name', validators=[DataRequired()], render_kw={"class": "form_name rounded-input"})
+    email = EmailField('email', validators=[DataRequired(), Email()], render_kw={"class": "form_email rounded-input"})
+    submit = SubmitField('Add', render_kw={"class": "submission rounded-20"})
+
+
+class Remove_Admin(FlaskForm):
+
+    admin = SelectField('Select Admin', coerce=int, render_kw={"class": "custom-select"})
+    submit = SubmitField('Delete')
 
 
 #  Club Admin
