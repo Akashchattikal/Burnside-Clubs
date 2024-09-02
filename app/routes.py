@@ -87,7 +87,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return render_template("logout.html", title="Logout")
+    return render_template("home.html", title="Logout")
 
 
 @app.route("/clubs", methods=["GET", "POST"])
