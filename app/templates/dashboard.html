@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+{% block content %}
+<body>
+  <span>
+    <h2 class="dash_title dark_title">Signed In As: {{ current_user.name }}</h2>
+  </span>
+
+  <h1 class="center dark_title" style="margin-top: -3%;">My Clubs:</h1>
+    
+  <ul class="club_container">
+      {% for club in current_user.clubs %}
+      <li class="multiple_club rounded-20 shadow center">
+          <!-- Displays a Club profile image and name -->
+          <form method="POST">
+            <input type="hidden" name="remove_favourite" value="{{ club.id }}">
+            <button type="submit" class="delete_button delete_club_item">X</button>
+          </form>
+          <a href="/club/{{ club.id }}"><img class="pfp prevent-select" src="/{{ club.pro_photo }}" /></a>
+          <a href="/club/{{ club.id }}"><h4 class="club_name prevent-select">{{ club.name }}</h4></a>
+      </li>
+      {% endfor %}
+  </ul>
+</body>
+{% endblock %}
+
+
+
+<script>
+    // Handle delete functionality for notices and events
+  document.addEventListener("DOMContentLoaded", function () {
+      // Attach event listeners to all delete buttons
+      const deleteButtons = document.querySelectorAll(".delete_button");
+      deleteButtons.forEach(button => {
+          button.addEventListener("click", function (event) {
+              event.preventDefault(); // Prevent the default form submission
+
+              const form = this.closest('form'); // Find the closest form element
+              if (confirm("Are You Sure You Want To Delete This Item?")) {
+                  form.submit(); // Submit the form to delete the item
+              }
+          });
+      });
+  });
+</script>

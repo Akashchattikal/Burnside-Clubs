@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, TextAreaField, SelectField, EmailField, FileField, DateField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Optional, ValidationError, InputRequired, Length, EqualTo
+from wtforms.validators import DataRequired, Optional, ValidationError, InputRequired, Length, EqualTo, Email
 from wtforms import validators
 import app.models
 from datetime import datetime
@@ -21,7 +21,7 @@ class Add_Club(FlaskForm):
 class Add_Teacher(FlaskForm):
 
     name = StringField('name', validators=[DataRequired()], render_kw={"class": "form_name rounded-input"})
-    email = EmailField('email', validators=[validators.DataRequired()], render_kw={"class": "form_email rounded-input"})
+    email = EmailField('email', validators=[DataRequired(), Email()], render_kw={"class": "form_email rounded-input"})
 
 
 class Club_Teacher(FlaskForm):
@@ -84,3 +84,19 @@ class SearchClubForm(FlaskForm):
 
 
 #  Login
+
+class LoginForm(FlaskForm):
+    email = EmailField("Email", validators=[DataRequired(), Email()], render_kw={"class": "login", "placeholder": "Enter Email"})
+    password = PasswordField("Password", validators=[DataRequired()], render_kw={"class": "login", "placeholder": "Enter Password"})
+    submit = SubmitField("Submit", render_kw={"class": "log_sub"})
+
+
+# Sign Up
+
+class SignupForm(FlaskForm):
+    picture = FileField('Profile Photo', validators=[DataRequired()], render_kw={"class": "signup_file"})
+    name = StringField("Name", validators=[DataRequired()], render_kw={"class": "signup", "placeholder": "Enter A Name"})
+    email = EmailField("Email", validators=[DataRequired(), Email()], render_kw={"class": "signup", "placeholder": "Enter A Email"})
+    password = PasswordField("Password", validators=[DataRequired(), EqualTo('repassword', message="the passful words must match-a-block")], render_kw={"class": "signup", "placeholder": "Enter A Password"})
+    repassword = PasswordField("Re Enter Password", validators=[DataRequired()], render_kw={"class": "signup", "placeholder": "Re Enter Password"})
+    submit = SubmitField("Submit", render_kw={"class": "sign_sub"})

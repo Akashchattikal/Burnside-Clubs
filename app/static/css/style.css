@@ -242,8 +242,11 @@ button {
 .default_si {
     border-radius: 50%;
     width: 50px;
+    height: 50px;  /* Ensure the height matches the width */
     cursor: pointer;
+    object-fit: cover; /* Ensures the image covers the area without distortion */
 }
+
 
 .default_si:active { 
     border: 3px solid var(--clr-bhs-dark);
@@ -282,6 +285,11 @@ button {
     display: block; 
 }
 
+.in_log {
+    color: white !important;
+}
+
+
 
 /************/
 /**Add Club**/
@@ -312,6 +320,8 @@ button {
 .multiple_club {
     width: 250px;
     height: 200px;
+    position: relative;
+    display: inline-block;
 }
 
 .multi_photo {
@@ -410,6 +420,55 @@ button {
     align-items: center;
 }
 
+.add_club_item {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    background-color: var(--clr-bhs-dark); 
+    color: #ffffff; 
+    border: none;
+    border-radius: 50%; 
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+.add_club_item::after {
+    content: "Add To Favourites"; /* The label text */
+    position: absolute;
+    top: -30px; /* Position the label above the button */
+    right: 50%; /* Center the label horizontally */
+    transform: translateX(50%); /* Adjust for the right alignment */
+    background-color: var(--clr-bhs-dark); 
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0; /* Hide the label by default */
+    pointer-events: none; /* Prevent the label from interfering with mouse events */
+    transition: opacity 0.3s ease; /* Smooth transition for showing the label */
+}
+
+.add_club_item:hover {
+    background-color: var(--clr-bhs-dark);
+    color: red;
+}
+
+.add_club_item.favorited {
+    color: red;
+}
+
+.add_club_item:hover::after {
+    opacity: 1; /* Show the label when the button is hovered */
+}
+
+
+
 /*************/
 /**Club Page**/ 
 /*************/
@@ -425,7 +484,7 @@ button {
     background-color: white;
     border-radius: 15px;
     padding-bottom: 3%;
-    width: 18%;
+    width: 20%;
     min-width: 225px; 
     text-align: center;
     transition: all 0.5s ease-out;
@@ -450,11 +509,12 @@ button {
     min-height: 6rem;
 }
 
+
 .delete_item {
-    position: absolute; 
+    position: absolute;
     top: 10px; 
     right: 10px;
-    background-color: rgb(244, 244, 244); 
+    background-color: rgb(244, 244, 244);
     color: #000000; 
     border: none;
     border-radius: 50%; 
@@ -463,14 +523,40 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+
+.delete_item::after {
+    content: "Delete Item";
+    position: absolute;
+    top: -30px;
+    right: 50%;
+    transform: translateX(50%);
+    background-color: var(--clr-bhs-dark); 
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+
 .delete_item:hover {
-    background-color: var(--clr-bhs-dark);
+    background-color: var(--clr-bhs-dark); 
     color: white;
 }
+
+
+.delete_item:hover::after {
+    opacity: 1;
+}
+
 
 .info_text {
     margin-top: 100%;
@@ -612,7 +698,7 @@ button {
 
 .popup {
     position: fixed;
-    z-index: 1;
+    z-index: 1000 ;
     left: 0;
     top: 0;
     width: 100%;
@@ -1153,3 +1239,178 @@ button {
 
 /***Test***/
 
+
+.signup {
+    width: 20rem;
+    padding: 1.5%;
+    border: none;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    outline: none;
+    margin-bottom: 4%;
+}
+
+.signup_file {
+    width: 20rem;
+    padding: 1%;
+    border: none;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    outline: none;
+    margin-bottom: 4%;
+}
+
+.sign_sub {
+    padding: 1%;
+    border: none;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    color: var(--clr-bhs-dark);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    outline: none;
+    margin-bottom: 5%;
+}
+
+.sign_sub:hover, .sign_sub:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
+.signup_div {
+    margin-top: 5%;
+    background-color: var(--clr-bhs-dark);
+    border-radius: 15px;
+    width: 50%;
+    min-width: 500px; 
+    text-align: center;
+    transition: all 0.5s ease-out;
+    margin: auto;
+}
+
+.signup_div:hover {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
+
+.signup_title {
+    padding-top: 5%;
+    margin-bottom: 5%;
+    color: white;
+}
+
+
+.login {
+    width: 20rem;
+    padding: 1.5%;
+    border: none;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    outline: none;
+    margin-bottom: 4%;
+}
+
+.log_sub {
+    padding: 1%;
+    border: none;
+    border-radius: 7rem;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    color: var(--clr-bhs-dark);
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    outline: none;
+    margin-bottom: 5%;
+}
+
+.log_sub:hover, .log_sub:focus {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
+.login_div {
+    margin-top: 5%;
+    background-color: var(--clr-bhs-dark);
+    border-radius: 15px;
+    width: 50%;
+    min-width: 500px; 
+    text-align: center;
+    transition: all 0.5s ease-out;
+    margin: auto;
+}
+
+.login_div:hover {
+    box-shadow: 5px 5px 9px rgba(0, 0, 0, 0.2);
+}
+
+
+.login_title {
+    padding-top: 5%;
+    margin-bottom: 5%;
+    color: white;
+}
+
+.dash_title {
+    font-size: 120%; /* Adjust the size as needed */
+    padding-bottom: 10%;
+    margin-left: 2%;
+}
+
+.delete_club_item {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    background-color: rgb(244, 244, 244);
+    color: #000000; 
+    border: none;
+    border-radius: 50%; 
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+.delete_club_item::after {
+    content: "Remove Club From Favourites";
+    position: absolute;
+    top: -30px;
+    right: 50%;
+    transform: translateX(50%);
+    background-color: var(--clr-bhs-dark); 
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+
+.delete_club_item:hover {
+    background-color: var(--clr-bhs-dark); 
+    color: white;
+}
+
+
+.delete_club_item:hover::after {
+    opacity: 1;
+}

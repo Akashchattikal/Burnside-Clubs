@@ -1,42 +1,49 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <title>Clubs</title>
-        <link rel="stylesheet" href="/static/css/style.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    </head>
+<head>
+    <title>Clubs</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
 
-    <body>
-        <header>
-            <nav class="header header_content nav shadow">
-                <ul class="nav_list prevent-select">
-                    <li><a href="/" class="nav_link" id="home">Home</a></li>
-                    <li><a href="/clubs" class="nav_link" id="clubs">Clubs</a></li>
-                    <li><a href="/teach_access" class="nav_link" id="teacher">Teacher Access</a></li>
+<body>
+    <header>
+        <nav class="header header_content nav shadow">
+            <ul class="nav_list prevent-select">
+                <li><a href="/" class="nav_link" id="home">Home</a></li>
+                <li><a href="/clubs" class="nav_link" id="clubs">Clubs</a></li>
+                {% if current_user.is_authenticated %}
                     <li><a href="/admin_access" class="nav_link" id="admin">Admin Access</a></li>
-                </ul>
+                    <li>Hello, {{ current_user.name }}</li>
+                {% endif %}
+            </ul>
 
-
+            {% if current_user.is_authenticated %}
+                <img class="default_si" src="/{{ current_user.picture }}" onclick="toggleButtons()"/>
+            {% else %}
                 <img class="default_si" src="/static/images/default_si.png" onclick="toggleButtons()" />
-            </nav>
-        </header>
-        <div class="default_user">
-            <!-- Buttons appear outside the nav bar -->
-            <button class="defualt_use shadow">Login</button>
-            <button class="defualt_use shadow">Register</button>
-        </div>
-        <main>
-            {% block content %}
-            {% endblock %}
+            {% endif %}
+        </nav>
+    </header>
+    <div class="default_user">
+        {% if current_user.is_authenticated %}
+            <button class="defualt_use shadow"><a href="{{ url_for('user', id=current_user.id) }}" class="in_log">My Clubs</a></button>
+            {% if current_user.get_teacher_id() %}
+                <button class="defualt_use shadow"><a href="/teach/{{ current_user.get_teacher_id() }}" class="in_log">Teach Access</a></button>
+            {% endif %}
+            <button class="defualt_use shadow"><a href="/logout" class="in_log">Logout</a></button>
+        {% else %}
+            <button class="defualt_use shadow"><a href="/login" class="in_log">Login</a></button>
+            <button class="defualt_use shadow"><a href="/signup" class="in_log">Sign Up</a></button>
+        {% endif %}
+    </div>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>Nobody Reads It</footer>
+</body>
 
-        </main>
-        <footer>Nobody Reads It</footer>
-    </body>
-
-    <script>
-
-
-    </script>
-    <script src="{{url_for('static',  filename='/script/nav.js')}}"></script>
+<script src="{{url_for('static',  filename='/script/nav.js')}}"></script>
 </html>

@@ -1,9 +1,17 @@
 from app import app
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 import os
 import time
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
+login_manager = LoginManager()
+# Initialise the LoginManager
+login_manager.init_app(app)
+# If login_required, redirect back to /login
+login_manager.login_view = 'login'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 db = SQLAlchemy()
@@ -15,7 +23,13 @@ WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
 import app.models as models  # need 'db' to import models
-from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm
+from app.forms import Add_Club, Add_Teacher, Club_Teacher, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm, LoginForm, SignupForm
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # Gets primary key value and then uses primary key value to find user sql_alchemy instance
+    return models.User.query.filter_by(id=user_id).first()
 
 
 @app.route("/")
@@ -24,18 +38,89 @@ def home():
     return render_template("home.html", title="Home Page", club_photos=club_photos)
 
 
+@app.route("/signup", methods=['POST', 'GET'])
+def signup():
+    form = SignupForm()
+    if form.validate_on_submit():
+        # Check if user with the same email is already in the database
+        user_check = models.User.query.filter_by(email=form.email.data).first()
+        if not user_check:
+            # Create new user instance
+            user = models.User()
+            # Assign form values to instance attributes
+            picture = form.picture.data
+            filename = secure_filename(picture.filename)
+            user.picture = ('static/images/' + filename)
+            picture.save(os.path.join(basedir, 'static/images/' + filename))
+            user.name = form.name.data
+            user.email = form.email.data
+            user.password = generate_password_hash(form.password.data, salt_length=16)
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=True)
+            return redirect(url_for('home'))
+        else:
+            flash("A User with the same email already exists!")
+        return redirect(url_for('signup'))
+    return render_template("signup.html", title="Sign Up", form=form)
+
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        # Checks if user with input email exists
+        user_info = models.User.query.filter_by(email=form.email.data).first()
+        # If exists, check db hash with input password and if there's a match, login user
+        if user_info:
+            if check_password_hash(user_info.password, form.password.data):
+                login_user(user_info, remember=True)
+                return redirect(url_for("home"))
+            else:
+                flash("Username Or Password is incorrect!")
+        else:
+            flash("User Does Not Exist!")
+        return redirect(url_for('login'))
+    return render_template("login.html", title="Login", form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return render_template("logout.html", title="Logout")
+
+
 @app.route("/clubs", methods=["GET", "POST"])
 def clubs():
     form = SearchClubForm()
     clubs = []
-    if form.validate_on_submit():
+    club_status = {}
+
+    if form.validate_on_submit() and 'search_query' in request.form:
         search_query = form.search_query.data
         clubs = models.Clubs.query.filter(models.Clubs.name.like(f"%{search_query}%")).all()
         if not clubs:
-            flash("No Results", "info")  # Flash message if no clubs are found
+            flash("No Results", "info")
+    elif request.method == "POST" and 'add_favorite' in request.form:
+        club_id = request.form.get('add_favorite')
+        club = models.Clubs.query.get(club_id)
+        if current_user not in club.User:
+            club.User.append(current_user)
+            db.session.commit()
+            flash(f"Added {club.name} to your favorites!")
+        else:
+            flash(f"You're already a member of {club.name}!")
+        return redirect(url_for('clubs'))
     else:
         clubs = models.Clubs.query.all()
-    return render_template("clubs.html", title="Clubs Page", clubs=clubs, form=form)
+
+    if current_user.is_authenticated:
+        club_status = {club.id: current_user in club.User for club in clubs}
+    else:
+        # If not authenticated, all clubs are not favorited
+        club_status = {club.id: False for club in clubs}
+
+    return render_template("clubs.html", title="Clubs Page", clubs=clubs, form=form, club_status=club_status)
 
 
 @app.route("/club/<int:id>")
@@ -45,18 +130,37 @@ def club(id):
     return render_template('club.html', club=club)
 
 
-@app.route("/teach_access")
-def teachers():
-    teachers = models.Teachers.query.all()
-    return render_template("teachers.html", title="Teach Access Page",
-                           teachers=teachers)
-
-
 @app.route("/teach/<int:id>")
+@login_required
 def teacher(id):
-    teacher = models.Teachers.query.filter_by(id=id).first()
-    return render_template("teacher.html", title="Club Access Page",
+    teacher = models.Teachers.query.filter_by(id=id).first() 
+    if not teacher:
+        # Teacher not found, return 404
+        abort(404)
+
+    if teacher.email != current_user.email:
+        # Current user email does not match the teacher's email, return 404
+        abort(404)
+    return render_template("teacher.html", title="Teacher Club Access",
                            teacher=teacher)
+
+
+@app.route("/user/<int:id>", methods=['GET', 'POST'])
+def user(id):
+    user = models.User.query.filter_by(id=id).first()
+    if request.method == 'GET':
+        return render_template("dashboard.html", title="User Club Access ",
+                            user=user)
+    else:
+        # Handle removing a favourite
+        if 'remove_favourite' in request.form:
+            club_id = request.form.get('remove_favourite')
+            favourite_to_remove = models.Clubs.query.filter_by(id=club_id).first()
+            if favourite_to_remove:
+                user.clubs.remove(favourite_to_remove)
+                db.session.commit()
+                flash('Favourite Removed!')
+            return redirect(f"/user/{id}")
 
 
 @app.route("/club_admin/<int:id>", methods=['GET', 'POST'])
@@ -73,7 +177,6 @@ def club_admin(id):
                                notice_form=notice_form, club_admin=club_admin,
                                event_form=event_form, photo_form=photo_form,
                                update_form=update_form)
-    
     else:
         # Handle deleting a notice
         if 'delete_notice' in request.form:

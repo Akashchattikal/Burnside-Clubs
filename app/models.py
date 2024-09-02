@@ -1,4 +1,5 @@
 from app.routes import db
+from flask_login import UserMixin
 
 
 Club_Events = db.Table('Club_Events', db.Column('cid', db.Integer, db.ForeignKey('Clubs.id')), db.Column('eid', db.Integer, db.ForeignKey('Events.id', ondelete='CASCADE')))
@@ -76,7 +77,7 @@ class Teachers(db.Model):
     clubs = db.relationship('Clubs', secondary='Club_Teacher', back_populates='teachers')
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "User"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text(), unique=True)
@@ -84,3 +85,13 @@ class User(db.Model):
     password = db.Column(db.Text())
     picture = db.Column(db.Text())
     clubs = db.relationship('Clubs', secondary='Club_User', back_populates='User')
+
+    def get_id(self):
+        return self.id
+
+    def get_teacher_id(self):
+        teacher = db.session.query(Teachers).filter_by(email=self.email).first()
+        return teacher.id if teacher else None
+
+    def get_teacher(self):
+        return db.session.query(Teachers).filter_by(email=self.email).first()
