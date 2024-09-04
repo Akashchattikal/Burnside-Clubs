@@ -19,26 +19,17 @@ body {
     display: flex;
     flex-direction: column;
     font-family: 'Inter', sans-serif;
-    min-height: 180rem;
     
 }
 
 main {
     color:#000000;
     height: 200px;
+    margin-bottom: 10%;
+    min-height: 160rem;
 }
 
 footer {
-    /* padding: 20px;
-    margin-top: auto;
-    position: absolute;
-    color: white;
-    width:100%;
-    padding:20px;
-    display:block; 
-    clear:both;
-    bottom:0;   
-    background-color:#E7E7E7; */
     
     padding: 20px;
     margin-top: auto;
@@ -48,6 +39,7 @@ footer {
     clear:both;
     bottom:0;   
     background-color:#E7E7E7;
+    border-top: 0.5px solid rgb(255, 255, 255);
 }
 
 table {
@@ -89,6 +81,7 @@ button {
 }
 
 .shadow {box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);}
+
 
 .center {
     margin-left: auto;
@@ -361,6 +354,7 @@ button {
     color: white !important;
 }
 
+.shadow_nav {box-shadow: 0px 7px 7px 0px rgba(0,0,0,0.4);}
 
 
 /************/
@@ -733,7 +727,7 @@ button {
 
 .club_pro {
     width: 97%;
-    height: 97%;
+    height: 12%;
     margin-right: -5%;
 }
 

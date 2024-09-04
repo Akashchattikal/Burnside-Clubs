@@ -126,7 +126,10 @@ def clubs():
 
 @app.route("/club/<int:id>")
 def club(id):
+    # Check if the club with the given ID exists
     club = models.Clubs.query.filter_by(id=id).first()
+    if not club:
+        abort(404)  # Not found if the club doesn't exist
 
     return render_template('club.html', club=club)
 
@@ -165,21 +168,33 @@ def user(id):
 
 
 @app.route("/club_admin/<int:id>", methods=['GET', 'POST'])
+@login_required
 def club_admin(id):
-
+    # Check if the club with the given ID exists
     club_admin = models.Clubs.query.filter_by(id=id).first()
+    if not club_admin:
+        abort(404)  # Not found if the club doesn't exist
+
+    user_email = current_user.email
+
+    # Check if the user is a teacher
+    teacher = models.Teachers.query.filter_by(email=user_email).first()
+    if not teacher:
+        abort(403)  # Forbidden if the user is not a teacher
+
+    # Check if the teacher has access to this specific club
+    has_access = db.session.query(models.Club_Teacher).filter_by(cid=id, tid=teacher.id).first()
+    if not has_access:
+        abort(403)  # Forbidden if the teacher does not have access to the club
+
+    # Initialize forms
     notice_form = Add_Notice()
     event_form = Add_Event()
     photo_form = Add_Photo()
     update_form = Update_Club()
-    if request.method == 'GET':
-        return render_template('club_admin.html',
-                               title="Club Admin Access Page",
-                               notice_form=notice_form, club_admin=club_admin,
-                               event_form=event_form, photo_form=photo_form,
-                               update_form=update_form)
-    else:
-        # Handle deleting a notice
+
+    if request.method == 'POST':
+        # Handle form submissions
         if 'delete_notice' in request.form:
             notice_id = request.form.get('delete_notice')
             notice_to_delete = models.Notices.query.filter_by(id=notice_id).first()
@@ -189,7 +204,6 @@ def club_admin(id):
                 flash('Notice Deleted!')
             return redirect(f"/club_admin/{id}")
 
-        # Handle deleting an event
         if 'delete_event' in request.form:
             event_id = request.form.get('delete_event')
             event_to_delete = models.Events.query.filter_by(id=event_id).first()
@@ -255,14 +269,15 @@ def club_admin(id):
                 flash('Club Updated!')
                 return redirect(f"/club_admin/{id}")
 
-    # Set forms with exsisting values
+    # Set forms with existing values
     update_form.name.data = club_admin.name
     update_form.description.data = club_admin.description
     update_form.pro_photo.data = club_admin.pro_photo
     update_form.club_room.data = club_admin.club_room
     update_form.organiser.data = club_admin.organiser
 
-    return render_template('club_admin.html', title="Club Admin Access Page",
+    return render_template('club_admin.html',
+                           title="Club Admin Access Page",
                            notice_form=notice_form, club_admin=club_admin,
                            event_form=event_form, photo_form=photo_form,
                            update_form=update_form)
@@ -313,10 +328,8 @@ def admin():
     remove_teacher_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
     remove_admin_form.admin.choices = [(user.id, f"{user.name} - {user.email}") for user in admin_users]  # Only show users with admin access
 
-    
-
     if current_user.email not in admin_emails:
-        abort(404)
+        abort(403)
     else:
         if request.method == 'GET':
             return render_template("admin.html",
@@ -424,7 +437,7 @@ def admin():
                 user_id = remove_admin_form.admin.data
                 user = models.User.query.get(user_id)
                 admin_to_remove = models.Admins.query.filter_by(email=user.email).first()
-                
+
                 if admin_to_remove:
                     db.session.delete(admin_to_remove)
                     db.session.commit()
@@ -446,6 +459,11 @@ def admin():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('403.html'), 403
 
 
 if __name__ == "__main__":
