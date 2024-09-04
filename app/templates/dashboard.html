@@ -13,7 +13,7 @@
           <!-- Displays a Club profile image and name -->
           <form method="POST">
             <input type="hidden" name="remove_favourite" value="{{ club.id }}">
-            <button type="submit" class="delete_button delete_club_item">X</button>
+            <button type="submit" class="delete_button delete_club_item">&times;</button>
           </form>
           <a href="/club/{{ club.id }}"><img class="pfp prevent-select" src="/{{ club.pro_photo }}" /></a>
           <a href="/club/{{ club.id }}"><h4 class="club_name prevent-select">{{ club.name }}</h4></a>

@@ -87,6 +87,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
+    flash("Logged Out!")
     return render_template("home.html", title="Logout")
 
 
@@ -209,7 +210,6 @@ def club_admin(id):
             club_admin.notices.append(new_notice)
             db.session.commit()
             flash('Notice Added!')
-            time.sleep(2.5)
             return redirect(f"/club_admin/{id}")
 
         if event_form.validate_on_submit():
@@ -223,7 +223,6 @@ def club_admin(id):
             club_admin.events.append(new_event)
             db.session.commit()
             flash('Event Added!')
-            time.sleep(2.5)
             return redirect(f"/club_admin/{id}")
 
         if photo_form.validate_on_submit():
@@ -235,7 +234,6 @@ def club_admin(id):
             club_admin.photos.append(new_photo)
             db.session.commit()
             flash('Photo Added!')
-            time.sleep(2.5)
             return redirect(f"/club_admin/{id}")
 
         if 'update_club' in request.form:
@@ -255,7 +253,6 @@ def club_admin(id):
                     club_admin.organiser = update_form.organiser.data
                 db.session.commit()
                 flash('Club Updated!')
-                time.sleep(2.5)
                 return redirect(f"/club_admin/{id}")
 
     # Set forms with exsisting values
@@ -291,15 +288,32 @@ def admin():
     remove_club_form = Remove_Club()
     remove_teacher_form = Remove_Teacher()
     remove_admin_form = Remove_Admin()
-    admin_emails = [admin.email for admin in models.Admins.query.all()]
+
     admins = models.Admins.query.all()
     teachers = models.Teachers.query.all()
     clubs = models.Clubs.query.all()
-    teacher_club_form.teacher.choices = [(teacher.id, teacher.name) for teacher in teachers]
+    users = models.User.query.all()  # Fetch all users
+
+    admin_emails = [admin.email for admin in models.Admins.query.all()]
+    teacher_emails = [teacher.email for teacher in teachers]
+    re_admin_emails = [admin.email for admin in admins]
+    teacher_users = models.User.query.filter(models.User.email.in_(teacher_emails)).all()
+    admin_users = models.User.query.filter(models.User.email.in_(re_admin_emails)).all()
+
+    teacher_club_form.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]
     teacher_club_form.club.choices = [(club.id, club.name) for club in clubs]
     remove_club_form.club.choices = [(club.id, club.name) for club in clubs]
-    remove_teacher_form.teacher.choices = [(teacher.id, teacher.name) for teacher in teachers]
-    remove_admin_form.admin.choices = [(admin.id, admin.name) for admin in admins]
+    remove_teacher_form.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]
+    remove_admin_form.admin.choices = [(admin.id, admin.email) for admin in admins]
+
+    # Populate select fields with user names and emails
+    teacher_club_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
+    teacher_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in users]
+    admin_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in users]
+    remove_teacher_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
+    remove_admin_form.admin.choices = [(user.id, f"{user.name} - {user.email}") for user in admin_users]  # Only show users with admin access
+
+    
 
     if current_user.email not in admin_emails:
         abort(404)
@@ -327,39 +341,51 @@ def admin():
                 new_club.organiser = club_form.organiser.data
                 db.session.add(new_club)
                 db.session.commit()
-                flash('New Club Added!')
-                time.sleep(2.5)
+                flash(f'{new_club.name} Club Added!')
                 return redirect('/admin_access')
 
             if teacher_form.validate_on_submit():
+                # Get the user ID from the form and look up the email
+                user_id = teacher_form.email.data
+                user = models.User.query.get(user_id)
                 new_teacher = models.Teachers()
-                new_teacher.name = teacher_form.name.data
-                new_teacher.email = teacher_form.email.data
+                new_teacher.email = user.email  # Save the email
                 db.session.add(new_teacher)
                 db.session.commit()
-                flash('New Teacher Added!')
-                time.sleep(2.5)
+                flash('Teacher Access Given!')
                 return redirect('/admin_access')
 
             if admin_form.validate_on_submit():
+                # Get the user ID from the form and look up the email
+                user_id = admin_form.email.data
+                user = models.User.query.get(user_id)
                 new_admin = models.Admins()
-                new_admin.name = admin_form.name.data
-                new_admin.email = admin_form.email.data
+                new_admin.email = user.email  # Save the email
                 db.session.add(new_admin)
                 db.session.commit()
-                flash('New Admin Added!')
-                time.sleep(2.5)
+                flash('Admin Access Given!')
                 return redirect('/admin_access')
 
             if teacher_club_form.validate_on_submit():
                 club_id = teacher_club_form.club.data
-                teacher_id = teacher_club_form.teacher.data
-                club = models.Clubs.query.filter_by(id=club_id).first()
-                teacher = models.Teachers.query.filter_by(id=teacher_id).first()
+                user_id = teacher_club_form.teacher.data
+
+                # Look up the user based on the selected ID
+                user = models.User.query.get(user_id)
+
+                # Find or create the teacher in the Teachers table
+                teacher = models.Teachers.query.filter_by(email=user.email).first()
+                if not teacher:
+                    teacher = models.Teachers(email=user.email)
+                    db.session.add(teacher)
+                    db.session.commit()
+
+                # Associate the teacher with the selected club
+                club = models.Clubs.query.get(club_id)
                 club.teachers.append(teacher)
                 db.session.commit()
-                flash('Teacher Gained Access to Club!')
-                time.sleep(2.5)
+
+                flash('Teacher Gained Access To Club!')
                 return redirect('/admin_access')
 
             if remove_club_form.validate_on_submit():
@@ -377,13 +403,13 @@ def admin():
 
                     db.session.delete(club)
                     db.session.commit()
-                    flash('Club and all associated relationships removed!')
-                    time.sleep(2.5)
+                    flash('Club Removed')
                     return redirect('/admin_access')
 
             if remove_teacher_form.validate_on_submit():
-                teacher_id = remove_teacher_form.teacher.data
-                teacher = models.Teachers.query.filter_by(id=teacher_id).first()
+                user_id = remove_teacher_form.teacher.data
+                user = models.User.query.get(user_id)
+                teacher = models.Teachers.query.filter_by(email=user.email).first()
 
                 if teacher:
                     db.session.execute(models.Club_Teacher.delete().where(models.Club_Teacher.c.tid == teacher.id))
@@ -391,17 +417,18 @@ def admin():
 
                     db.session.delete(teacher)
                     db.session.commit()
-                    flash('Teacher and all associated relationships removed!')
-                    time.sleep(2.5)
+                    flash('Teacher Removed')
                     return redirect('/admin_access')
 
             if remove_admin_form.validate_on_submit():
-                admin_id = remove_admin_form.admin.data
-                admin_to_remove = models.Admins.query.get(admin_id)
+                user_id = remove_admin_form.admin.data
+                user = models.User.query.get(user_id)
+                admin_to_remove = models.Admins.query.filter_by(email=user.email).first()
+                
                 if admin_to_remove:
                     db.session.delete(admin_to_remove)
                     db.session.commit()
-                    flash('Admin removed successfully!')
+                    flash('Admin Removed')
                     return redirect('/admin_access')
 
             else:
@@ -414,7 +441,6 @@ def admin():
                                        remove_teacher_form=remove_teacher_form,
                                        remove_admin_form=remove_admin_form,
                                        admin_form=admin_form, admins=admins)
-
 
 
 @app.errorhandler(404)

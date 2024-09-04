@@ -45,6 +45,18 @@
         {% endif %}
     </div>
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-container">
+                {% for category, message in messages %}
+                    <div class="custom-flash-message {{ category }}">
+                        <span>{{ message }}</span>
+                        <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+      {% endwith %}
         {% block content %}
         {% endblock %}
     </main>

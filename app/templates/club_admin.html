@@ -55,7 +55,7 @@
                 <!-- Delete Notice Button -->
                 <form method="POST">
                   <input type="hidden" name="delete_notice" value="{{ notice.id }}">
-                  <button type="submit" class="delete_button delete_item">X</button>
+                  <button type="submit" class="delete_button delete_item">&times;</button>
                 </form>
                   {% if notice.photo %}
                     <img class="notice_photo" style="opacity: 0.7;" src="/{{notice.photo}}"/>
@@ -146,7 +146,7 @@
   <!-- Popup for Photos -->
   <div id="myPopup" class="popup">
     <div class="popup-content">
-      <button id="closePopup" class="pop_close prevent-select">X</button>
+      <button id="closePopup" class="pop_close prevent-select">&times;</button>
       <ul class="photo_container">
         <li class="multi_photo">
           <div class="multi_pic club_items_hover">

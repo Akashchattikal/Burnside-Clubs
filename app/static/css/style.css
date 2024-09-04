@@ -132,6 +132,78 @@ button {
     }
 }
 
+#flash-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px; /* Start at the final position */
+    z-index: 1000;
+    width: auto;
+}
+
+.custom-flash-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: var(--clr-bhs-dark);
+    background-color: white;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 4px solid #4CAF50; 
+    border-bottom: 4px solid #4CAF50;
+    transform: translateX(-100%); 
+    opacity: 0; 
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.custom-flash-message.success {
+    border-top-color: #4CAF50; 
+    border-bottom-color: #4CAF50;
+}
+
+.custom-flash-message.error {
+    border-top-color: #f44336; 
+    border-bottom-color: #f44336;
+}
+
+.custom-flash-message.warning {
+    border-top-color: #ff9800; 
+    border-bottom-color: #ff9800; 
+}
+
+.custom-flash-message.info {
+    border-top-color: #2196F3; 
+    border-bottom-color: #2196F3; 
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--clr-bhs-dark);
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Animation to slide the message in on load */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Apply slide-in animation when the flash message first appears */
+.custom-flash-message {
+    animation: slideIn 0.5s ease-out forwards;
+}
+
 /*************/
 /**Home Page**/
 /*************/
@@ -919,7 +991,23 @@ button {
 
 }
 
-.custom-select {
+.common_form {
+    width: 50%;
+    padding: 1%;
+    border: 0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: var(--white);
+    box-shadow: 
+        inset 0.3rem 0.3rem 0.6rem var(--greyLight-2), 
+        inset -0.2rem -0.2rem 0.4rem var(--white);
+    margin-bottom: 3%;
+    transition: box-shadow 0.3s ease;
+    outline: none;
+    font-weight: normal !important;
+}
+
+.small_form {
     width: 30%;
     padding: 1%;
     border: 0;
@@ -993,7 +1081,7 @@ button {
 }
 
 .form_email {
-    width: 40%;
+    width: 50%;
     padding: 1%;
     border: 0;
     border-radius: 5px;
@@ -1037,12 +1125,16 @@ button {
     outline: none;
 }
 
-.custom-file-upload {
+.custom-upload {
     display: inline-block;
     padding: 2%;
     cursor: pointer;
     color: #000000; /* Text color */
     outline: none;
+}
+
+.custom-file-upload {
+    color: #000000; /* Text color */
 }
 
 
@@ -1233,9 +1325,9 @@ button {
 
 
 
-/******************/
-/**404 Error Page**/
-/******************/
+/**************/
+/**Error Page**/
+/**************/
 
 .error {
     background-color: var(--clr-bhs-dark);
@@ -1247,6 +1339,9 @@ button {
     margin-right: 15%;
 }
 
+.error:hover, .error:focus {
+    box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+}
 
 
 /***Test***/

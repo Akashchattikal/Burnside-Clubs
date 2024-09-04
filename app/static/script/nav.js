@@ -28,7 +28,18 @@ function toggleButtons() {
     const img = document.querySelector('.default_si');
     const buttons = document.querySelectorAll('.defualt_use');
 
-    img.classList.toggle('active'); // Toggle the active class to apply the border
-    buttons.forEach(button => button.classList.toggle('show')); // Show/hide the buttons
+    img.classList.toggle('active'); 
+    buttons.forEach(button => button.classList.toggle('show')); 
 }
+
+document.querySelectorAll('.custom-flash-message').forEach(function(msg) {
+    setTimeout(function() {
+        msg.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out'; 
+        msg.style.transform = 'translateX(-100%)'; // Slide out to the left
+        msg.style.opacity = '0'; // Fade out
+        setTimeout(function() {
+            msg.style.display = 'none'; // Hide the element after the transition
+        }, 500); // Match this time with the CSS transition duration
+    }, 3000); // Wait 3 seconds before starting the slide-out
+});
 

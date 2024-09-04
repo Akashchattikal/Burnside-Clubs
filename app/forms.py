@@ -11,48 +11,45 @@ from wtforms import StringField, PasswordField, SubmitField
 
 class Add_Club(FlaskForm):
 
-    name = StringField('title', validators=[DataRequired()], render_kw={"class": "form_name rounded-input"})
+    name = StringField('title', validators=[DataRequired()], render_kw={"class": "form_name rounded-input", "placeholder": "Avoid Adding 'Club' At End"})
     description = TextAreaField('description', validators=[DataRequired()], render_kw={"class": "form_desc rounded-input"})
-    pro_photo = FileField('pro_photo', validators=[DataRequired()], render_kw={"class": "form_pic file-input custom-file-upload"})
+    pro_photo = FileField('pro_photo', validators=[DataRequired()], render_kw={"class": "form_pic custom-file-upload"})
     club_room = StringField('club_room', validators=[DataRequired()], render_kw={"class": "form_room rounded-input"})
     organiser = StringField('organiser', validators=[DataRequired()], render_kw={"class": "form_organiser rounded-input"})
 
 
 class Add_Teacher(FlaskForm):
 
-    name = StringField('name', validators=[DataRequired()], render_kw={"class": "form_name rounded-input"})
-    email = EmailField('email', validators=[DataRequired(), Email()], render_kw={"class": "form_email rounded-input"})
+    email = SelectField('email', validators=[DataRequired()], render_kw={"class": "form_email rounded-input"})
+
+
+class Add_Admin(FlaskForm):
+    email = SelectField('email', validators=[DataRequired()], render_kw={"class": "form_email rounded-input"})
+    submit = SubmitField('Add', render_kw={"class": "submission rounded-20"})
 
 
 class Club_Teacher(FlaskForm):
 
-    club = SelectField('club', validators=[DataRequired()], render_kw={"class": "custom-select"})
-    teacher = SelectField('teacher', validators=[DataRequired()], render_kw={"class": "custom-select"})
+    club = SelectField('club', validators=[DataRequired()], render_kw={"class": "small_form"})
+    teacher = SelectField('teacher', validators=[DataRequired()], render_kw={"class": "common_form"})
 
 
 class Remove_Club(FlaskForm):
 
-    club = SelectField('Club', coerce=int, validators=[DataRequired()], render_kw={"class": "custom-select"})
+    club = SelectField('Club', coerce=int, validators=[DataRequired()], render_kw={"class": "small_form"})
     submit = SubmitField('Delete')
 
 
 class Remove_Teacher(FlaskForm):
 
-    teacher = SelectField('Select Teacher', coerce=int, render_kw={"class": "custom-select"})
-    submit = SubmitField('Delete')
-
-
-class Add_Admin(FlaskForm):
-
-    name = StringField('name', validators=[DataRequired()], render_kw={"class": "form_name rounded-input"})
-    email = EmailField('email', validators=[DataRequired(), Email()], render_kw={"class": "form_email rounded-input"})
-    submit = SubmitField('Add', render_kw={"class": "submission rounded-20"})
+    teacher = SelectField('Select Teacher', coerce=int, render_kw={"class": "common_form"})
+    submit = SubmitField('Remove')
 
 
 class Remove_Admin(FlaskForm):
 
-    admin = SelectField('Select Admin', coerce=int, render_kw={"class": "custom-select"})
-    submit = SubmitField('Delete')
+    admin = SelectField('Select Admin', coerce=int, render_kw={"class": "common_form"})
+    submit = SubmitField('Remove')
 
 
 #  Club Admin

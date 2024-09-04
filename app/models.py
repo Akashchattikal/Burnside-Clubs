@@ -70,7 +70,6 @@ class Photos(db.Model):
 class Teachers(db.Model):
     __tablename__ = "Teachers"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text())
     email = db.Column(db.Text())
     clubs = db.relationship('Clubs', secondary='Club_Teacher', back_populates='teachers')
 
@@ -98,5 +97,4 @@ class User(db.Model, UserMixin):
 class Admins(db.Model):
     __tablename__ = "Admins"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text())
     email = db.Column(db.Text())
