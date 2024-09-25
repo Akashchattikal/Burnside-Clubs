@@ -11,39 +11,93 @@
     <header>
         <nav class="header header_content nav shadow_nav">
             <ul class="nav_list prevent-select">
+                <a href="/"  style="width: 10%px;"><img class="logo" src="/static/images/logo-lo-lo-lo.png"/></a>
                 <li><a href="/" class="nav_link" id="home">Home</a></li>
                 <li><a href="/clubs" class="nav_link" id="clubs">Clubs</a></li>
                 {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('user', id=current_user.id) }}" class="nav_link" id="dashboard">My Clubs</a></li>
+                    {% if current_user.get_teacher_id() %}
+                        <li><a href="/teach/{{ current_user.get_teacher_id() }}" class="nav_link" id="teach">Teacher Access</a></li>
+                    {% endif %}
                     {% if is_admin %}
-                        <li>Welcome Admin</li>
-                    {% else %}
-                        <li>Hello, {{ current_user.name }}</li>
+                        <li><a href="/admin_access" class="nav_link" id="admin">Admin Access</a></li>
                     {% endif %}
                 {% endif %}
             </ul>
-
+    
             {% if current_user.is_authenticated %}
-                <img class="default_si" src="/{{ current_user.picture }}" onclick="toggleButtons()"/>
+            <div class="profile-wrapper">
+                <div class="welcome-message">
+                    {% if is_admin %}
+                        Welcome Admin
+                    {% else %}
+                        Welcome {{ current_user.name }}
+                    {% endif %}
+                </div>
+        <div class="profile-container" onclick="toggleProfileMenu()">
+            {% if current_user.picture %}
+                <img class="default_si" src="/{{ current_user.picture }}" />
             {% else %}
-                <img class="default_si" src="/static/images/default_si.png" onclick="toggleButtons()" />
+                <img class="default_si" src="/static/images/default_si.png" />
             {% endif %}
+            <span id="menu-arrow">▼</span>
+        </div>
+        {% else %}
+        <div class="profile-container" onclick="toggleProfileMenu()">
+            <img class="default_si" src="/static/images/default_si.png" />
+            <span id="menu-arrow">▼</span>
+        </div>
+        {% endif %}
         </nav>
     </header>
-    <div class="default_user">
+    
+
+    <div class="dropdown_menu prevent-select">
         {% if current_user.is_authenticated %}
-            <button class="defualt_use shadow"><a href="{{ url_for('user', id=current_user.id) }}" class="in_log">My Clubs</a></button>
+            <a href="{{ url_for('user', id=current_user.id) }}" class="menu_link">
+                <div class="menu_item">
+                    <div>🏛️</div>
+                    <span>My Clubs</span>
+                </div>
+            </a>
             {% if current_user.get_teacher_id() %}
-                <button class="defualt_use shadow"><a href="/teach/{{ current_user.get_teacher_id() }}" class="in_log">Teach Access</a></button>
+            <a href="/teach/{{ current_user.get_teacher_id() }}" class="menu_link">
+                <div class="menu_item">
+                    <div>👓</div>
+                    <span>Teach Access</span>
+                </div>
+            </a>            
             {% endif %}
             {% if is_admin %}
-                <button class="defualt_use shadow"><a href="/admin_access" class="in_log">Admin Access</a></button>
-            {% endif%}
-            <button class="defualt_use shadow"><a href="/logout" class="in_log">Logout</a></button>
+            <a href="/admin_access" class="menu_link">
+                <div class="menu_item">
+                    <div>👤</div>
+                    <span>Admin Access</span>
+                </div>
+            </a>
+            {% endif %}
+            <a href="/logout" class="menu_link">
+                <div class="menu_item">
+                    <div>🚪</div>
+                    <span>Logout</span>
+                </div>
+            </a>
         {% else %}
-            <button class="defualt_use shadow"><a href="/login" class="in_log">Login</a></button>
-            <button class="defualt_use shadow"><a href="/signup" class="in_log">Sign Up</a></button>
+            <a href="/login" class="menu_link">
+                <div class="menu_item">
+                    <div>🔑</div>
+                    <span>Login</span>
+                </div>
+            </a>
+            <a href="/signup" class="menu_link">
+                <div class="menu_item">
+                    <div>📝</div>
+                    <span>Sign Up</span>
+                </div>
+            </a>
         {% endif %}
     </div>
+    
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}

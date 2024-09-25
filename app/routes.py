@@ -2,52 +2,50 @@ from app import app
 from flask import render_template, redirect, request, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 import os
-import time
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
+# Initialize the LoginManager
 login_manager = LoginManager()
-# Initialise the LoginManager
 login_manager.init_app(app)
-# If login_required, redirect back to /login
-login_manager.login_view = 'login'
+login_manager.login_view = 'login'  # Redirect to login if access is required
 
+# Set up database configuration
 basedir = os.path.abspath(os.path.dirname(__file__))
-db = SQLAlchemy()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "info.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'correcthorsebatterystaple'
-WTF_CSRF_ENABLED = True
-WTF_CSRF_SECRET_KEY = 'sup3r_secr3t_passw3rd'
 db = SQLAlchemy(app)
 
-import app.models as models  # need 'db' to import models
+import app.models as models  # Import models after initializing db
 from app.forms import Add_Club, Add_Teacher, Club_Teacher, Remove_Admin, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm, LoginForm, SignupForm, Add_Admin
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Gets primary key value and then uses primary key value to find user sql_alchemy instance
+    # Retrieve user by primary key (user_id)
     return models.User.query.filter_by(id=user_id).first()
 
 
 @app.route("/")
 def home():
-    club_photos = [club.pro_photo for club in models.Clubs.query.all()]
-    return render_template("home.html", title="Home Page", club_photos=club_photos)
+    return render_template("home.html", title="Home Page")
 
 
 @app.route("/signup", methods=['POST', 'GET'])
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
-        # Check if user with the same email is already in the database
+        if len(form.name.data) > 20:
+            flash("Username must be within 20 characters", 'error')
+            return redirect(url_for('signup'))
+
+        # Check if the email already exists in the database
         user_check = models.User.query.filter_by(email=form.email.data).first()
         if not user_check:
-            # Create new user instance
+            # Create a new user instance and save the uploaded picture
             user = models.User()
-            # Assign form values to instance attributes
             picture = form.picture.data
             filename = secure_filename(picture.filename)
             user.picture = ('static/images/' + filename)
@@ -56,11 +54,11 @@ def signup():
             user.email = form.email.data
             user.password = generate_password_hash(form.password.data, salt_length=16)
             db.session.add(user)
-            db.session.commit()
-            login_user(user, remember=True)
+            db.session.commit()  # Commit the new user to the database
+            login_user(user, remember=True)  # Log in the new user
             return redirect(url_for('home'))
         else:
-            flash("A User with the same email already exists!")
+            flash("A User with the same email already exists!", 'error')
         return redirect(url_for('signup'))
     return render_template("signup.html", title="Sign Up", form=form)
 
@@ -71,7 +69,8 @@ def login():
     if form.validate_on_submit():
         # Checks if user with input email exists
         user_info = models.User.query.filter_by(email=form.email.data).first()
-        # If exists, check db hash with input password and if there's a match, login user
+        # If exists, check db hash with input password and if there's a match,
+        # login user
         if user_info:
             if check_password_hash(user_info.password, form.password.data):
                 login_user(user_info, remember=True)
@@ -102,6 +101,7 @@ def clubs():
         clubs = models.Clubs.query.filter(models.Clubs.name.like(f"%{search_query}%")).all()
         if not clubs:
             flash("No Results", "info")
+            return redirect(url_for('clubs'))
     elif request.method == "POST" and 'add_favorite' in request.form:
         club_id = request.form.get('add_favorite')
         club = models.Clubs.query.get(club_id)
@@ -121,15 +121,16 @@ def clubs():
         # If not authenticated, all clubs are not favorited
         club_status = {club.id: False for club in clubs}
 
-    return render_template("clubs.html", title="Clubs Page", clubs=clubs, form=form, club_status=club_status)
+    return render_template("clubs.html", title="Clubs Page", clubs=clubs,
+                           form=form, club_status=club_status)
 
 
 @app.route("/club/<int:id>")
 def club(id):
     # Check if the club with the given ID exists
-    club = models.Clubs.query.filter_by(id=id).first()
-    if not club:
-        abort(404)  # Not found if the club doesn't exist
+    club = models.Clubs.query.filter_by(id=id).first_or_404()
+    # if not club:
+    #     abort(404)  # Not found if the club doesn't exist
 
     return render_template('club.html', club=club)
 
@@ -137,7 +138,7 @@ def club(id):
 @app.route("/teach/<int:id>")
 @login_required
 def teacher(id):
-    teacher = models.Teachers.query.filter_by(id=id).first() 
+    teacher = models.Teachers.query.filter_by(id=id).first()
     if not teacher:
         # Teacher not found, return 404
         abort(404)
@@ -154,7 +155,7 @@ def user(id):
     user = models.User.query.filter_by(id=id).first()
     if request.method == 'GET':
         return render_template("dashboard.html", title="User Club Access ",
-                            user=user)
+                               user=user)
     else:
         # Handle removing a favourite
         if 'remove_favourite' in request.form:
@@ -199,6 +200,14 @@ def club_admin(id):
             notice_id = request.form.get('delete_notice')
             notice_to_delete = models.Notices.query.filter_by(id=notice_id).first()
             if notice_to_delete:
+                # Delete the associated photo from the file system if it exists
+                if notice_to_delete.photo:
+                    try:
+                        os.remove(
+                            os.path.join(basedir, notice_to_delete.photo))
+                    except FileNotFoundError:
+                        flash(f"Notice photo {notice_to_delete.photo} not found on the server.", "warning")
+
                 club_admin.notices.remove(notice_to_delete)
                 db.session.commit()
                 flash('Notice Deleted!')
@@ -206,11 +215,35 @@ def club_admin(id):
 
         if 'delete_event' in request.form:
             event_id = request.form.get('delete_event')
-            event_to_delete = models.Events.query.filter_by(id=event_id).first()
+            event_to_delete = models.Events.query.filter_by(
+                id=event_id).first()
             if event_to_delete:
+                # Delete the associated photo from the file system if it exists
+                if event_to_delete.photo:
+                    try:
+                        os.remove(os.path.join(basedir, event_to_delete.photo))
+                    except FileNotFoundError:
+                        flash(f"Event photo {event_to_delete.photo} not found on the server.", "warning")
+
                 club_admin.events.remove(event_to_delete)
                 db.session.commit()
                 flash('Event Deleted!')
+            return redirect(f"/club_admin/{id}")
+
+        if 'delete_photo' in request.form:
+            photo_id = request.form.get('delete_photo')
+            photo_to_delete = models.Photos.query.filter_by(id=photo_id).first()
+            if photo_to_delete:
+                # Delete the associated photo from the file system if it exists
+                if photo_to_delete.photo:
+                    try:
+                        os.remove(os.path.join(basedir, photo_to_delete.photo))
+                    except FileNotFoundError:
+                        flash(f"Notice photo {photo_to_delete.photo} not found on the server.", "warning")
+
+                club_admin.photos.remove(photo_to_delete)
+                db.session.commit()
+                flash('Photo Deleted!')
             return redirect(f"/club_admin/{id}")
 
         if notice_form.validate_on_submit():
@@ -230,6 +263,7 @@ def club_admin(id):
             new_event = models.Events()
             new_event.name = event_form.name.data
             new_event.date = event_form.date.data
+            new_event.location = event_form.location.data
             photo = event_form.photo.data
             filename = secure_filename(photo.filename)
             new_event.photo = ('static/images/' + filename)
@@ -241,6 +275,7 @@ def club_admin(id):
 
         if photo_form.validate_on_submit():
             new_photo = models.Photos()
+            new_photo.description = photo_form.description.data
             photo = photo_form.photo.data
             filename = secure_filename(photo.filename)
             new_photo.photo = ('static/images/' + filename)
@@ -251,6 +286,7 @@ def club_admin(id):
             return redirect(f"/club_admin/{id}")
 
         if 'update_club' in request.form:
+            # Update information about the club if provided
             if update_form.validate_on_submit():
                 if update_form.name.data:
                     club_admin.name = update_form.name.data
@@ -260,21 +296,17 @@ def club_admin(id):
                     photo = update_form.pro_photo.data
                     filename = secure_filename(photo.filename)
                     club_admin.pro_photo = 'static/images/' + filename
-                    photo.save(os.path.join(basedir, 'static/images/' + filename))
+                    photo.save(os.path.join(
+                        basedir, 'static/images/' + filename))
                 if update_form.club_room.data:
                     club_admin.club_room = update_form.club_room.data
                 if update_form.organiser.data:
                     club_admin.organiser = update_form.organiser.data
+
+                # Commit changes and flash success message
                 db.session.commit()
                 flash('Club Updated!')
                 return redirect(f"/club_admin/{id}")
-
-    # Set forms with existing values
-    update_form.name.data = club_admin.name
-    update_form.description.data = club_admin.description
-    update_form.pro_photo.data = club_admin.pro_photo
-    update_form.club_room.data = club_admin.club_room
-    update_form.organiser.data = club_admin.organiser
 
     return render_template('club_admin.html',
                            title="Club Admin Access Page",
@@ -286,6 +318,7 @@ def club_admin(id):
 @app.context_processor
 def inject_is_admin():
     if current_user.is_authenticated:
+        # Get all admin emails to check if current user is an admin
         admin_emails = [admin.email for admin in models.Admins.query.all()]
         is_admin = current_user.email in admin_emails
     else:
@@ -296,6 +329,7 @@ def inject_is_admin():
 @app.route('/admin_access', methods=['GET', 'POST'])
 @login_required
 def admin():
+    # Initialize forms for admin actions
     club_form = Add_Club()
     teacher_form = Add_Teacher()
     admin_form = Add_Admin()
@@ -304,29 +338,34 @@ def admin():
     remove_teacher_form = Remove_Teacher()
     remove_admin_form = Remove_Admin()
 
+    # Retrieve all necessary data from the database
     admins = models.Admins.query.all()
     teachers = models.Teachers.query.all()
     clubs = models.Clubs.query.all()
     users = models.User.query.all()  # Fetch all users
 
+    # Prepare email lists for admins and teachers
     admin_emails = [admin.email for admin in models.Admins.query.all()]
     teacher_emails = [teacher.email for teacher in teachers]
     re_admin_emails = [admin.email for admin in admins]
+
+    # Get user data for admin and teacher forms
     teacher_users = models.User.query.filter(models.User.email.in_(teacher_emails)).all()
     admin_users = models.User.query.filter(models.User.email.in_(re_admin_emails)).all()
 
+    # Populate select fields for forms with user options
     teacher_club_form.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]
     teacher_club_form.club.choices = [(club.id, club.name) for club in clubs]
     remove_club_form.club.choices = [(club.id, club.name) for club in clubs]
     remove_teacher_form.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]
     remove_admin_form.admin.choices = [(admin.id, admin.email) for admin in admins]
 
-    # Populate select fields with user names and emails
+    # Populate forms with user data, including names and emails
     teacher_club_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
     teacher_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in users]
     admin_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in users]
     remove_teacher_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
-    remove_admin_form.admin.choices = [(user.id, f"{user.name} - {user.email}") for user in admin_users]  # Only show users with admin access
+    remove_admin_form.admin.choices = [(user.id, f"{user.name} - {user.email}") for user in admin_users]
 
     if current_user.email not in admin_emails:
         abort(403)
@@ -382,22 +421,16 @@ def admin():
             if teacher_club_form.validate_on_submit():
                 club_id = teacher_club_form.club.data
                 user_id = teacher_club_form.teacher.data
-
-                # Look up the user based on the selected ID
                 user = models.User.query.get(user_id)
-
-                # Find or create the teacher in the Teachers table
-                teacher = models.Teachers.query.filter_by(email=user.email).first()
+                teacher = models.Teachers.query.filter_by(
+                    email=user.email).first()
                 if not teacher:
                     teacher = models.Teachers(email=user.email)
                     db.session.add(teacher)
                     db.session.commit()
-
-                # Associate the teacher with the selected club
                 club = models.Clubs.query.get(club_id)
                 club.teachers.append(teacher)
                 db.session.commit()
-
                 flash('Teacher Gained Access To Club!')
                 return redirect('/admin_access')
 
@@ -406,6 +439,13 @@ def admin():
                 club = models.Clubs.query.filter_by(id=club_id).first()
 
                 if club:
+                    # Remove the profile photo from the file system
+                    if club.pro_photo:
+                        try:
+                            os.remove(os.path.join(basedir, club.pro_photo))
+                        except FileNotFoundError:
+                            flash(f"Profile photo {club.pro_photo} not found on the server.", "warning")
+
                     # Delete All Relationships With Club
                     db.session.execute(models.Club_Events.delete().where(models.Club_Events.c.cid == club.id))
                     db.session.execute(models.Club_Notices.delete().where(models.Club_Notices.c.cid == club.id))
@@ -416,7 +456,7 @@ def admin():
 
                     db.session.delete(club)
                     db.session.commit()
-                    flash('Club Removed')
+                    flash('Club Deleted!')
                     return redirect('/admin_access')
 
             if remove_teacher_form.validate_on_submit():

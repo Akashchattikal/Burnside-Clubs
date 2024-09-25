@@ -16,7 +16,7 @@ window.addEventListener("click", function (event) {
 // Smooth scrolling to different sections of the page
 function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
-    const yOffset = -60; // Adjust this value based on your needs
+    const yOffset = -60; 
     const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
     window.scrollTo({

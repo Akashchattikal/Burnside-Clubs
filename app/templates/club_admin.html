@@ -1,15 +1,24 @@
 {% extends 'layout.html' %}
 {% block content %}
 <body class="prevent-select">
+
+  <!-- Sidebar menu for quick navigation -->
   <div class="fix_menu">
     <button class="toggle_button" onclick="toggleMenu()">&#9664;</button>
-    <h2 class="organiser dark_title">Club Organiser: {{ club_admin.organiser }} <button onclick="toggleEdit('organiserEditForm')" class="form_edit dark_title">✎</button></h2>
     
+    <!-- Organiser section with edit option -->
+    <h2 class="organiser dark_title">Club Organiser: {{ club_admin.organiser }} 
+      <button onclick="toggleEdit('organiserEditForm')" class="form_edit dark_title">✎</button>
+    </h2>
+    
+    <!-- Organiser edit form (hidden by default) -->
     <form id="organiserEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
         {{ update_form.csrf_token }}
         {{ update_form.organiser() }}
         <input type="submit" name="update_club" value="Apply" class="change_sub_small">
     </form>
+    
+    <!-- Quick scroll buttons to notices and events -->
     <div class="scroll_container">
       <button onclick="scrollToSection('section1')" class="scroll">Go To Notices</button>
       <button onclick="scrollToSection('section2')" class="scroll">Go To Events</button>
@@ -17,24 +26,36 @@
   </div>
 
   <div class="grid-container">
+
+    <!-- Club name, room, and notices section -->
     <div class="item1">
-      <h1 class="club_title dark_title">{{ club_admin.name }} Club<button onclick="toggleEdit('nameEditForm')" class="form_edit dark_title">✎</button></h1>
+      <h1 class="club_title dark_title">{{ club_admin.name }} Club
+        <button onclick="toggleEdit('nameEditForm')" class="form_edit dark_title">✎</button>
+      </h1>
+      
+      <!-- Club name edit form -->
       <form id="nameEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
           {{ update_form.csrf_token }}
           {{ update_form.name() }}
           <input type="submit" name="update_club" value="Apply" class="change_sub">
       </form>
-      <p class="club_room dark_title">Club Common Room: {{ club_admin.club_room }} <button onclick="toggleEdit('roomEditForm')" class="form_edit dark_title">✎</button></p>
+      
+      <!-- Club room section with edit option -->
+      <p class="club_room dark_title">Club Common Room: {{ club_admin.club_room }} 
+        <button onclick="toggleEdit('roomEditForm')" class="form_edit dark_title">✎</button>
+      </p>
       <form id="roomEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
           {{ update_form.csrf_token }}
           {{ update_form.club_room() }}
           <input type="submit" name="update_club" value="Apply" class="change_sub">
       </form>
 
-      <!-- Notices Section -->
+      <!-- Notices section -->
       <div id="section1" class="section scroll-target">
         <h2 class="club_titles dark_title">Notices</h2>
         <ul class="notices_container">
+          
+          <!-- Form to add a notice -->
           <div class="info_release club_items_hover">
             <form method="POST" enctype="multipart/form-data" class="center">
               {{ notice_form.csrf_token }}
@@ -48,15 +69,17 @@
             </form>
           </div>
           
+          <!-- Loop through and display existing notices -->
           {% for notice in club_admin.notices %}
             {% if notice.notice and notice.date %}
               <div class="info_release club_items_hover dark_title">
+                
+                <!-- Notice with delete button -->
                 <div class="info_pic">
-                <!-- Delete Notice Button -->
-                <form method="POST">
-                  <input type="hidden" name="delete_notice" value="{{ notice.id }}">
-                  <button type="submit" class="delete_button delete_item">&times;</button>
-                </form>
+                  <form method="POST">
+                    <input type="hidden" name="delete_notice" value="{{ notice.id }}">
+                    <button type="submit" class="delete_button delete_item">&times;</button>
+                  </form>
                   {% if notice.photo %}
                     <img class="notice_photo" style="opacity: 0.7;" src="/{{notice.photo}}"/>
                   {% else %}
@@ -70,13 +93,13 @@
           {% endfor %}
         </ul>
       </div>
-      &nbsp;
-      &nbsp;
 
-      <!-- Events Section -->
+      <!-- Events section -->
       <div id="section2" class="section scroll-target">
         <h2 class="club_titles" id="events_section">Events</h2>
         <ul class="events_container">
+          
+          <!-- Form to add an event -->
           <div class="info_release club_items_hover">
             <form method="POST" enctype="multipart/form-data" class="center">
               {{ event_form.csrf_token }}
@@ -93,47 +116,54 @@
             </form>
           </div>
           
+          <!-- Loop through and display existing events -->
           {% for event in club_admin.events %}
-              <div class="info_release club_items_hover">
-                <div class="info_pic">
-                  {% if event.photo %}
-                    <img class="event_photo" src="{{event.photo}}"/>
-                  {% else %}
-                    <img class="notice_photo" src="/static/images/placeholder.png"/>
-                  {% endif %}
-                </div>
-                <div class="info_text dark_title">
-                  {{event.name}}
-                  <div class="event_location">
-                    <p class="location">Event Location:</p>
-                    <a href="https://www.google.com/maps/search/{{ event.location | urlencode }}" target="_blank">{{ event.location }}</a>
-                  </div>
-                </div>
-                <div class="info_upload dark_title">Uploaded At {{ event.date }}</div>
-
-                <!-- Delete Event Button -->
-                <form method="POST" style="display:inline;">
-                  <input type="hidden" name="delete_event" value="{{ event.id }}">
-                  <button type="submit" class="delete_button delete_item">X</button>
-                </form>
+            <div class="info_release club_items_hover">
+              <div class="info_pic">
+                {% if event.photo %}
+                  <img class="event_photo" src="/{{event.photo}}"/>
+                {% else %}
+                  <img class="notice_photo" src="/static/images/placeholder.png"/>
+                {% endif %}
               </div>
+              <div class="info_text dark_title">
+                {{event.name}}
+                <div class="event_location">
+                  <p class="location">Event Location:</p>
+                  <a href="https://www.google.com/maps/search/{{ event.location | urlencode }}" target="_blank">{{ event.location }}</a>
+                </div>
+              </div>
+              <div class="info_upload dark_title">Uploaded At {{ event.date }}</div>
+              
+              <!-- Delete event button -->
+              <form method="POST" style="display:inline;">
+                <input type="hidden" name="delete_event" value="{{ event.id }}">
+                <button type="submit" class="delete_button delete_item">X</button>
+              </form>
+            </div>
           {% endfor %}
         </ul>
       </div>
     </div>
 
-    <!-- Club Profile and Description -->
+    <!-- Club profile and description section -->
     <div class="item2">
       <img class="club_pro shadow rounded-20" src="/{{ club_admin.pro_photo }}" />
-      &nbsp;
       <button onclick="toggleEdit('photoEditForm')" class="form_edit dark_title">✎ Change Profile Photo</button>
+      
+      <!-- Profile photo edit form -->
       <form id="photoEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
           {{ update_form.csrf_token }}
           {{ update_form.pro_photo() }}
           <input type="submit" name="update_club" value="Apply" class="change_sub_small">
       </form>
-      &nbsp;
-      <p class="club_about dark_title">{{ club_admin.description }} <button onclick="toggleEdit('descriptionEditForm')" class="form_edit dark_title">✎</button></p>
+      
+      <!-- Club description with edit option -->
+      <p class="club_about dark_title">{{ club_admin.description }} 
+        <button onclick="toggleEdit('descriptionEditForm')" class="form_edit dark_title">✎</button>
+      </p>
+      
+      <!-- Description edit form -->
       <form id="descriptionEditForm" method="POST" enctype="multipart/form-data" style="display:none;">
           {{ update_form.csrf_token }}
           {{ update_form.description() }}
@@ -142,42 +172,55 @@
       <button id="myButton" class="photo_pop">Click Me To See Photos</button>
     </div>
   </div>
-  
-  <!-- Popup for Photos -->
+
+  <!-- Popup for viewing and adding photos -->
   <div id="myPopup" class="popup">
     <div class="popup-content">
       <button id="closePopup" class="pop_close prevent-select">&times;</button>
       <ul class="photo_container">
+        
+        <!-- Form to add a photo -->
         <li class="multi_photo">
           <div class="multi_pic club_items_hover">
             <form method="POST" enctype="multipart/form-data" class="center">
-              <div class="multi_pic_1 dark_title">
+              <div class="multi_pic_3 dark_title">
                 <h3 class="add_photo_title dark_title">ADD PHOTO</h3>
                 {{ photo_form.csrf_token }}
                 {{ photo_form.photo }}
                 {{ photo_form.description }}
               </div>
-              <div class="multi_pic_2">
+              <div class="multi_pic_2" style="border-top: 3px solid rgb(219, 219, 219);">
                   <input type="submit" value="+" class="sub_date dark_title">
               </div>
-          </form>
+            </form>
           </div>
         </li>
+        
+        <!-- Loop through and display existing photos -->
         {% for photo in club_admin.photos %}
-        <li class="multi_photo">
-          <div class="multi_pic">
-            <div class="multi_pic_1"><img class="prevent-select club_photos" src="/{{photo.photo}}"/></div>
-            {% if photo.description %}
-              <div class="multi_pic_2 dark_title">{{photo.description}}</div>
-            {% else %}
-              <div class="multi_pic_2 dark_title">No Details Provided</div>
-            {% endif %}
-          </div>
-        </li>
+          <li class="multi_photo">
+            <div class="multi_pic">
+              <div class="multi_pic_1">
+                <img class="prevent-select club_photos" src="/{{ photo.photo }}" />
+              </div>
+              {% if photo.description %}
+                <div class="multi_pic_2 dark_title">{{ photo.description }}</div>
+              {% else %}
+                <div class="multi_pic_2 dark_title">No Details Provided</div>
+              {% endif %}
+            </div>
+
+            <!-- Delete photo button -->
+            <form method="POST" style="display:inline;">
+              <input type="hidden" name="delete_photo" value="{{ photo.id }}">
+              <button type="submit" class="delete_button delete_item">X</button>
+            </form>
+          </li>
         {% endfor %}
       </ul>
     </div>
   </div>
+
 </body>
 
 <!-- Linking to External JS -->

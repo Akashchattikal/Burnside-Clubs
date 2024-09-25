@@ -45,7 +45,7 @@
               <div class="info_release multiple_events">
                 <div class="info_pic">
                   {% if event.photo %}
-                    <img class="event_photo" src="{{event.photo}}"/>
+                    <img class="event_photo" src="/{{event.photo}}"/>
                   {% else %}
                     <img class="notice_photo" src="/static/images/placeholder.png"/>
                   {% endif %}
@@ -80,11 +80,7 @@
       <li class="multi_photo">
         <div class="multi_pic">
           <div class="multi_pic_1"><img class="prevent-select club_photos" src="/{{photo.photo}}"/></div>
-          {% if photo.description %}
-            <div class="multi_pic_2 dark_title">{{photo.description}}</div>
-          {% else %}
-            <div class="multi_pic_2 dark_title">No Details Provided</div>
-          {% endif %}
+          <div class="multi_pic_2 dark_title">{{photo.description}}</div>
         </div>
       </li>
       {% endfor %}

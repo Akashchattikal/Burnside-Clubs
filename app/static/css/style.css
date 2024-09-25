@@ -69,6 +69,7 @@ button {
 :root {
     --clr-body-bg: #EFE9E7;
     --clr-bhs-dark: #173248;
+    --clr-nav-bg: #E7E7E7;
 
     --primary-light: #8abdff;
     --primary: #6d5dfc;
@@ -98,17 +99,14 @@ button {
     margin: auto;
 }
 
-@media only screen and (max-width: 600px) {
+@media (max-width: 770px) {
     .header_content {
         flex-direction: column;
         align-items: center;
-        padding: 25px 0;
         row-gap: 18px;
-
     }
 
     .nav_list {
-        margin-top: 6%;
         column-gap: 20px;
     }
     
@@ -116,15 +114,29 @@ button {
         padding: 20px;
         position: absolute;
         color: white;
-        width:100%;
-        padding:20px;
-        display:block; 
-        clear:both;
-        bottom:0;   
-        background-color:#E7E7E7; 
+        width: 100%;
+        display: block; 
+        clear: both;
+        bottom: 0;   
+        background-color: #E7E7E7; 
+    }
+
+    /* Adjust dropdown menu */
+    .dropdown_menu {
+        margin-top: 2.25%;
+        display: none;
+        position: fixed;
+        top: 70.5px; 
+        left: 50%; /* Center the dropdown */
+        transform: translateX(-50%); /* Adjust centering */
+        background-color: var(--clr-bhs-dark);
+        box-shadow: 0px 7px 7px 0px rgba(0, 0, 0, 0.4);
+        width: 200px;
+        z-index: 1001;
+        border-radius: 0 0 15px 15px; /* Rounded bottom corners */
+        padding: 10px 0;
     }
 }
-
 #flash-container {
     position: fixed;
     bottom: 20px;
@@ -202,13 +214,24 @@ button {
 /*************/
 
 .svg_container {
+    margin-top: 2.5%;
+}
+
+.layout-grid {
     display: grid;
-    place-items: center;
-    margin-top: -37%;
+    grid-template-columns: 1fr 2fr 1fr; /* Three equal columns */
+    align-items: center;
+    justify-items: center;
+}
+
+
+.center-content {
+    grid-column: 2 / 3; /* Center content in the middle column */
+    text-align: center;
 }
 
 .club_symbol {
-    width: 30%;
+    width: 80%;
 }
 
 .home_image {
@@ -218,6 +241,23 @@ button {
     min-height: 40rem;
 
 }
+.info-left, .info-right {
+    text-align: center;
+    font-size: 100%;
+    color: var(--clr-bhs-dark);
+    margin-top: 1.5%;
+    line-height: 1.5;
+    margin-left: 5%;
+    margin-right: 5%;
+    background-color: rgb(0, 0, 0, 0.1);
+    padding: 7%;
+    border-radius: 20px;
+}
+
+.info-left p, .info-right p {
+    text-transform: none;
+}
+
 
 .home_indi_image {
     width: 20%;
@@ -231,12 +271,18 @@ button {
 }
 
 
-
 /***********/
 /**Nav Bar**/
 /***********/
+
+.logo {
+    width: 8.5rem;
+}
+
+
+
 .header {
-    background-color: #E7E7E7;
+    background-color: var(--clr-nav-bg);
     position: fixed;
     width: 100%; /* Ensure the nav bar covers the entire width */
     top: 0;
@@ -304,19 +350,93 @@ button {
     color: white;
 }
 
+.dropdown_menu {
+    display: none;
+    position: fixed;
+    top: 70.5px; 
+    right: 0; 
+    background-color: var(--clr-bhs-dark);
+    box-shadow: 0px 7px 7px 0px rgba(0,0,0,0.4);
+    width: 200px;
+    z-index: 1001;
+    border-radius: 0 0 0 15px; 
+    padding: 10px 0;
+}
+
+.menu_item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.menu_item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu_item div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
+    border: 2px solid white;
+    background-color: white;
+    border-radius: 50%;
+    color: white;
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.4);
+    transition: all 0.5s ease-out;
+}
+
+.menu_item div:hover {
+    box-shadow: 0px 6px 6px 0px rgba(0,0,0,0.4);
+}
+
+.menu_link {
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+    flex-grow: 1;
+}
+
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.welcome-message {
+    font-weight: bold;
+    color: var(--clr-bhs-dark)
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
 .default_si {
     border-radius: 50%;
     width: 50px;
-    height: 50px;  /* Ensure the height matches the width */
-    cursor: pointer;
-    object-fit: cover; /* Ensures the image covers the area without distortion */
+    height: 50px;
+    object-fit: cover;
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.4);
+    transition: all 0.5s ease-out;
 }
 
-
-.default_si:active { 
-    border: 3px solid var(--clr-bhs-dark);
+.default_si:hover {
+    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.4);
 }
 
+#menu-arrow {
+    margin-left: 10px;
+    font-size: 1rem; 
+    color: var(--clr-bhs-dark);
+    user-select: none;
+}
 
 .default_user {
     position: fixed;
@@ -398,6 +518,7 @@ button {
     flex-direction: column;
     background-color: white;
     transition: all 0.5s ease-out;
+    position: relative;
 }
 
 .multi_photo:hover {
@@ -413,10 +534,10 @@ button {
     height: 100%;
     width: 100%;
     border-radius: 20px;
-    z-index: -1;
+    z-index: 1;
 }
 
-.multiple_club:hover {opacity: 0.9;}
+.multiple_club:hover {opacity: 0.7;}
 
 .club_name {
     margin-left: auto;
@@ -424,10 +545,11 @@ button {
     padding-bottom: 3%;
     font-size: 130%;
     color: white;
-    z-index: 1;
+    z-index: 3;
     text-align: center;
     margin-top: -20%;
     padding: 3%;
+    text-shadow: 2px 2px var(--clr-bhs-dark);
 }
 
 .title {
@@ -592,6 +714,8 @@ button {
     font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 2;
+    float: right;
 }
 
 
@@ -727,7 +851,7 @@ button {
 
 .club_pro {
     width: 97%;
-    height: 12%;
+    height: auto;
     margin-right: -5%;
 }
 
@@ -737,7 +861,10 @@ button {
 }
 
 .club_photos {
-    width: 100%;
+    width: auto; /* Allow the width to adjust according to the aspect ratio */
+    max-width: 100%; /* Ensure the image doesn’t exceed the container's width */
+    max-height: 100%; /* Ensure the image scales down to fit the height of the container */
+    object-fit: contain; /* Keep the image's aspect ratio intact while fitting it within the space */
     border-radius: 20px 20px 0px 0px;
 }
 
@@ -873,21 +1000,29 @@ button {
 }
 
 .multi_pic_1 {
+    max-height: 9.2rem; /* Set a maximum height for the container */
+    width: 100%; /* Ensure the container takes full width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensure no overflow */
+    padding: 0;
+}
+
+.multi_pic_2 {
+    padding-top: 6%;
+    min-height: 6rem;
+    font-size: 80%;
+    text-align: center;
+}
+
+.multi_pic_3 {
     min-height: 9.2rem;
     flex: 1; /* Allow this section to grow if needed */
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
     align-items: center; /* Center content horizontally */
-}
-
-.multi_pic_2 {
-    margin-top: -1.8%; /* Reset any negative margins */
-    padding-top: 6%;
-    border-top: 3px solid rgb(219, 219, 219);
-    min-height: 6rem;
-    font-size: 80%;
-    text-align: center;
 }
 
 .event_location {
@@ -1311,9 +1446,55 @@ button {
     margin-bottom: 1%;
 }
 
-.delete_item {
-    z-index: 2;
+.delete_pic_item {
+    position: absolute;
+    top: 10px; 
+    right: 10px;
+    background-color: rgb(244, 244, 244);
+    color: #000000; 
+    border: none;
+    border-radius: 50%; 
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 1000000;
     float: right;
+}
+
+
+.delete_pic_item::after {
+    content: "Delete Item";
+    position: absolute;
+    top: -30px;
+    right: 50%;
+    transform: translateX(50%);
+    background-color: var(--clr-bhs-dark); 
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100000;
+    float: right;
+}
+
+
+.delete_pic_item:hover {
+    background-color: var(--clr-bhs-dark); 
+    color: white;
+}
+
+
+.delete_pic_item:hover::after {
+    opacity: 1;
 }
 
 
@@ -1338,7 +1519,9 @@ button {
 }
 
 
-/***Test***/
+/******************/
+/**Login & Signup**/
+/******************/
 
 
 .signup {
@@ -1463,6 +1646,10 @@ button {
     color: white;
 }
 
+/******************/
+/**Dashboard Page**/
+/******************/
+
 .dash_title {
     font-size: 120%; /* Adjust the size as needed */
     padding-bottom: 10%;
@@ -1515,4 +1702,24 @@ button {
 
 .delete_club_item:hover::after {
     opacity: 1;
+}
+
+.dash_semi {
+    margin-top: 3%;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--clr-bhs-dark);
+}
+
+.dash_text {
+    margin-top: 1%;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--clr-bhs-dark);
+}
+
+.dash_a {
+    text-decoration: none;
+    font-weight: 1000;
+    color: var(--clr-bhs-dark);
 }

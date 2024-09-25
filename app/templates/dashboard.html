@@ -7,9 +7,12 @@
 
   <h1 class="center dark_title" style="margin-top: -3%;">My Clubs:</h1>
     
-  <ul class="club_container">
+  
+  {% if current_user.clubs %}
+    <!-- Display the clubs if the user has any -->
+    <ul class="club_container">
       {% for club in current_user.clubs %}
-      <li class="multiple_club rounded-20 shadow center">
+        <li class="multiple_club rounded-20 shadow center">
           <!-- Displays a Club profile image and name -->
           <form method="POST">
             <input type="hidden" name="remove_favourite" value="{{ club.id }}">
@@ -17,9 +20,15 @@
           </form>
           <a href="/club/{{ club.id }}"><img class="pfp prevent-select" src="/{{ club.pro_photo }}" /></a>
           <a href="/club/{{ club.id }}"><h4 class="club_name prevent-select">{{ club.name }}</h4></a>
-      </li>
+        </li>
       {% endfor %}
-  </ul>
+    </ul>
+  {% else %}
+    <!-- Display this if the user has no clubs -->
+    <h2 class="dash_semi">You Do Not Have Any Favourites!</h2>
+    <h3 class="dash_text">Go To <a href="/clubs" class="dash_a">Clubs Page</a> To Add Clubs To Favourites</h3>
+  {% endif %}
+
 </body>
 {% endblock %}
 
