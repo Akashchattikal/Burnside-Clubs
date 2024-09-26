@@ -33,29 +33,29 @@
               <p class="space_form">{{ club_form.club_room }}</p>
               Organiser: 
               <p class="space_form">{{ club_form.organiser }}</p>
-              <input type="submit" value="Add" class="submission rounded-20">
+              {{ club_form.submit }}
           </form>
         </div>
       </li>
 
       <li class="multiple_feature">
         <!-- Assign teacher access and assign teacher to a club -->
-        <div style="margin-top: 8%;">
+        <div style="margin-top: 20%;">
           <h2 style="text-align: center;">Give Teacher Access To</h2>
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ teacher_form.csrf_token }}
             User Emails: 
             <p class="space_form">{{ teacher_form.email }}</p>
-            <input type="submit" value="Add" class="submission rounded-20">
+            {{ teacher_form.submit }}
           </form>
-          <h2 style="text-align: center;">Assign A Teacher To A Club</h2>
+          <h2 class="teach_dis">Assign A Teacher To A Club</h2>
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ teacher_club_form.csrf_token }}
             Club: 
             <p class="space_form" style="text-align: center;">{{ teacher_club_form.club }}</p>
             Teacher: 
             <p class="space_form" style="text-align: center;">{{ teacher_club_form.teacher }}</p>
-            <input type="submit" value="Assign" class="submission rounded-20">
+            {{ teacher_club_form.submit }}
           </form>
         </div>
       </li>
@@ -68,24 +68,24 @@
     <ul class="admin_container">
       <li class="multiple_feature">
         <!-- Delete club form -->
-        <div style="margin-top: 8%;">
+        <div style="margin-top: 20%;">
           <h2 style="text-align: center;">Delete Club</h2>
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ remove_club_form.csrf_token }}
             Clubs: 
             <p class="space_form" style="text-align: center;">{{ remove_club_form.club }}</p>
-            <input type="submit" value="Delete" class="submission rounded-20">
+            {{ remove_club_form.submit}}
           </form>
         </div>
         
         <!-- Remove teacher access form -->
         <div style="margin-top: 8%;">
-          <h2 style="text-align: center;">Remove Teacher Access</h2>
+          <h2 class="teach_dis">Remove Teacher Access</h2>
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ remove_teacher_form.csrf_token }}
             Teachers: 
             <p class="space_form">{{ remove_teacher_form.teacher }}</p>
-            <input type="submit" value="Remove" class="submission rounded-20">
+            {{ remove_teacher_form.submit }}
           </form>
         </div>
       </li>
@@ -98,24 +98,24 @@
     <ul class="admin_container">
       <li class="multiple_feature">
         <!-- Give admin access form -->
-        <div style="margin-top: 8%;">
+        <div style="margin-top: 20%;">
           <h2 style="text-align: center;">Give Admin Access To</h2>
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ admin_form.csrf_token }}
             User Emails: 
-            <p class="space_form">{{ admin_form.email }}</p>
+            <p class="space_form">{{ admin_form.email_admin }}</p>
             {{ admin_form.submit }}
           </form>
         </div>
 
         <!-- Remove admin access form -->
         <div style="margin-top: 8%;">
-          <h2 style="text-align: center;">Remove Admin Access</h2>
+          <h2 class="teach_dis">Remove Admin Access</h2>
           <form method="POST" enctype="multipart/form-data" class="center">
             {{ remove_admin_form.csrf_token }}
             Admins: 
             <p class="space_form">{{ remove_admin_form.admin }}</p>
-            <input type="submit" value="Remove" class="submission rounded-20">
+            {{ remove_admin_form.submit }}
           </form>
         </div>
       </li>

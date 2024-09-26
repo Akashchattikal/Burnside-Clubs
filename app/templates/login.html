@@ -6,10 +6,12 @@
     <form method="POST">
       {{ form.hidden_tag() }}
       <div class="form-group">
-        {{ form.email}}
+        Email:
+        <p class="space_form">{{ form.email}}</p>
       </div>
       <div class="form-group">
-        {{ form.password}}
+        Password:
+        <p class="space_form">{{ form.password}}</p>
       </div>
       <div class="form-group">
         {{ form.submit}}

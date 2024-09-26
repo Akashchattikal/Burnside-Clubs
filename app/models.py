@@ -77,7 +77,7 @@ class Teachers(db.Model):
 class User(db.Model, UserMixin):
     __tablename__ = "User"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text(), unique=True)
+    name = db.Column(db.Text())
     email = db.Column(db.Text())
     password = db.Column(db.Text())
     picture = db.Column(db.Text())

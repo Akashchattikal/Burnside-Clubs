@@ -1,30 +1,32 @@
 from app import app
+import requests
 from flask import render_template, redirect, request, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager, login_user, logout_user, \
+ login_required, current_user
 
-# Initialize the LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'  # Redirect to login if access is required
+login_manager.login_view = 'login'
 
-# Set up database configuration
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "info.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir,
+                                                                    "info.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'correcthorsebatterystaple'
 db = SQLAlchemy(app)
 
-import app.models as models  # Import models after initializing db
-from app.forms import Add_Club, Add_Teacher, Club_Teacher, Remove_Admin, Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, Update_Club, SearchClubForm, LoginForm, SignupForm, Add_Admin
+import app.models as models
+from app.forms import Add_Club, Add_Teacher, Club_Teacher, Remove_Admin, \
+    Add_Notice, Add_Event, Add_Photo, Remove_Club, Remove_Teacher, \
+Update_Club, SearchClubForm, LoginForm, SignupForm, Add_Admin
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Retrieve user by primary key (user_id)
     return models.User.query.filter_by(id=user_id).first()
 
 
@@ -33,33 +35,80 @@ def home():
     return render_template("home.html", title="Home Page")
 
 
+def check_if_email_exists(email):
+    api_key = '096f1e4835d2403f9f366e91b9cd5c89'
+    response = requests.get(f"https://emailvalidation.abstractapi.com/v1/?api_key={api_key}&email={email}")
+
+    # Check if the email exists
+    data = response.json()
+    if data['is_valid_format']['value'] and data['deliverability'] == 'DELIVERABLE':
+        return True
+    return False
+
+
 @app.route("/signup", methods=['POST', 'GET'])
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
-        if len(form.name.data) > 20:
-            flash("Username must be within 20 characters", 'error')
+        if len(form.name.data) > 15:
+            flash("Username must be within 15 characters", 'error')
             return redirect(url_for('signup'))
 
-        # Check if the email already exists in the database
+        # Check email length to ensure it’s not too long
+        if len(form.email.data) > 50:
+            flash("Email must be within 50 characters", 'error')
+            return redirect(url_for('signup'))
+
+        # Check if passwords match
+        if form.password.data != form.repassword.data:
+            flash("Passwords do not match!", 'error')
+            return redirect(url_for('signup'))
+
+        # Continue if email is not taken
         user_check = models.User.query.filter_by(email=form.email.data).first()
         if not user_check:
-            # Create a new user instance and save the uploaded picture
+            # Check if the email exists using an API
+            try:
+                if not check_if_email_exists(form.email.data):
+                    flash("The email provided doesn't exist. Please use \
+                          a valid email.", 'error')
+                    return redirect(url_for('signup'))
+            except Exception as e:
+                flash("Error verifying email. Please try again later.",
+                      'error')
+                return redirect(url_for('signup'))
+
+            # Create a new user instance
             user = models.User()
             picture = form.picture.data
-            filename = secure_filename(picture.filename)
-            user.picture = ('static/images/' + filename)
-            picture.save(os.path.join(basedir, 'static/images/' + filename))
+            original_filename = secure_filename(picture.filename)
+            base_filename, file_extension = os.path.splitext(original_filename)
+
+            # Initialize the new filename as the original one
+            new_filename = original_filename
+            counter = 1
+
+            # Generates a unique filename if matching ones currently exist
+            while os.path.exists(os.path.join(basedir,
+                                              'static/images/',
+                                              new_filename)) or any(u.picture.endswith(new_filename) for u in models.User.query.all()):
+                new_filename = f"{base_filename} ({counter}){file_extension}"
+                counter += 1
+
+            user.picture = f'static/images/{new_filename}'
+            picture.save(os.path.join(basedir, 'static/images/', new_filename))
             user.name = form.name.data
             user.email = form.email.data
-            user.password = generate_password_hash(form.password.data, salt_length=16)
+            user.password = generate_password_hash(form.password.data,
+                                                   salt_length=16)
             db.session.add(user)
-            db.session.commit()  # Commit the new user to the database
-            login_user(user, remember=True)  # Log in the new user
+            db.session.commit()
+            login_user(user, remember=True)
             return redirect(url_for('home'))
         else:
             flash("A User with the same email already exists!", 'error')
-        return redirect(url_for('signup'))
+            return redirect(url_for('signup'))
+
     return render_template("signup.html", title="Sign Up", form=form)
 
 
@@ -67,19 +116,29 @@ def signup():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        # Checks if user with input email exists
+        # Check email length to ensure it’s not too long
+        if len(form.email.data) > 50:
+            flash("Email must be within 50 characters", 'error')
+            return redirect(url_for('login'))
+        # Check if the email exists
+        if not check_if_email_exists(form.email.data):
+            flash("The email provided does not exist. \
+                  Please use a valid email.", 'error')
+            return redirect(url_for('login'))
+
         user_info = models.User.query.filter_by(email=form.email.data).first()
-        # If exists, check db hash with input password and if there's a match,
-        # login user
+        # Check if user exists, if so check hash with input password.
+        # If correct, login.
         if user_info:
             if check_password_hash(user_info.password, form.password.data):
                 login_user(user_info, remember=True)
                 return redirect(url_for("home"))
             else:
-                flash("Username Or Password is incorrect!")
+                flash("Password is incorrect!")
         else:
             flash("User Does Not Exist!")
         return redirect(url_for('login'))
+
     return render_template("login.html", title="Login", form=form)
 
 
@@ -129,28 +188,26 @@ def clubs():
 def club(id):
     # Check if the club with the given ID exists
     club = models.Clubs.query.filter_by(id=id).first_or_404()
-    # if not club:
-    #     abort(404)  # Not found if the club doesn't exist
-
     return render_template('club.html', club=club)
 
 
 @app.route("/teach/<int:id>")
 @login_required
 def teacher(id):
+    # Non-teacher prevention. Important because it prevents users from
+    # gaining special priviliges by
+    # simply typing in the search bar certain off-limit routes
     teacher = models.Teachers.query.filter_by(id=id).first()
     if not teacher:
-        # Teacher not found, return 404
         abort(404)
-
     if teacher.email != current_user.email:
-        # Current user email does not match the teacher's email, return 404
         abort(404)
     return render_template("teacher.html", title="Teacher Club Access",
                            teacher=teacher)
 
 
 @app.route("/user/<int:id>", methods=['GET', 'POST'])
+@login_required
 def user(id):
     user = models.User.query.filter_by(id=id).first()
     if request.method == 'GET':
@@ -174,19 +231,20 @@ def club_admin(id):
     # Check if the club with the given ID exists
     club_admin = models.Clubs.query.filter_by(id=id).first()
     if not club_admin:
-        abort(404)  # Not found if the club doesn't exist
+        abort(404)
 
     user_email = current_user.email
 
-    # Check if the user is a teacher
+    # Prevent non-teachers from accessing
     teacher = models.Teachers.query.filter_by(email=user_email).first()
     if not teacher:
-        abort(403)  # Forbidden if the user is not a teacher
+        abort(403)
 
-    # Check if the teacher has access to this specific club
-    has_access = db.session.query(models.Club_Teacher).filter_by(cid=id, tid=teacher.id).first()
+    # Prevent teachers that do not control selected club
+    has_access = db.session.query(models.Club_Teacher).filter_by(
+        cid=id, tid=teacher.id).first()
     if not has_access:
-        abort(403)  # Forbidden if the teacher does not have access to the club
+        abort(403)
 
     # Initialize forms
     notice_form = Add_Notice()
@@ -198,7 +256,8 @@ def club_admin(id):
         # Handle form submissions
         if 'delete_notice' in request.form:
             notice_id = request.form.get('delete_notice')
-            notice_to_delete = models.Notices.query.filter_by(id=notice_id).first()
+            notice_to_delete = models.Notices.query.filter_by(
+                id=notice_id).first()
             if notice_to_delete:
                 # Delete the associated photo from the file system if it exists
                 if notice_to_delete.photo:
@@ -206,7 +265,8 @@ def club_admin(id):
                         os.remove(
                             os.path.join(basedir, notice_to_delete.photo))
                     except FileNotFoundError:
-                        flash(f"Notice photo {notice_to_delete.photo} not found on the server.", "warning")
+                        flash(f"Notice photo {notice_to_delete.photo} \
+                              not found on the server.", "warning")
 
                 club_admin.notices.remove(notice_to_delete)
                 db.session.commit()
@@ -223,7 +283,8 @@ def club_admin(id):
                     try:
                         os.remove(os.path.join(basedir, event_to_delete.photo))
                     except FileNotFoundError:
-                        flash(f"Event photo {event_to_delete.photo} not found on the server.", "warning")
+                        flash(f"Event photo {event_to_delete.photo} not \
+                              found on the server.", "warning")
 
                 club_admin.events.remove(event_to_delete)
                 db.session.commit()
@@ -239,7 +300,8 @@ def club_admin(id):
                     try:
                         os.remove(os.path.join(basedir, photo_to_delete.photo))
                     except FileNotFoundError:
-                        flash(f"Notice photo {photo_to_delete.photo} not found on the server.", "warning")
+                        flash(f"Notice photo {photo_to_delete.photo} not \
+                              found on the server.", "warning")
 
                 club_admin.photos.remove(photo_to_delete)
                 db.session.commit()
@@ -251,9 +313,23 @@ def club_admin(id):
             new_notice.notice = notice_form.notice.data
             new_notice.date = notice_form.date.data
             photo = notice_form.photo.data
-            filename = secure_filename(photo.filename)
-            new_notice.photo = ('static/images/' + filename)
-            photo.save(os.path.join(basedir, 'static/images/' + filename))
+            original_filename = secure_filename(photo.filename)
+            base_filename, file_extension = os.path.splitext(original_filename)
+
+            new_filename = original_filename
+            counter = 1
+
+            # Generates a unique filename if matching ones currently exist
+            # This is important as images will get overriden with a
+            # non-unique naming system
+            while os.path.exists(os.path.join(basedir,
+                                              'static/images/',
+                                              new_filename)) or any(n.photo.endswith(new_filename) for n in models.Notices.query.all()):
+                new_filename = f"{base_filename} ({counter}){file_extension}"
+                counter += 1
+
+            new_notice.photo = f'static/images/{new_filename}'
+            photo.save(os.path.join(basedir, 'static/images/', new_filename))
             club_admin.notices.append(new_notice)
             db.session.commit()
             flash('Notice Added!')
@@ -265,9 +341,24 @@ def club_admin(id):
             new_event.date = event_form.date.data
             new_event.location = event_form.location.data
             photo = event_form.photo.data
-            filename = secure_filename(photo.filename)
-            new_event.photo = ('static/images/' + filename)
-            photo.save(os.path.join(basedir, 'static/images/' + filename))
+            original_filename = secure_filename(photo.filename)
+            base_filename, file_extension = os.path.splitext(original_filename)
+
+            # Initialize the new filename as the original one
+            new_filename = original_filename
+            counter = 1
+
+            # Generates a unique filename if matching ones currently exist
+            # This is important as images will get overriden with a
+            # non-unique naming system
+            while os.path.exists(os.path.join(basedir,
+                                              'static/images/',
+                                              new_filename)) or any(e.photo.endswith(new_filename) for e in models.Events.query.all()):
+                new_filename = f"{base_filename} ({counter}){file_extension}"
+                counter += 1
+
+            new_event.photo = f'static/images/{new_filename}'
+            photo.save(os.path.join(basedir, 'static/images/', new_filename))
             club_admin.events.append(new_event)
             db.session.commit()
             flash('Event Added!')
@@ -277,9 +368,23 @@ def club_admin(id):
             new_photo = models.Photos()
             new_photo.description = photo_form.description.data
             photo = photo_form.photo.data
-            filename = secure_filename(photo.filename)
-            new_photo.photo = ('static/images/' + filename)
-            photo.save(os.path.join(basedir, 'static/images/' + filename))
+            original_filename = secure_filename(photo.filename)
+            base_filename, file_extension = os.path.splitext(original_filename)
+
+            new_filename = original_filename
+            counter = 1
+
+            # Generates a unique filename if matching ones currently exist
+            # This is important as images will get overriden with a
+            # non-unique naming system
+            while os.path.exists(os.path.join(basedir,
+                                              'static/images/',
+                                              new_filename)) or any(p.photo.endswith(new_filename) for p in models.Photos.query.all()):
+                new_filename = f"{base_filename} ({counter}){file_extension}"
+                counter += 1
+
+            new_photo.photo = f'static/images/{new_filename}'
+            photo.save(os.path.join(basedir, 'static/images/', new_filename))
             club_admin.photos.append(new_photo)
             db.session.commit()
             flash('Photo Added!')
@@ -294,16 +399,29 @@ def club_admin(id):
                     club_admin.description = update_form.description.data
                 if update_form.pro_photo.data:
                     photo = update_form.pro_photo.data
-                    filename = secure_filename(photo.filename)
-                    club_admin.pro_photo = 'static/images/' + filename
-                    photo.save(os.path.join(
-                        basedir, 'static/images/' + filename))
+                    original_filename = secure_filename(photo.filename)
+                    base_filename, file_extension = os.path.splitext(original_filename)
+
+                    new_filename = original_filename
+                    counter = 1
+
+                    # Generates a unique filename if
+                    # matching ones currently exist
+                    # This is important as images will get overriden with a
+                    # non-unique naming system
+                    while os.path.exists(os.path.join(basedir,
+                                                      'static/images/',
+                                                      new_filename)) or any(c.pro_photo.endswith(new_filename) for c in models.Club.query.all()):
+                        new_filename = f"{base_filename} ({counter}){file_extension}"
+                        counter += 1
+
+                    club_admin.pro_photo = f'static/images/{new_filename}'
+                    photo.save(os.path.join(basedir, 'static/images/',
+                                            new_filename))
                 if update_form.club_room.data:
                     club_admin.club_room = update_form.club_room.data
                 if update_form.organiser.data:
                     club_admin.organiser = update_form.organiser.data
-
-                # Commit changes and flash success message
                 db.session.commit()
                 flash('Club Updated!')
                 return redirect(f"/club_admin/{id}")
@@ -342,7 +460,7 @@ def admin():
     admins = models.Admins.query.all()
     teachers = models.Teachers.query.all()
     clubs = models.Clubs.query.all()
-    users = models.User.query.all()  # Fetch all users
+    users = models.User.query.all()
 
     # Prepare email lists for admins and teachers
     admin_emails = [admin.email for admin in models.Admins.query.all()]
@@ -360,10 +478,22 @@ def admin():
     remove_teacher_form.teacher.choices = [(teacher.id, teacher.email) for teacher in teachers]
     remove_admin_form.admin.choices = [(admin.id, admin.email) for admin in admins]
 
+    # Make add admin list include NON-admins only
+    addable_admins = users.copy()
+    user_admins = models.User.query.filter(models.User.email == models.Admins.email).all()
+    for admin in user_admins:
+        addable_admins.remove(admin)
+
+    # Make add teacher list include NON-teachers only
+    addable_teachers = users.copy()
+    user_teachers = models.User.query.filter(models.User.email == models.Teachers.email).all()
+    for teacher in user_teachers:
+        addable_teachers.remove(teacher)
+
     # Populate forms with user data, including names and emails
     teacher_club_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
-    teacher_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in users]
-    admin_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in users]
+    teacher_form.email.choices = [(user.id, f"{user.name} - {user.email}") for user in addable_teachers]
+    admin_form.email_admin.choices = [(user.id, f"{user.name} - {user.email}") for user in addable_admins]
     remove_teacher_form.teacher.choices = [(user.id, f"{user.name} - {user.email}") for user in teacher_users]
     remove_admin_form.admin.choices = [(user.id, f"{user.name} - {user.email}") for user in admin_users]
 
@@ -386,9 +516,23 @@ def admin():
                 new_club.name = club_form.name.data
                 new_club.description = club_form.description.data
                 photo = club_form.pro_photo.data
-                filename = secure_filename(photo.filename)
-                new_club.pro_photo = ('static/images/' + filename)
-                photo.save(os.path.join(basedir, 'static/images/' + filename))
+                original_filename = secure_filename(photo.filename)
+                base_filename, file_extension = os.path.splitext(original_filename)
+
+                # Initialize the new filename as the original one
+                new_filename = original_filename
+                counter = 1
+
+                # Generate a unique filename if necessary
+                while os.path.exists(os.path.join(basedir,
+                                                  'static/images/',
+                                                  new_filename)) or any(h.pro_photo.endswith(new_filename) for h in models.Clubs.query.all()):
+                    new_filename = f"{base_filename} ({counter}){file_extension}"
+                    counter += 1
+
+                new_club.pro_photo = f'static/images/{new_filename}'
+                photo.save(os.path.join(basedir,
+                                        'static/images/', new_filename))
                 new_club.club_room = club_form.club_room.data
                 new_club.organiser = club_form.organiser.data
                 db.session.add(new_club)
@@ -409,10 +553,10 @@ def admin():
 
             if admin_form.validate_on_submit():
                 # Get the user ID from the form and look up the email
-                user_id = admin_form.email.data
+                user_id = admin_form.email_admin.data
                 user = models.User.query.get(user_id)
                 new_admin = models.Admins()
-                new_admin.email = user.email  # Save the email
+                new_admin.email = user.email
                 db.session.add(new_admin)
                 db.session.commit()
                 flash('Admin Access Given!')
@@ -444,7 +588,8 @@ def admin():
                         try:
                             os.remove(os.path.join(basedir, club.pro_photo))
                         except FileNotFoundError:
-                            flash(f"Profile photo {club.pro_photo} not found on the server.", "warning")
+                            flash(f"Profile photo {club.pro_photo} not found \
+                                  on the server.", "warning")
 
                     # Delete All Relationships With Club
                     db.session.execute(models.Club_Events.delete().where(models.Club_Events.c.cid == club.id))

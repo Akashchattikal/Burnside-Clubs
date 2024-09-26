@@ -1057,6 +1057,11 @@ button {
     color: white;
 }
 
+.teach_dis {
+    text-align: center;
+    margin-top: 5rem;
+}
+
 .multiple_feature {
     width: 40%;
     height: 600px;
@@ -1137,7 +1142,7 @@ button {
 }
 
 .small_form {
-    width: 30%;
+    width: 50%;
     padding: 1%;
     border: 0;
     border-radius: 5px;
@@ -1159,7 +1164,7 @@ button {
 
 /* Global styles for form inputs */
 .form_name {
-    width: 40%;
+    width: 50%;
     padding: 1%;
     border: 0;
     border-radius: 5px;
@@ -1175,7 +1180,7 @@ button {
 
 
 .form_pic {
-    width: 40%;
+    width: 50%;
     height: 90%;
     padding: 1%;
     border: 0;
@@ -1191,7 +1196,7 @@ button {
 }
 
 .form_desc {
-    width: 60%;
+    width: 50%;
     height: 90%;
     padding: 1%;
     border: 0;
@@ -1225,7 +1230,7 @@ button {
 }
 
 .form_room {
-    width: 10%;
+    width: 50%;
     padding: 5px;
     border: 0;
     border-radius: 5px;
@@ -1240,7 +1245,7 @@ button {
 }
 
 .form_organiser {
-    width: 40%;
+    width: 50%;
     padding: 1%;
     border: 0;
     border-radius: 5px;
@@ -1578,6 +1583,7 @@ button {
     text-align: center;
     transition: all 0.5s ease-out;
     margin: auto;
+    color: white;
 }
 
 .signup_div:hover {
@@ -1633,6 +1639,7 @@ button {
     text-align: center;
     transition: all 0.5s ease-out;
     margin: auto;
+    color: white;
 }
 
 .login_div:hover {
